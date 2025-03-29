@@ -48,7 +48,7 @@ class Data():
     def __init__(self, cmn):
         logging.debug("Init data.Data")
         self.cmn = cmn
-        logging.info("    connected to sqlite3 db \'%s\'",
+        logging.info("    connected to dispatch db \'%s\'",
             cmn.stns.pathname_dispatch_db)
 
     def get_car_hours(self, s_watch, e_watch):
@@ -78,13 +78,10 @@ class Data():
 
     def get_wc_date_range(self, s_date_d, e_date_d):
         """Return list of Watch Commanders who worked during a date range"""
-        # Table: Watch_Commander_Log
-        # Match:
-        #     Watch_Start, Watch_end
-        # Return fields:
-        #     Watch_ID, Watch_Start, Watch_Commander_ID,
-        #     Watch_Commander_Trainee_ID
+        # Date range includes the start date and excludes the end date
+        # (typical Python)
 
+        # SQL between includes both satart and end dates so we addjust
         s_date_st = s_date_d.strftime(DATE_FORMAT_MSACCESS)
         e_date_st = (e_date_d - datetime.timedelta(days=1)).strftime(
             DATE_FORMAT_MSACCESS)
@@ -94,15 +91,15 @@ class Data():
                 Watch_ID, Watch_Start, Watch_Number,
                 Watch_Commander_ID, Watch_Commander_Trainee_ID
             FROM
-                Watch_Commander_Log"""
-        sql_statement += """
+                Watch_Commander_Log
             WHERE Watch_Start between """ + s_date_st + """
                 and """ + e_date_st
 #       print(sql_statement)
 #       print()
         self.curs_disp.execute(sql_statement)
-        rows = self.curs_disp.fetchall()
+
         te_list = []
+        rows = self.curs_disp.fetchall()
         for i in rows:
             if i.Watch_Commander_ID:
                 te = TimeEntry()
