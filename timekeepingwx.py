@@ -5,7 +5,7 @@ wxPython (GUI) interface for xsdPatrol time keeping module
 #pylint: disable=too-many-locals
 #pylint: disable=too-many-statements
 
-#import datetime
+import datetime
 import logging
 import wx
 #import wx.adv
@@ -27,7 +27,17 @@ class TimekeepingMain(wx.Frame):
         wx.Frame.__init__(self, parent, title=title)
         logging.debug("Init timekeepingwx.TimekeepingMain")
         self.pnl = wx.Panel(self)
+
+        # A few things before we set up our GUI
         self.cmn = cmn
+        self.cmn.dat.open_dispatch_db()
+
+#       print("Today: %s" % self.cmn.app_start_time_dt.date())
+        start_d = common.get_work_week_start_d(
+            self.cmn.app_start_time_dt.date())
+        end_d = start_d + datetime.timedelta(weeks=1)
+#       print("Date Range: %s -- %s" % (start_d, end_d))
+        self.cmn.dat.get_wc_date_range(start_d, end_d)
 
         # Create MenuItems
         # Note: About and Exit are moved to the application menu in macOS
@@ -52,18 +62,27 @@ class TimekeepingMain(wx.Frame):
         self.SetMenuBar(menu_bar)
 
         # Static text
-
+        label_start_date = wx.StaticText(self.pnl, label="Start Date")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        ctrl_start_date = wx.TextCtrl(self.pnl,
+            style=wx.TE_READONLY)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
+
+        ctrl_start_date.SetValue(start_d.isoformat())
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
 
         # BOX 0
-        # Member list
+        # Headings
+        sizer_heading_date = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_heading_date.Add(ctrl_start_date, 1)
+
         sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_box0_main.Add(label_start_date)
+        sizer_box0_main.Add(sizer_heading_date, 1, wx.EXPAND)
 
         # BOX n
         # Create a sizer to hold the buttons

@@ -2,8 +2,14 @@
 A place to keep data
 """
 
+import pyodbc
+
 import datetime
 import logging
+import settings
+
+DATE_FORMAT_MSACCESS = "#%m/%d/%Y#"
+
 
 def display_name(last_name, first_name, pref_name):
     """Return the full name as a string"""
@@ -26,6 +32,10 @@ class TimeEntry():
     hours_rec = 0
     hours_calc = 0
 
+    def __str__(self):
+        return f"{self.user_id} {self.hours_calc}"
+
+
 class Data():
     """
     A class to manage data
@@ -38,10 +48,8 @@ class Data():
     def __init__(self, cmn):
         logging.debug("Init data.Data")
         self.cmn = cmn
-#       self.con = sqlite3.connect(cmn.stns.db_pathname)
         logging.info("    connected to sqlite3 db \'%s\'",
-            cmn.stns.db_pathname)
-#       self.cur = self.con.cursor()
+            cmn.stns.pathname_dispatch_db)
 
     def get_car_hours(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
@@ -68,7 +76,7 @@ class Data():
         #     Watch_Number, Shift_Number, IC_Number, Monitor_ID,
         #     Monitor_Hours,  Trainee_ID, Trainee_Hours
 
-    def get_wc_date_range(self, s_date, e_date):
+    def get_wc_date_range(self, s_date_d, e_date_d):
         """Return list of Watch Commanders who worked during a date range"""
         # Table: Watch_Commander_Log
         # Match:
@@ -76,3 +84,68 @@ class Data():
         # Return fields:
         #     Watch_ID, Watch_Start, Watch_Commander_ID,
         #     Watch_Commander_Trainee_ID
+
+        s_date_st = s_date_d.strftime(DATE_FORMAT_MSACCESS)
+        e_date_st = (e_date_d - datetime.timedelta(days=1)).strftime(
+            DATE_FORMAT_MSACCESS)
+
+        sql_statement = """
+            SELECT
+                Watch_ID, Watch_Start, Watch_Number,
+                Watch_Commander_ID, Watch_Commander_Trainee_ID
+            FROM
+                Watch_Commander_Log"""
+        sql_statement += """
+            WHERE Watch_Start between """ + s_date_st + """
+                and """ + e_date_st
+#       print(sql_statement)
+#       print()
+        self.curs_disp.execute(sql_statement)
+        rows = self.curs_disp.fetchall()
+        te_list = []
+        for i in rows:
+            if i.Watch_Commander_ID:
+                te = TimeEntry()
+                te.user_id = i.Watch_Commander_ID
+                te.unit_id = ""
+                te.service_date = i.Watch_Start
+                te.watch_number = i.Watch_Number
+                te.shift_number = 0
+                te.second_shift = False
+                te.student = False
+                te.instructor = False
+                if i.Watch_Commander_Trainee_ID:
+                    te.instructor = True
+                te.hours_rec = 12
+                te.hours_calc = 12
+                te_list.append(te)
+            elif i.Watch_Commander_Trainee_ID:
+                te = TimeEntry()
+                te.user_id = i.Watch_Commander_Trainee_ID
+                te.unit_id = ""
+                te.service_date = i.Watch_Number
+                te.watch_number = i.Watch_Start
+                te.shift_number = 0
+                te.second_shift = False
+                te.student = True
+                te.instructor = False
+                te.hours_rec = 12
+                te.hours_calc = 12
+                te_list.append(te)
+#       for i in te_list:
+#           print(i)
+
+    def open_dispatch_db(self):
+        """Open Database used by Dispatch and WC logging applications"""
+
+        conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+            r'DBQ=' + self.cmn.stns.pathname_dispatch_db + r';')
+        logging.info("    connected to %s", conn_str)
+        self.conn_disp = pyodbc.connect(conn_str)
+        self.curs_disp = self.conn_disp.cursor()
+#       print('### Tables:')
+#       for i in self.curs_disp.tables(tableType='TABLE'):
+#           print(i.table_name)
+#       print('### Views:')
+#       for i in self.curs_disp.tables(tableType='VIEW'):
+#           print(i.table_name)

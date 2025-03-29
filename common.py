@@ -58,6 +58,7 @@ def calc_earned_hours(watch_num, shift_num, second_shift=False,
         hours += 4
     return hours
 
+
 def get_console_name():
     """Return the console ID"""
 
@@ -66,6 +67,16 @@ def get_console_name():
     fqd_name = platform.node()
     host_name = fqd_name.partition(".")[0]
     return host_name
+
+
+def get_work_week_start_d(date_d):
+    """Return a date object for the first day of the work for date"""
+    first_day = 0       # Work week starts on Sunday
+    earlier_td = datetime.timedelta(
+        days=first_day + date_d.weekday() + 1)
+    start_day_d = date_d - earlier_td
+    return start_day_d
+
 
 def init_logging():
     """Initialize logging
@@ -123,5 +134,7 @@ class Common():
     def __init__(self):
         logging.debug("Init common.Common")
         self.app_start_time_dt = datetime.datetime.now()
+        self.app_start_time_dt = datetime.datetime(
+            year=2024, month=3, day=20) #FIXME: Just for testing
         self.stns = settings.Settings()
         self.dat = data.Data(self)

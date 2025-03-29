@@ -24,7 +24,7 @@ class Settings():
         logging.debug("Init settings.Settings")
 
         # Defaults to access data
-        self.db_pathname = r"/Users/josep" \
+        self.pathname_dispatch_db = r"/Users/josep" \
             r"/SCS Patrol server copies/SecurityLogDB2/SecurityLog.mdb"
 
         # Time and time formatting variables
