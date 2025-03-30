@@ -89,7 +89,7 @@ class Data():
             if i.Watch_Commander_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_ID
-                te.unit_id = ""
+                te.unit_id = "Watch Commander"
                 te.service_date = i.Watch_Start
                 te.watch_id = i.Watch_ID
                 te.shift_number = 0
@@ -104,7 +104,7 @@ class Data():
             elif i.Watch_Commander_Trainee_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_Trainee_ID
-                te.unit_id = ""
+                te.unit_id = "Watch Commander Trainee"
                 te.service_date = i.Watch_Start
                 te.watch_id = i.Watch_ID
                 te.shift_number = 0

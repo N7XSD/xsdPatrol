@@ -7,11 +7,7 @@ wxPython (GUI) interface for xsdPatrol time keeping module
 
 import datetime
 import logging
-#import wx.adv
-#import wx.grid
 
-#import activitywx
-#import peoplewx
 import common
 #import data
 #import settings
@@ -26,6 +22,7 @@ class TimekeepingMain():
         logging.debug("Init timekeepingcli.TimekeepingMain")
         self.cmn = cmn
         seperator_st = 80 * '-'
+        time_dict = {}
 
         # Header
         print("xsdPatrol Timekeeping")
@@ -43,16 +40,28 @@ class TimekeepingMain():
         (watch_id_start, watch_id_end) = cmn.get_watch_range(te_list_wc)
         print("Watch Range: %s -- %s" % (watch_id_start, watch_id_end))
 
-        print()
-        if te_list_wc:
-            for i in te_list_wc:
-                print(i)
-        else:
-            print("I got nothin'")
+        cmn.add_time_entries(time_dict, te_list_wc)
 
         print()
         print(seperator_st)
         print()
+
+        for i in sorted(time_dict):
+            print()
+            print(i)
+            total_rec = 0
+            total_calc = 0
+            for j in time_dict[i]:
+                total_rec += j.hours_rec
+                total_calc += j.hours_calc
+                if j.hours_rec == j.hours_calc:
+                    print(f"\t{j.service_date}"
+                        f"\t{j.hours_rec:4} {j.hours_calc:5}\t{j.unit_id}")
+                else:
+                    print(f"*\t{j.service_date}"
+                        f"\t{j.hours_rec:4} {j.hours_calc:5}\t{j.unit_id}")
+            print("\t\t\t\t====  ====")
+            print(f"\t\t\t\t{total_rec:4} {total_calc:5}")
 
 
 if __name__ == '__main__':

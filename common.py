@@ -164,6 +164,15 @@ class Common():
         self.dat = data.Data(self)
         self.dat.open_dispatch_db()
 
+    def add_time_entries(self, time_dict, te_list):
+        """Add a time recored to a user.  A new user is created,
+        if needed"""
+        for i in te_list:
+            if i.user_id in time_dict:
+                time_dict[i.user_id].append(i)
+            else:
+                time_dict[i.user_id] = [i]
+
     def get_hours(self, start_d, end_d):
         """Return a list of TimeEntry objects for the date range"""
         self.dat.get_wc_date_range(start_d, end_d)
