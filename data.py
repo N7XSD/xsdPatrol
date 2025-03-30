@@ -4,6 +4,7 @@ A place to keep data
 
 import pyodbc
 
+import common
 import datetime
 import logging
 import settings
@@ -18,22 +19,6 @@ def display_name(last_name, first_name, pref_name):
     else:
         name = f'{first_name} "{pref_name}" {last_name}'
     return name
-
-
-class TimeEntry():
-    user_id = ""
-    unit_id = ""
-    service_date = None
-    watch_number = 0
-    shift_number = 0
-    second_shift = False
-    student = False
-    instructor = False
-    hours_rec = 0
-    hours_calc = 0
-
-    def __str__(self):
-        return f"{self.user_id} {self.hours_calc}"
 
 
 class Data():
@@ -102,11 +87,11 @@ class Data():
         rows = self.curs_disp.fetchall()
         for i in rows:
             if i.Watch_Commander_ID:
-                te = TimeEntry()
+                te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_ID
                 te.unit_id = ""
                 te.service_date = i.Watch_Start
-                te.watch_number = i.Watch_Number
+                te.watch_id = i.Watch_ID
                 te.shift_number = 0
                 te.second_shift = False
                 te.student = False
@@ -117,11 +102,11 @@ class Data():
                 te.hours_calc = 12
                 te_list.append(te)
             elif i.Watch_Commander_Trainee_ID:
-                te = TimeEntry()
+                te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_Trainee_ID
                 te.unit_id = ""
-                te.service_date = i.Watch_Number
-                te.watch_number = i.Watch_Start
+                te.service_date = i.Watch_Start
+                te.watch_id = i.Watch_ID
                 te.shift_number = 0
                 te.second_shift = False
                 te.student = True
@@ -129,8 +114,8 @@ class Data():
                 te.hours_rec = 12
                 te.hours_calc = 12
                 te_list.append(te)
-#       for i in te_list:
-#           print(i)
+
+        return te_list
 
     def open_dispatch_db(self):
         """Open Database used by Dispatch and WC logging applications"""

@@ -98,6 +98,26 @@ def init_logging():
         logging.info("Running on %s", os.name)
 
 
+class TimeEntry():
+    user_id = ""
+    unit_id = ""
+    service_date = None
+    watch_id = 0
+    shift_number = 0
+    second_shift = False
+    student = False
+    instructor = False
+    hours_rec = 0
+    hours_calc = 0
+
+    def __str__(self):
+        return (
+            f"{self.user_id:12}"
+            f" {self.watch_id}"
+            f" {self.shift_number}"
+            f" {self.hours_calc}")
+
+
 class Common():
     """
     A collection of objects to pass around to various user interfaces
@@ -134,7 +154,38 @@ class Common():
     def __init__(self):
         logging.debug("Init common.Common")
         self.app_start_time_dt = datetime.datetime.now()
-        self.app_start_time_dt = datetime.datetime(
-            year=2024, month=3, day=20) #FIXME: Just for testing
+
+#       FIXME: Mess with the date just for testing
+#       self.app_start_time_dt = datetime.datetime(
+#           year=2024, month=3, day=20)
+        self.app_start_time_dt -= datetime.timedelta(days=365)
+
         self.stns = settings.Settings()
         self.dat = data.Data(self)
+        self.dat.open_dispatch_db()
+
+    def get_hours(self, start_d, end_d):
+        """Return a list of TimeEntry objects for the date range"""
+        self.dat.get_wc_date_range(start_d, end_d)
+
+    def get_last_work_week(self, date_d):
+        """Returns datetime.date objects for first day of @date_d work
+        week and the first day of the following week"""
+
+        start_d = get_work_week_start_d(date_d)
+        end_d = start_d + datetime.timedelta(weeks=1)
+        return (start_d, end_d)
+
+    def get_watch_range(self, te_list):
+        """Return smallest range of watches that includes all TimeEntry
+        objects in te_list"""
+
+        if te_list:
+            max_watch = min_watch = te_list[0].watch_id
+            for i in te_list:
+                max_watch = max(max_watch, i.watch_id)
+                min_watch = min(min_watch, i.watch_id)
+            max_watch += 1      # It's a Python thing
+        else:
+            min_watch = max_watch = None
+        return min_watch, max_watch
