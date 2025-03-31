@@ -44,11 +44,11 @@ class TimekeepingMain():
         te_list = cmn.dat.get_dispatch_by_watch(watch_id_start, watch_id_end)
         cmn.add_time_entries(time_dict, te_list)
 
-#       te_list = cmn.dat.get_ic_by_watch(watch_id_start, watch_id_end)
-#       cmn.add_time_entries(time_dict, te_list)
+        te_list = cmn.dat.get_car_by_watch(watch_id_start, watch_id_end)
+        cmn.add_time_entries(time_dict, te_list)
 
-#       te_list = cmn.dat.get_car_by_watch(watch_id_start, watch_id_end)
-#       cmn.add_time_entries(time_dict, te_list)
+        te_list = cmn.dat.get_ic_by_watch(watch_id_start, watch_id_end)
+        cmn.add_time_entries(time_dict, te_list)
 
         print()
         print(seperator_st)

@@ -45,26 +45,26 @@ class Data():
 
         sql_statement = """
             SELECT
-                InService_Date, Car_Number, Watch_ID, Shift_Number,
-                Driver1_ID,Driver1_Hours, Driver2_ID,Driver2_Hours,
+                InService_DateTime, Car_Number, Watch_ID, Shift_Number,
+                Driver1_ID, Driver1_Hours, Driver2_ID, Driver2_Hours,
                 Trainee_ID, Trainee_Hours, Observer, Observer_Hours
             FROM
                 Car_Details
             WHERE Watch_ID BETWEEN """ + s_watch_st + """
                 and """ + e_watch_st
-        print(sql_statement)
-        print()
+#        print(sql_statement)
+#        print()
         self.curs_disp.execute(sql_statement)
 
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
             unit_st = "Car " + str(i.Car_Number)
-            if i.Monitor_ID:
+            if i.Driver1_ID:
                 te = common.TimeEntry()
-                te.user_id = i.Monitor_ID
+                te.user_id = i.Driver1_ID
                 te.unit_id = unit_st
-                te.service_date = i.InService_Date
+                te.service_date = i.InService_DateTime
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = False
@@ -72,18 +72,55 @@ class Data():
                 if i.Trainee_ID:
                     te.unit_id = unit_st + " Trainer"
                     te.instructor = True
-                te.hours_rec = float(i.Monitor_Hours)
+                te.hours_rec = float(i.Driver1_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
+                te_list.append(te)
+            elif i.Driver2_ID:
+                te = common.TimeEntry()
+                te.user_id = i.Driver2_ID
+                te.unit_id = unit_st
+                te.service_date = i.InService_DateTime
+                te.watch_id = i.Watch_ID
+                te.shift_number = i.Shift_Number
+                te.student = False
+                te.instructor = False
+                if i.Trainee_ID:
+                    te.unit_id = unit_st + " Trainer"
+                    te.instructor = True
+                te.hours_rec = float(i.Driver2_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
                 te_list.append(te)
             elif i.Trainee_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
-                te.service_date = i.InService_Date
+                te.service_date = i.InService_DateTime
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = True
                 te.instructor = False
                 te.hours_rec = float(i.Trainee_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
+                te_list.append(te)
+            elif i.Observer:
+                te = common.TimeEntry()
+                te.user_id = i.Observer
+                te.unit_id = unit_st + " Observer"
+                te.service_date = i.InService_DateTime
+                te.watch_id = i.Watch_ID
+                te.shift_number = i.Shift_Number
+                te.student = False
+                te.instructor = False
+                te.hours_rec = float(i.Observer_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
                 te_list.append(te)
         return te_list
 
@@ -97,14 +134,14 @@ class Data():
         sql_statement = """
             SELECT
                 Shift_Start, Watch_ID, Shift_Number,
-                Dispatcher1_ID,Dispatcher1_Hours,
-                Dispatcher2_ID,Dispatcher2_Hours
+                Dispatcher1_ID, Dispatcher1_Hours,
+                Dispatcher2_ID, Dispatcher2_Hours
             FROM
                 Dispatcher_Log
             WHERE Watch_ID BETWEEN """ + s_watch_st + """
                 and """ + e_watch_st
-        print(sql_statement)
-        print()
+#       print(sql_statement)
+#       print()
         self.curs_disp.execute(sql_statement)
 
         te_list = []
@@ -123,6 +160,9 @@ class Data():
                     te.unit_id = "Dispatcher Trainer"
                     te.instructor = True
                 te.hours_rec = float(i.Dispatcher1_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
                 te_list.append(te)
             elif i.Dispatcher2_ID:
                 te = common.TimeEntry()
@@ -134,6 +174,9 @@ class Data():
                 te.student = True
                 te.instructor = False
                 te.hours_rec = float(i.Dispatcher2_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
                 te_list.append(te)
         return te_list
 
@@ -146,34 +189,34 @@ class Data():
 
         sql_statement = """
             SELECT
-                InService_Date, IC_Number,
+                InService_DateTime, IC_Number,
                 Watch_ID, Shift_Number,
-                Monitor_ID,Monitor_Hours,
+                Monitor_ID, Monitor_Hours,
                 Trainee_ID, Trainee_Hours
             FROM
                 IC_Details
             WHERE Watch_ID BETWEEN """ + s_watch_st + """
                 and """ + e_watch_st
-        print(sql_statement)
-        print()
+#       print(sql_statement)
+#       print()
         self.curs_disp.execute(sql_statement)
 
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
             unit_st = "Unknown IC"
-            if IC_Number == 1:
+            if i.IC_Number == 1:
                 unit_st = "Rampart IC"
-            elif IC_Number == 2:
+            elif i.IC_Number == 2:
                 unit_st = "Lake Meade IC"
-            elif IC_Number == 3:
+            elif i.IC_Number == 3:
                 unit_st = "Sun City IC"
 
             if i.Monitor_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Monitor_ID
                 te.unit_id = unit_st
-                te.service_date = i.InService_Date
+                te.service_date = i.InService_DateTime
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = False
@@ -182,17 +225,23 @@ class Data():
                     te.unit_id = unit_st + " Trainer"
                     te.instructor = True
                 te.hours_rec = float(i.Monitor_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
                 te_list.append(te)
             elif i.Trainee_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
-                te.service_date = i.InService_Date
+                te.service_date = i.InService_DateTime
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = True
                 te.instructor = False
                 te.hours_rec = float(i.Trainee_Hours)
+                if te.hours_rec == 99.0:
+                    te.unit_id = unit_st + " WC"
+                    te.hours_rec = 0.0
                 te_list.append(te)
         return te_list
 
@@ -214,8 +263,8 @@ class Data():
                 Watch_Commander_Log
             WHERE Watch_Start BETWEEN """ + s_date_st + """
                 and """ + e_date_st
-        print(sql_statement)
-        print()
+#       print(sql_statement)
+#       print()
         self.curs_disp.execute(sql_statement)
 
         te_list = []
@@ -235,7 +284,7 @@ class Data():
                     te.unit_id = "Watch Commander Trainer"
                     te.instructor = True
                 te.hours_rec = 12.0
-                te.hours_calc = 12.0
+                te.hours_calc = 0.0
                 te_list.append(te)
             elif i.Watch_Commander_Trainee_ID:
                 te = common.TimeEntry()
@@ -248,7 +297,7 @@ class Data():
                 te.student = True
                 te.instructor = False
                 te.hours_rec = 12.0
-                te.hours_calc = 12.0
+                te.hours_calc = 0.0
                 te_list.append(te)
 
         return te_list
