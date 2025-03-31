@@ -107,8 +107,8 @@ class TimeEntry():
     second_shift = False
     student = False
     instructor = False
-    hours_rec = 0
-    hours_calc = 0
+    hours_rec = 0.0
+    hours_calc = 0.0
 
     def __str__(self):
         return (
