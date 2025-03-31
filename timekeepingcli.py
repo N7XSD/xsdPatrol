@@ -52,14 +52,14 @@ class TimekeepingMain():
 
         print()
         print(seperator_st)
-        print()
 
-        for i in sorted(time_dict):
+        name_dict = cmn.dat.get_full_name(time_dict.keys())
+        for i in sorted(name_dict, key=name_dict.get):
             print()
-            print(i)
+            print(name_dict[i] + " (" + i + ")")
             total_rec = 0.0
             total_calc = 0.0
-            for j in time_dict[i]:
+            for j in sorted(time_dict[i]):
                 total_rec += j.hours_rec
                 total_calc += j.hours_calc
                 if j.hours_rec == j.hours_calc:

@@ -302,6 +302,47 @@ class Data():
 
         return te_list
 
+    def get_full_name(self, user_ids):
+        """Return a dictionary with id:full_name"""
+
+        key_list = ""
+        for i in user_ids:
+            key_list += "'" + str(i) + "', "
+        sql_statement = """
+            SELECT
+                User_ID, User_Name
+            FROM
+                Users
+            WHERE User_ID IN (""" + key_list + ")"
+#       print(sql_statement)
+#       print()
+        self.curs_disp.execute(sql_statement)
+        name_dict = {}
+        rows = self.curs_disp.fetchall()
+        for i in rows:
+            name_parts = i.User_Name.split()
+            full_name = name_parts[-1] + ","
+            for j in range(0, len(name_parts) - 1):
+                full_name += " " + name_parts[j]
+            if not i.User_Name:
+                full_Name = i.User_ID
+
+            # Ugly fix for some names
+            elif i.User_Name == "Linda Van Horn":
+                full_name = "Van Horn, Linda"
+            elif i.User_Name == "Maureen Mc Cartin":
+                full_name = "McCartin, Maureen"
+            elif i.User_Name == "Geraldean Jeri Stephan":
+                full_name = 'Stephan, Geraldean "Jerri"'
+            elif i.User_Name == "Marian De Sumrak":
+                full_name = "De Sumrak, Marian"
+            elif i.User_Name == "De Ila Meyer":
+                full_name = "Meyer, De Ila"
+
+            name_dict[i.User_ID] = full_name
+        return name_dict
+
+
     def open_dispatch_db(self):
         """Open Database used by Dispatch and WC logging applications"""
 

@@ -110,12 +110,22 @@ class TimeEntry():
     hours_rec = 0.0
     hours_calc = 0.0
 
-    def __str__(self):
+    def __str__(self, other):
         return (
             f"{self.user_id:12}"
             f" {self.watch_id}"
             f" {self.shift_number}"
             f" {self.hours_calc}")
+
+    def __hash__(self):
+        return hash(user_id, unit_id, service_date, watch_id,
+            shift_number)
+
+    def __eq__(self, other):
+        return self.service_date == other.service_date
+
+    def __lt__(self, other):
+        return self.service_date < other.service_date
 
 
 class Common():
