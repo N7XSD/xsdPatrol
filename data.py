@@ -33,8 +33,6 @@ class Data():
     def __init__(self, cmn):
         logging.debug("Init data.Data")
         self.cmn = cmn
-        logging.info("    connected to dispatch db \'%s\'",
-            cmn.stns.pathname_dispatch_db)
 
     def get_car_by_watch(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
@@ -347,7 +345,7 @@ class Data():
         """Open Database used by Dispatch and WC logging applications"""
 
         conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-            r'DBQ=' + self.cmn.stns.pathname_dispatch_db + r';')
+            r'DBQ=' + self.cmn.stns.get_pathname_dispatch_db() + r';')
         logging.info("    connected to %s", conn_str)
         self.conn_disp = pyodbc.connect(conn_str)
         self.curs_disp = self.conn_disp.cursor()

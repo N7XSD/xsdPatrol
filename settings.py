@@ -5,6 +5,7 @@ xsdPatrol settings
 #pylint: disable=too-few-public-methods
 #pylint: disable=too-many-instance-attributes
 
+import configparser
 import datetime
 import logging
 
@@ -23,15 +24,19 @@ class Settings():
     def __init__(self):
         logging.debug("Init settings.Settings")
 
-        # Defaults to access data
-        self.pathname_dispatch_db = r"/Users/josep" \
-            r"/SCS Patrol server copies/SecurityLogDB2/SecurityLog.mdb"
+        self.config = configparser.ConfigParser()
 
-        # Time and time formatting variables
-        self.first_watch_start_dt = datetime.datetime(2009, 4, 14)
-        self.format_date = "%Y-%m-%d"
-        self.format_time = "%H:%M"
-        self.format_datetime = "%Y-%m-%d %H:%M"
+        # Defaults to access data
+        self.config['data'] = {'dispatch_db':
+            r"/Users/josep/SCS Patrol server copies/SecurityLogDB2/SecurityLog.mdb"}
+
+        self.config['date'] =  {'first_watch': '2009-04-12'}
+
+        # Time formatting variables
+        self.config['format'] = {
+            'date': '%%Y-%%m-%%d',
+            'time': '%%H:%%M',
+            'datetime': '%%Y-%%m-%%d %%H:%%M'}
 
         self.gear_default = ["Radio-A", "Radio-B", "Radio-C",
                 "Radio-D", "Radio-E", "Radio-F",
@@ -53,3 +58,24 @@ class Settings():
             "Rec_Version"]
 
         self.widget_border = 8
+        
+        with open('xsdPatrol.ini', 'w') as configfile:
+            self.config.write(configfile)
+            
+    def get_pathname_dispatch_db(self):
+        return self.config['data']['dispatch_db']
+
+    def get_format_date(self):
+        """Return date format"""
+        return self.config['format']['date']
+
+    def get_format_time(self):
+        """Return time format"""
+        return self.config['format']['time']
+
+    def get_format_datetime(self):
+        """Return datetime format"""
+        return self.config['format']['datetime']
+
+if __name__ == '__main__':
+    stns = Settings()
