@@ -26,6 +26,7 @@ class TimekeepingMain(wx.Frame):
     def __init__(self, parent, cmn, title):
         wx.Frame.__init__(self, parent, title=title)
         logging.debug("Init timekeepingwx.TimekeepingMain")
+        self.SetMinSize(wx.Size(512, 256))
         self.pnl = wx.Panel(self)
         self.cmn = cmn
         working_d = (self.cmn.app_start_time_dt
@@ -87,9 +88,9 @@ class TimekeepingMain(wx.Frame):
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
         sizer_main.Add(sizer_box0_main, 1, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.widget_border)
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.widget_border)
+            border=self.cmn.stns.get_widget_border_size())
 
         # Layout sizers
         self.pnl.SetSizer(sizer_main)
@@ -119,6 +120,6 @@ if __name__ == '__main__':
     app = wx.App(False)
     frame = TimekeepingMain(None, common_stuff,
         "Patrol Timekeeping Management")
-#    frame.SetPosition(stns.initial_window_position)
-#    frame.SetSize(stns.initial_window_size)
+#    frame.SetPosition(stns.get_window_pos_time())
+#    frame.SetSize(stns.get_window_size_time())
     app.MainLoop()
