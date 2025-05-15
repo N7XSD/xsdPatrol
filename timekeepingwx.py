@@ -8,52 +8,27 @@ wxPython (GUI) interface for xsdPatrol time keeping module
 import datetime
 import logging
 import wx
-#import wx.adv
-#import wx.grid
 
-#import activitywx
-#import peoplewx
 import common
-#import data
-#import settings
+import commonwx
 
 
-class TimekeepingMain(wx.Frame):
+class TimekeepingMain(commonwx.CommonFrame):
     """
     Main window for time keeping module
     """
 
     def __init__(self, parent, cmn, title):
-        wx.Frame.__init__(self, parent, title=title)
+        commonwx.CommonFrame.__init__(self, parent, cmn, title)
         logging.debug("Init timekeepingwx.TimekeepingMain")
-        self.SetMinSize(wx.Size(512, 256))
-        self.pnl = wx.Panel(self)
-        self.cmn = cmn
+
+        self.Show()
+
+    def create_sizer_main(self):
+        """The main sizer holds everthing the user will interact with"""
         working_d = (self.cmn.app_start_time_dt
             - datetime.timedelta(weeks=1)).date()
         self.cmn.get_last_work_week(working_d)
-
-        # Create MenuItems
-        # Note: About and Exit are moved to the application menu in macOS
-        about_mitem = wx.MenuItem(None, wx.ID_ABOUT)
-        self.Bind(wx.EVT_MENU, self.on_about, about_mitem)
-
-        exit_mitem = wx.MenuItem(None, wx.ID_EXIT)
-        self.Bind(wx.EVT_MENU, self.on_exit, exit_mitem)
-
-        # File menu
-        file_menu = wx.Menu()
-        file_menu.Append(exit_mitem)
-
-        # Help menu
-        help_menu = wx.Menu()
-        help_menu.Append(about_mitem)
-
-        # Create the menubar
-        menu_bar = wx.MenuBar()
-        menu_bar.Append(file_menu, "&File")
-        menu_bar.Append(help_menu, "&Help")
-        self.SetMenuBar(menu_bar)
 
         # Static text
         label_start_date = wx.StaticText(self.pnl, label="Test Date")
@@ -92,25 +67,7 @@ class TimekeepingMain(wx.Frame):
         sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
 
-        # Layout sizers
-        self.pnl.SetSizer(sizer_main)
-        self.pnl.SetAutoLayout(1)
-        sizer_main.Fit(self)
-
-        self.Show()
-
-    def on_about(self, _event):
-        """Create a message dialog box"""
-        dlg = wx.MessageDialog(self,
-            "Timekeeping Application",
-            "About Patrol Timekeeping", wx.OK)
-        dlg.ShowModal() # Shows it
-        dlg.Destroy() # finally destroy it when finished
-
-    def on_exit(self, _event):
-        """Exit"""
-        logging.debug("Exit TimekeepingMain")
-        self.Close(True)  # Close the frame
+        return sizer_main
 
 
 if __name__ == '__main__':
