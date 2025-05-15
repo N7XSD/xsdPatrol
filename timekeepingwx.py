@@ -11,6 +11,7 @@ import wx
 
 import common
 import commonwx
+import timeimportdi
 
 
 class TimekeepingMain(commonwx.CommonFrame):
@@ -23,6 +24,38 @@ class TimekeepingMain(commonwx.CommonFrame):
         logging.debug("Init timekeepingwx.TimekeepingMain")
 
         self.Show()
+
+    def create_menu_bar(self):
+        """Create the menu bar"""
+
+        # Create MenuItems
+        # Note: About and Exit are moved to the application menu in macOS
+        about_mitem = wx.MenuItem(None, wx.ID_ABOUT)
+        self.Bind(wx.EVT_MENU, self.on_about, about_mitem)
+
+        exit_mitem = wx.MenuItem(None, wx.ID_EXIT)
+        self.Bind(wx.EVT_MENU, self.on_exit, exit_mitem)
+
+        import_di_mitem = wx.MenuItem(None, wx.ID_ANY,
+            "Import Dispatch DB Hours")
+        self.Bind(wx.EVT_MENU, self.on_import_di_db_hours, import_di_mitem)
+
+        # File menu
+        file_menu = wx.Menu()
+        file_menu.Append(import_di_mitem)
+        file_menu.AppendSeparator()
+        file_menu.Append(exit_mitem)
+
+        # Help menu
+        help_menu = wx.Menu()
+        help_menu.Append(about_mitem)
+
+        # Create the menubar
+        menu_bar = wx.MenuBar()
+        menu_bar.Append(file_menu, "&File")
+        menu_bar.Append(help_menu, "&Help")
+
+        return menu_bar
 
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
@@ -68,6 +101,10 @@ class TimekeepingMain(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
+
+    def on_import_di_db_hours(self, _event):
+        """Open Dispatch DB import window"""
+        timeimportdi.TimeImportDispatchHours(self, self.cmn)
 
 
 if __name__ == '__main__':
