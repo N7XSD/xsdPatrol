@@ -11,6 +11,7 @@ import logging
 
 ID_NAME = "xsdPatrol"
 ID_VER = "0.0"
+ID_CONF_VER = "1"
 
 #Logging levels are: CRITICAL, ERROR, WARNING, INFO, and DEBUG.
 LOGGING_LEVEL = logging.DEBUG
@@ -30,6 +31,7 @@ class Settings():
         self.config['xsdPatrol'] = {}
         self.config.set('xsdPatrol', 'name', ID_NAME)
         self.config.set('xsdPatrol', 'version', ID_VER)
+        self.config.set('xsdPatrol', 'config-file-version', ID_CONF_VER)
 
     def _get(self, sect, key, def_val, val_type=None):
         try:
@@ -75,8 +77,14 @@ class Settings():
     def get_pathname_dispatch_db(self):
         """Return full pathname for Dispatcher/WC log DB"""
         return self._get('data', 'dispatch-db',
-            r"/Users/josep/SCS Patrol server copies/SecurityLogDB2/"
+            r"/Users/josep/SCS-Patrol-data/SecurityLogDB2/"
             + r"SecurityLog.mdb")
+
+    def get_pathname_member_db(self):
+        """Return full pathname for member DB"""
+        return self._get('data', 'member-db',
+            r"/Users/josep/SCS-Patrol-data/MemberDB/"
+            + r"SPMemberDB.accdb")
 
     def get_window_pos_time(self):
         return self._get('window', 'time-window-position', (32, 32))
