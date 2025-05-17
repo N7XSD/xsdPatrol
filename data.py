@@ -12,14 +12,58 @@ import settings
 DATE_FORMAT_MSACCESS = "#%m/%d/%Y#"
 
 
-def display_name(last_name, first_name, pref_name):
+def display_name(surname, first_name, pref_name):
     """Return the full name as a string"""
     if not pref_name or pref_name == first_name:
-        name = f"{first_name} {last_name}"
+        name = f"{first_name} {surname}"
     else:
-        name = f'{first_name} "{pref_name}" {last_name}'
+        name = f'{first_name} "{pref_name}" {surname}'
     return name
 
+
+def display_name_by_surname(surname, first_name, pref_name):
+    """Return the full name as a string"""
+    if not pref_name or pref_name == first_name:
+        name = f"{surname}, {first_name}"
+    else:
+        name = f'{surname}, {first_name} "{pref_name}"'
+    return name
+
+
+def parse_dispatch_name(disp_name):
+    """Parse names in dispatch DB into surname, given name,
+       and prefered name"""
+    gname = ""
+    pname = ""
+    if not disp_name:
+        surname = disp_name
+    else:
+        name_parts = disp_name.split()
+        surname = name_parts[-1]
+        gname = ""
+        for i in range(0, len(name_parts) - 1):
+            gname += " " + name_parts[i]
+
+    # Ugly hack to fix some names
+    if disp_name == "Linda Van Horn":
+        surname = "Van Horn"
+        gname = "Linda"
+    elif disp_name == "Maureen Mc Cartin":
+        surname = "McCartin"
+        gname = "Maureen"
+    elif disp_name == "Marian De Sumrak":
+        surname = "De Sumrak"
+        gname = "Marian"
+    elif disp_name == "De Ila Meyer":
+        surname = "Meyer"
+        gname = "De Ila"
+    # Users with prefered names
+    elif disp_name == "Geraldean Jeri Stephan":
+        surname = "Stephan"
+        gname = "Geraldean"
+        pname = "Jerri"
+
+    return (surname, gname, pname)
 
 class Data():
     """
@@ -299,6 +343,26 @@ class Data():
                 te_list.append(te)
 
         return te_list
+
+    def get_active_disp_users(self):
+        """Return a dictionary with id:full_name"""
+
+        sql_statement = """
+            SELECT
+                User_ID, User_Name
+            FROM
+                Users
+            WHERE IsActive"""
+#       print(sql_statement)
+#       print()
+        self.curs_disp.execute(sql_statement)
+        name_dict = {}
+        rows = self.curs_disp.fetchall()
+        for i in rows:
+            (surname, givname, prefname) = parse_dispatch_name(i.User_Name)
+            name_dict[i.User_ID] = display_name_by_surname(
+                surname, givname, prefname)
+        return name_dict
 
     def get_full_name(self, user_ids):
         """Return a dictionary with id:full_name"""
