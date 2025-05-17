@@ -340,7 +340,6 @@ class Data():
             name_dict[i.User_ID] = full_name
         return name_dict
 
-
     def open_dispatch_db(self):
         """Open Database used by Dispatch and WC logging applications"""
 
@@ -349,9 +348,37 @@ class Data():
         logging.info("    connected to %s", conn_str)
         self.conn_disp = pyodbc.connect(conn_str)
         self.curs_disp = self.conn_disp.cursor()
-#       print('### Tables:')
-#       for i in self.curs_disp.tables(tableType='TABLE'):
-#           print(i.table_name)
-#       print('### Views:')
-#       for i in self.curs_disp.tables(tableType='VIEW'):
-#           print(i.table_name)
+
+    def open_member_db(self):
+        """Open Database used by Dispatch and WC logging applications"""
+
+        conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+            r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';')
+        logging.info("    connected to %s", conn_str)
+        self.conn_member = pyodbc.connect(conn_str)
+        self.curs_member = self.conn_member.cursor()
+
+
+if __name__ == '__main__':
+    cmn = common.Common()
+    d = Data(cmn)
+
+    d.open_dispatch_db()
+    print()
+    print('Dispatch DB')
+    print('### Tables:')
+    for i in d.curs_disp.tables(tableType='TABLE'):
+        print(i.table_name)
+    print('### Views:')
+    for i in d.curs_disp.tables(tableType='VIEW'):
+        print(i.table_name)
+
+    d.open_member_db()
+    print()
+    print('Member DB')
+    print('### Tables:')
+    for i in d.curs_member.tables(tableType='TABLE'):
+        print(i.table_name)
+    print('### Views:')
+    for i in d.curs_member.tables(tableType='VIEW'):
+        print(i.table_name)
