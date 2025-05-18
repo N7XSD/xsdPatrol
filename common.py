@@ -128,6 +128,15 @@ class DispatchDbReports():
         name_dict = cmn.dat.get_full_name(time_dict.keys())
         for i in sorted(name_dict, key=name_dict.get):
             output.write(f"<h3>{name_dict[i]} ({i})</h3>")
+            total_rec = 0.0
+            output.write("<table>")
+            for j in sorted(time_dict[i]):
+                total_rec += j.hours_rec
+                output.write(f"<tr><td>{j.hours_rec}</td>"
+                    + f"<td>{j.unit_id}</td></tr>")
+            output.write(f"<tr><td>{total_rec}</td>"
+                + f"<td>TOTAL</td></tr>")
+            output.write("</table>")
 
         output.write("</body>\n")
         output.write("</html>")
