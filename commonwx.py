@@ -8,8 +8,20 @@ wxPython (GUI) frame for xsdPatrol
 #import datetime
 import logging
 import wx
+import wx.html
 
 import common
+
+
+class ShowHTML(wx.Frame):
+    """
+    Class for simple HTML viewer
+    """
+
+    def __init__(self, parent, cmn, html_content, title):
+        wx.Frame.__init__(self, parent, title=title)
+        html_window = wx.html.HtmlWindow(self)
+        html_window.SetPage(html_content.read())
 
 
 class CommonFrame(wx.Frame):

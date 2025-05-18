@@ -10,6 +10,7 @@ xsdPatrol common classes and functions
 #pylint: disable=too-many-instance-attributes
 
 import datetime
+import io
 import logging
 import os
 import platform
@@ -96,6 +97,18 @@ def init_logging():
         logging.info(sys.getwindowsversion())
     else:
         logging.info("Running on %s", os.name)
+
+
+class DispatchDbReports():
+    """Import form Dispatch DB and create reports"""
+
+    def dispatch_db_hours(self, output, start_d, end_d):
+        """Return a StringIO object conaining an HTML reports showing
+           hours recoreded between dates in the dispatch DB"""
+        output.write("<body>\n")
+        output.write("<h1>Dispatch Log Hours Extract</h1>\n")
+        output.write(f"<h2>From {start_d} to {end_d}</h2>\n")
+        output.write("</body>\n")
 
 
 class TimeEntry():

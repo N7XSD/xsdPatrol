@@ -6,6 +6,7 @@ wxPython (GUI) interface for xsdPatrol time keeping module
 #pylint: disable=too-many-statements
 
 import datetime
+import io
 import logging
 import wx
 
@@ -104,7 +105,25 @@ class TimekeepingMain(commonwx.CommonFrame):
 
     def on_import_di_db_hours(self, _event):
         """Open Dispatch DB import window"""
-        timeimportdi.TimeImportDispatchHours(self, self.cmn)
+#       timeimportdi.TimeImportDispatchHours(self, self.cmn)
+
+        # Ask the user to choose start and end dates.
+        # FIXME: Not really.  Pick some for testing.
+        working_d = (self.cmn.app_start_time_dt
+            - datetime.timedelta(weeks=1)).date()
+        (start_d, end_d) = self.cmn.get_last_work_week(working_d)
+
+        reports = common.DispatchDbReports()
+        web_page = io.StringIO()
+        reports.dispatch_db_hours(web_page, start_d, end_d)
+
+        web_page.seek(0)
+#       print(web_page.read())
+        report_viewer = commonwx.ShowHTML(self, self.cmn, web_page,
+            "Import from Dispatch DB")
+        report_viewer.Show()
+
+        web_page.close()
 
 
 if __name__ == '__main__':
