@@ -36,13 +36,14 @@ def parse_dispatch_name(disp_name):
     gname = ""
     pname = ""
     if not disp_name:
-        surname = disp_name
+        surname = disp_name.strip()
     else:
         name_parts = disp_name.split()
-        surname = name_parts[-1]
+        surname = name_parts[-1].strip()
         gname = ""
         for i in range(0, len(name_parts) - 1):
-            gname += " " + name_parts[i]
+            gname += name_parts[i].strip() + " "
+        gname = gname.strip()
 
     # Ugly hack to fix some names
     if disp_name == "Linda Van Horn":
@@ -86,16 +87,14 @@ class Data():
         e_watch_st = str(e_watch - 1)
 
         sql_statement = """
-            SELECT
-                InService_DateTime, Car_Number, Watch_ID, Shift_Number,
+            SELECT InService_DateTime, Car_Number, Watch_ID, Shift_Number,
                 Driver1_ID, Driver1_Hours, Driver2_ID, Driver2_Hours,
                 Trainee_ID, Trainee_Hours, Observer, Observer_Hours
-            FROM
-                Car_Details
+            FROM Car_Details
             WHERE Watch_ID BETWEEN """ + s_watch_st + """
-                and """ + e_watch_st
-#        print(sql_statement)
-#        print()
+                AND """ + e_watch_st
+#       print(sql_statement)
+#       print()
         self.curs_disp.execute(sql_statement)
 
         te_list = []
@@ -174,14 +173,12 @@ class Data():
         e_watch_st = str(e_watch - 1)
 
         sql_statement = """
-            SELECT
-                Shift_Start, Watch_ID, Shift_Number,
+            SELECT Shift_Start, Watch_ID, Shift_Number,
                 Dispatcher1_ID, Dispatcher1_Hours,
                 Dispatcher2_ID, Dispatcher2_Hours
-            FROM
-                Dispatcher_Log
+            FROM Dispatcher_Log
             WHERE Watch_ID BETWEEN """ + s_watch_st + """
-                and """ + e_watch_st
+                AND """ + e_watch_st
 #       print(sql_statement)
 #       print()
         self.curs_disp.execute(sql_statement)
@@ -230,15 +227,13 @@ class Data():
         e_watch_st = str(e_watch - 1)
 
         sql_statement = """
-            SELECT
-                InService_DateTime, IC_Number,
+            SELECT InService_DateTime, IC_Number,
                 Watch_ID, Shift_Number,
                 Monitor_ID, Monitor_Hours,
                 Trainee_ID, Trainee_Hours
-            FROM
-                IC_Details
+            FROM IC_Details
             WHERE Watch_ID BETWEEN """ + s_watch_st + """
-                and """ + e_watch_st
+                AND """ + e_watch_st
 #       print(sql_statement)
 #       print()
         self.curs_disp.execute(sql_statement)
@@ -298,13 +293,11 @@ class Data():
             DATE_FORMAT_MSACCESS)
 
         sql_statement = """
-            SELECT
-                Watch_ID, Watch_Start, Watch_Number,
+            SELECT Watch_ID, Watch_Start, Watch_Number,
                 Watch_Commander_ID, Watch_Commander_Trainee_ID
-            FROM
-                Watch_Commander_Log
+            FROM Watch_Commander_Log
             WHERE Watch_Start BETWEEN """ + s_date_st + """
-                and """ + e_date_st
+                AND """ + e_date_st
 #       print(sql_statement)
 #       print()
         self.curs_disp.execute(sql_statement)
@@ -390,10 +383,8 @@ class Data():
         for i in user_ids:
             key_list += "'" + str(i) + "', "
         sql_statement = """
-            SELECT
-                User_ID, User_Name
-            FROM
-                Users
+            SELECT User_ID, User_Name
+            FROM Users
             WHERE User_ID IN (""" + key_list + ")"
 #       print(sql_statement)
 #       print()
@@ -401,25 +392,13 @@ class Data():
         name_dict = {}
         rows = self.curs_disp.fetchall()
         for i in rows:
-            name_parts = i.User_Name.split()
-            full_name = name_parts[-1] + ","
-            for j in range(0, len(name_parts) - 1):
-                full_name += " " + name_parts[j]
             if not i.User_Name:
-                full_Name = i.User_ID
-
-            # Ugly fix for some names
-            elif i.User_Name == "Linda Van Horn":
-                full_name = "Van Horn, Linda"
-            elif i.User_Name == "Maureen Mc Cartin":
-                full_name = "McCartin, Maureen"
-            elif i.User_Name == "Geraldean Jeri Stephan":
-                full_name = 'Stephan, Geraldean "Jerri"'
-            elif i.User_Name == "Marian De Sumrak":
-                full_name = "De Sumrak, Marian"
-            elif i.User_Name == "De Ila Meyer":
-                full_name = "Meyer, De Ila"
-
+                full_Name = i.User_ID.strip()
+            else:
+                (sname, gname, pname
+                    ) = parse_dispatch_name(i.User_Name)
+                full_name = display_name_by_surname(
+                    sname, gname, pname)
             name_dict[i.User_ID] = full_name
         return name_dict
 
