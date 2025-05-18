@@ -29,13 +29,20 @@ if __name__ == '__main__':
     print(f"Active Dispatch Users:  {len(users_dis_dict)}")
 
     cmn.dat.open_member_db()
-#   users_member_dict = cmn.dat.get_active_members_users()
-#   print(f"Active Members:  {len(users_member_dict)}")
-#   print()
+    users_member_dict = cmn.dat.get_active_members()
+    print(f"Active Members:  {len(users_member_dict)}")
+    print()
     print()
 
 #   print("### Active Members in Dispatch DB not active in Member DB")
     print("### Active Members in Dispatch DB")
     print()
     for i in sorted(users_dis_dict, key=users_dis_dict.get):
-        print(f"{i:16} {users_dis_dict[i]}")
+        print(f"{users_dis_dict[i]} ({i})")
+    print()
+    print()
+
+    print("### Active Members in Member DB")
+    print()
+    for i in sorted(users_member_dict, key=users_member_dict.get):
+        print(f"{users_member_dict[i]}")

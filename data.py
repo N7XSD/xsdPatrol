@@ -344,14 +344,32 @@ class Data():
 
         return te_list
 
+    def get_active_members(self):
+        """Return a dictionary with id:full_name"""
+
+        sql_statement = """
+            SELECT Members.MemberID, LastName, FirstName, PrefName
+            FROM Members INNER JOIN Service
+                ON (Members.MemberID = Service.MemberID)
+            WHERE Service.DateDropped IS NULL
+                OR (Service.DateRejoined IS NOT Null
+                AND Service.DateRedropped IS NULL)"""
+#       print(sql_statement)
+#       print()
+        self.curs_member.execute(sql_statement)
+        name_dict = {}
+        rows = self.curs_member.fetchall()
+        for i in rows:
+            name_dict[i.MemberID] = display_name(
+                i.LastName, i.FirstName, i.PrefName)
+        return name_dict
+
     def get_active_disp_users(self):
         """Return a dictionary with id:full_name"""
 
         sql_statement = """
-            SELECT
-                User_ID, User_Name
-            FROM
-                Users
+            SELECT User_ID, User_Name
+            FROM Users
             WHERE IsActive"""
 #       print(sql_statement)
 #       print()
@@ -359,9 +377,10 @@ class Data():
         name_dict = {}
         rows = self.curs_disp.fetchall()
         for i in rows:
-            (surname, givname, prefname) = parse_dispatch_name(i.User_Name)
-            name_dict[i.User_ID] = display_name_by_surname(
-                surname, givname, prefname)
+#           (surname, givname, prefname) = parse_dispatch_name(i.User_Name)
+#           name_dict[i.User_ID] = display_name_by_surname(
+#               surname, givname, prefname)
+            name_dict[i.User_ID] = i.User_Name
         return name_dict
 
     def get_full_name(self, user_ids):
