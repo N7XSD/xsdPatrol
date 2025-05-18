@@ -102,13 +102,35 @@ def init_logging():
 class DispatchDbReports():
     """Import form Dispatch DB and create reports"""
 
-    def dispatch_db_hours(self, output, start_d, end_d):
+    def dispatch_db_hours(self, cmn, output, start_d, end_d):
         """Return a StringIO object conaining an HTML reports showing
            hours recoreded between dates in the dispatch DB"""
+
+        time_dict = {}
+        te_list = cmn.dat.get_wc_date_range(start_d, end_d)
+        (watch_id_start, watch_id_end) = cmn.get_watch_range(te_list)
+        cmn.add_time_entries(time_dict, te_list)
+
+        te_list = cmn.dat.get_dispatch_by_watch(watch_id_start, watch_id_end)
+        cmn.add_time_entries(time_dict, te_list)
+
+        te_list = cmn.dat.get_car_by_watch(watch_id_start, watch_id_end)
+        cmn.add_time_entries(time_dict, te_list)
+
+        te_list = cmn.dat.get_ic_by_watch(watch_id_start, watch_id_end)
+        cmn.add_time_entries(time_dict, te_list)
+
+        output.write("<html>\n")
         output.write("<body>\n")
         output.write("<h1>Dispatch Log Hours Extract</h1>\n")
         output.write(f"<h2>From {start_d} to {end_d}</h2>\n")
+
+        name_dict = cmn.dat.get_full_name(time_dict.keys())
+        for i in sorted(name_dict, key=name_dict.get):
+            output.write(f"<h3>{name_dict[i]} ({i})</h3>")
+
         output.write("</body>\n")
+        output.write("</html>")
 
 
 class TimeEntry():

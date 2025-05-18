@@ -115,14 +115,11 @@ class TimekeepingMain(commonwx.CommonFrame):
 
         reports = common.DispatchDbReports()
         web_page = io.StringIO()
-        reports.dispatch_db_hours(web_page, start_d, end_d)
-
+        reports.dispatch_db_hours(self.cmn, web_page, start_d, end_d)
         web_page.seek(0)
-#       print(web_page.read())
         report_viewer = commonwx.ShowHTML(self, self.cmn, web_page,
             "Import from Dispatch DB")
         report_viewer.Show()
-
         web_page.close()
 
 
