@@ -120,26 +120,29 @@ class DispatchDbReports():
         te_list = cmn.dat.get_ic_by_watch(watch_id_start, watch_id_end)
         cmn.add_time_entries(time_dict, te_list)
 
-        output.write("<html>\n")
-        output.write("<body>\n")
-        output.write("<h1>Dispatch Log Hours Extract</h1>\n")
-        output.write(f"<h2>From {start_d} to {end_d}</h2>\n")
+        output.write('<html>\n')
+        output.write('<body>\n')
+        output.write('<h1>Dispatch Log Hours Extract</h1>\n')
+        output.write(f'<h2>From {start_d} to {end_d}</h2>\n')
 
         name_dict = cmn.dat.get_full_name(time_dict.keys())
         for i in sorted(name_dict, key=name_dict.get):
-            output.write(f"<h3>{name_dict[i]} ({i})</h3>")
+            output.write(f'<p>{name_dict[i]} ({i})</p>')
             total_rec = 0.0
-            output.write("<table>")
+            output.write('<table>')
+            output.write(f'<tr><th>Hours</th>'
+                + f'<th>Activity</th></tr>')
             for j in sorted(time_dict[i]):
                 total_rec += j.hours_rec
-                output.write(f"<tr><td>{j.hours_rec}</td>"
-                    + f"<td>{j.unit_id}</td></tr>")
-            output.write(f"<tr><td>{total_rec}</td>"
-                + f"<td>TOTAL</td></tr>")
-            output.write("</table>")
+                output.write(f'<tr><td style="text-align:right">'
+                    + f'{j.hours_rec}</td>'
+                    + f'<td>{j.unit_id}</td></tr>')
+            output.write(f'<tr><td style="text-align:right">{total_rec}</td>'
+                + f'<td>TOTAL</td></tr>')
+            output.write('</table>')
 
-        output.write("</body>\n")
-        output.write("</html>")
+        output.write('</body>\n')
+        output.write('</html>')
 
 
 class TimeEntry():
