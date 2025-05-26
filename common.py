@@ -270,7 +270,7 @@ class Common():
 
         start_d = get_work_week_start_d(date_d)
         end_d = start_d + datetime.timedelta(weeks=1)
-        return (start_d, end_d)
+        return start_d, end_d
 
     def get_watch_range(self, te_list):
         """Return smallest range of watches that includes all TimeEntry

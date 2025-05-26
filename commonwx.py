@@ -32,7 +32,7 @@ class CommonFrame(wx.Frame):
 
     def __init__(self, parent, cmn, title):
         wx.Frame.__init__(self, parent, title=title)
-        self.SetMinSize(wx.Size(512, 256))
+        self.SetMinSize(wx.Size(256, 256))
         self.pnl = wx.Panel(self)
         self.cmn = cmn
 

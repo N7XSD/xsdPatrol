@@ -63,25 +63,35 @@ class TimekeepingMain(commonwx.CommonFrame):
         """The main sizer holds everthing the user will interact with"""
         self.working_d = (self.cmn.app_start_time_dt
             - datetime.timedelta(weeks=1)).date()
-        self.cmn.get_last_work_week(self.working_d)
+        self.start_d, self.end_d = self.cmn.get_last_work_week(self.working_d)
 
         # Static text
-        label_start_date = wx.StaticText(self.pnl, label="Select Date")
+        label_start_date = wx.StaticText(self.pnl,
+            label="Select any day in work week")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        ctrl_start_date = wxadv.DatePickerCtrl(self.pnl)
+        ctrl_start_date = wxadv.CalendarCtrl(self.pnl)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
 
         # wx.DateTime months start at zero
         working_wxd = wx.DateTime(self.working_d.day,
-            self.working_d.month-1, self.working_d.year)
-        ctrl_start_date.SetValue(working_wxd)
+            self.working_d.month - 1, self.working_d.year)
+        start_wxd = wx.DateTime(self.start_d.day,
+            self.start_d.month - 1, self.start_d.year)
+        end_wxd = wx.DateTime(self.end_d.day,
+            self.end_d.month - 1, self.end_d.year)
+        ctrl_start_date.SetDateRange(upperdate=end_wxd)
+        ctrl_start_date.SetDate(start_wxd)
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
-        self.pnl.Bind(wxadv.EVT_DATE_CHANGED, self.on_date_changed,
-            ctrl_start_date)
+        self.pnl.Bind(wxadv.EVT_CALENDAR,
+            self.on_date_changed, ctrl_start_date)
+        self.pnl.Bind(wxadv.EVT_CALENDAR_PAGE_CHANGED,
+            self.on_date_changed, ctrl_start_date)
+        self.pnl.Bind(wxadv.EVT_CALENDAR_SEL_CHANGED,
+            self.on_date_changed, ctrl_start_date)
 
         # BOX 0
         # Headings
@@ -110,18 +120,17 @@ class TimekeepingMain(commonwx.CommonFrame):
 
     def on_date_changed(self, _event):
         """Change the working date"""
+        self.working_d = datetime.date.fromisoformat(
+            _event.GetDate().FormatISODate())
+        self.start_d, self.end_d = self.cmn.get_last_work_week(self.working_d)
 
     def on_import_di_db_hours(self, _event):
         """Open Dispatch DB import window"""
 #       timeimportdi.TimeImportDispatchHours(self, self.cmn)
 
-        # Ask the user to choose start and end dates.
-        # FIXME: Not really.  Pick some for testing.
-        (start_d, end_d) = self.cmn.get_last_work_week(self.working_d)
-
         reports = common.DispatchDbReports()
         web_page = io.StringIO()
-        reports.dispatch_db_hours(self.cmn, web_page, start_d, end_d)
+        reports.dispatch_db_hours(self.cmn, web_page, self.start_d, self.end_d)
         web_page.seek(0)
         report_viewer = commonwx.ShowHTML(self, self.cmn, web_page,
             "Import from Dispatch DB")
