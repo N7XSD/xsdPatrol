@@ -9,6 +9,7 @@ import datetime
 import io
 import logging
 import wx
+import wx.adv as wxadv
 
 import common
 import commonwx
@@ -65,18 +66,22 @@ class TimekeepingMain(commonwx.CommonFrame):
         self.cmn.get_last_work_week(self.working_d)
 
         # Static text
-        label_start_date = wx.StaticText(self.pnl, label="Test Date")
+        label_start_date = wx.StaticText(self.pnl, label="Select Date")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        ctrl_start_date = wx.TextCtrl(self.pnl,
-            style=wx.TE_READONLY)
+        ctrl_start_date = wxadv.DatePickerCtrl(self.pnl)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
 
-        ctrl_start_date.SetValue(self.working_d.isoformat())
+        # wx.DateTime months start at zero
+        working_wxd = wx.DateTime(self.working_d.day,
+            self.working_d.month-1, self.working_d.year)
+        ctrl_start_date.SetValue(working_wxd)
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
+        self.pnl.Bind(wxadv.EVT_DATE_CHANGED, self.on_date_changed,
+            ctrl_start_date)
 
         # BOX 0
         # Headings
@@ -102,6 +107,9 @@ class TimekeepingMain(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
+
+    def on_date_changed(self, _event):
+        """Change the working date"""
 
     def on_import_di_db_hours(self, _event):
         """Open Dispatch DB import window"""
