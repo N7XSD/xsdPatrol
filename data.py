@@ -100,10 +100,8 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
-            # Shift_Number starts with 1 but we start shift numbers
-            # with 0 internally
             start_dt = self.cmn.convert_watch_date(
-                i.Watch_ID, i.Shift_Number - 1)
+                i.Watch_ID, i.Shift_Number)
 
             unit_st = "Car " + str(i.Car_Number)
             if i.Driver1_ID:
@@ -246,10 +244,8 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
-            # Shift_Number starts with 1 but we start shift numbers
-            # with 0 internally
             start_dt = self.cmn.convert_watch_date(
-                i.Watch_ID, i.Shift_Number - 1)
+                i.Watch_ID, i.Shift_Number)
 
             unit_st = "Unknown IC"
             if i.IC_Number == 1:
@@ -315,8 +311,6 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
-            # Shift_Number starts with 1 but we start shift numbers
-            # with 0 internally
             start_dt = self.cmn.convert_watch_date(i.Watch_ID)
 
             if i.Watch_Commander_ID:
