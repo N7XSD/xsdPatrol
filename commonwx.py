@@ -22,6 +22,7 @@ class ShowHTML(wx.Frame):
         wx.Frame.__init__(self, parent, title=title)
         html_window = wx.html.HtmlWindow(self)
         html_window.SetPage(html_content.read())
+        self.SetSize(wx.Size(512, 512))
 
 
 class CommonFrame(wx.Frame):

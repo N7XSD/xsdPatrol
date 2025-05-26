@@ -124,22 +124,35 @@ class DispatchDbReports():
         output.write('<body>\n')
         output.write('<h1>Dispatch Log Hours Extract</h1>\n')
         output.write(f'<h2>From {start_d} to {end_d}</h2>\n')
+        output.write('<p>Notes about hours.</p>\n')
+        output.write('<ul>\n')
+        output.write('''<li>Hours are extracted from the dispatch log
+            database.</li>\n''')
+        output.write('''<li>Date/Time is the nominal start of the shift.
+            Actual arrival time is not recorded in the database.</li>\n''')
+        output.write('''<li>When hours are recorded as "99" they are
+            converted to zero and "WC" is appended to the activity.</li>\n''')
+#       output.write('''<li></li>\n''')
+        output.write('</ul>\n')
 
         name_dict = cmn.dat.get_full_name(time_dict.keys())
         for i in sorted(name_dict, key=name_dict.get):
-            output.write(f'<p>{name_dict[i]} ({i})</p>')
+            output.write(f'<p>{name_dict[i]} ({i})</p>\n')
             total_rec = 0.0
-            output.write('<table>')
-            output.write(f'<tr><th>Hours</th>'
-                + f'<th>Activity</th></tr>')
+            output.write('<table>\n')
+            output.write('<tr><th>Hours</th>'
+                + '<th>Date/Time</th></tr>'
+                + '<th>Activity</th></tr>\n')
             for j in sorted(time_dict[i]):
                 total_rec += j.hours_rec
+                date_st = j.service_date.strftime(cmn.stns.get_format_datetime())
                 output.write(f'<tr><td style="text-align:right">'
                     + f'{j.hours_rec}</td>'
-                    + f'<td>{j.unit_id}</td></tr>')
+                    + f'<td>{date_st}</td>'
+                    + f'<td>{j.unit_id}</td></tr>\n')
             output.write(f'<tr><td style="text-align:right">{total_rec}</td>'
-                + f'<td>TOTAL</td></tr>')
-            output.write('</table>')
+                + f'<td>TOTAL</td></tr>\n')
+            output.write('</table>\n')
 
         output.write('</body>\n')
         output.write('</html>')
@@ -229,6 +242,22 @@ class Common():
                 time_dict[i.user_id].append(i)
             else:
                 time_dict[i.user_id] = [i]
+
+    def convert_watch_date(self, watch_id, shift_num=0):
+        """Return the datetime when the watch (or shift) starts"""
+        num_watches = len(self.stns.get_names_watch())
+        watch_length = 24 / num_watches
+        num_shifts = len(self.stns.get_names_shift())
+        shift_length = watch_length / num_shifts
+
+        days, watch_num = divmod(watch_id, num_watches)
+        more_time = datetime.timedelta(days=days)
+        more_time = more_time + datetime.timedelta(
+            hours=watch_num * watch_length)
+        more_time = more_time + datetime.timedelta(
+            hours=shift_num * shift_length)
+        start_dt = self.stns.get_first_watch() + more_time
+        return start_dt
 
     def get_hours(self, start_d, end_d):
         """Return a list of TimeEntry objects for the date range"""

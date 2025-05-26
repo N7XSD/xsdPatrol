@@ -37,28 +37,32 @@ class Settings():
         try:
             section = self.config[str(sect)]
             val = section.get(str(key), str(def_val))
-            if val_type == 'int':
-                val = int(val)
             # This is where we should test to see if our value should be
             # a list and do the conversion.  Tuples may also need some love.
         except KeyError:
             val = def_val
+        if val_type == 'int':
+            val = int(val)
+        elif val_type == 'date':
+            val = datetime.datetime.fromisoformat(val)
+        elif val_type == 'list':
+            val = val.split()
         return val
 
     def get_first_watch(self):
-        return self._get('date', 'first-watch', '2009-04-12')
+        return self._get('date', 'first-watch', '2009-08-14', 'date')
 
     def get_format_date(self):
         """Return date format"""
-        return self._get('format', 'date', '%%Y-%%m-%%d')
+        return self._get('format', 'date', '%Y-%m-%d')
 
     def get_format_time(self):
         """Return time format"""
-        return self._get('format', 'time', '%%H:%%M')
+        return self._get('format', 'time', '%H:%M')
 
     def get_format_datetime(self):
         """Return datetime format"""
-        return self._get('format', 'datetime', '%%Y-%%m-%%d %%H:%%M')
+        return self._get('format', 'datetime', '%Y-%m-%d %H:%M')
 
     def get_gear(self):
         return self._get('resources', "gear", [
@@ -69,10 +73,10 @@ class Settings():
             "Flashlight-4", "Flashlight-5", "Flashlight-6"])
 
     def get_names_shift(self):
-        return self._get('resources', 'shift-names', ["1", "2", "3"])
+        return self._get('resources', 'shift-names', "1 2 3", "list")
 
     def get_names_watch(self):
-        return self._get('resources', 'watch-names', ["1", "2"])
+        return self._get('resources', 'watch-names', "1 2", "list")
 
     def get_pathname_dispatch_db(self):
         """Return full pathname for Dispatcher/WC log DB"""

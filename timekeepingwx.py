@@ -60,9 +60,9 @@ class TimekeepingMain(commonwx.CommonFrame):
 
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
-        working_d = (self.cmn.app_start_time_dt
+        self.working_d = (self.cmn.app_start_time_dt
             - datetime.timedelta(weeks=1)).date()
-        self.cmn.get_last_work_week(working_d)
+        self.cmn.get_last_work_week(self.working_d)
 
         # Static text
         label_start_date = wx.StaticText(self.pnl, label="Test Date")
@@ -73,7 +73,7 @@ class TimekeepingMain(commonwx.CommonFrame):
             style=wx.TE_READONLY)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
 
-        ctrl_start_date.SetValue(working_d.isoformat())
+        ctrl_start_date.SetValue(self.working_d.isoformat())
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
@@ -109,9 +109,7 @@ class TimekeepingMain(commonwx.CommonFrame):
 
         # Ask the user to choose start and end dates.
         # FIXME: Not really.  Pick some for testing.
-        working_d = (self.cmn.app_start_time_dt
-            - datetime.timedelta(weeks=1)).date()
-        (start_d, end_d) = self.cmn.get_last_work_week(working_d)
+        (start_d, end_d) = self.cmn.get_last_work_week(self.working_d)
 
         reports = common.DispatchDbReports()
         web_page = io.StringIO()

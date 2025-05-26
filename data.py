@@ -22,7 +22,7 @@ def display_name(surname, first_name, pref_name):
 
 
 def display_name_by_surname(surname, first_name, pref_name):
-    """Return the full name as a string"""
+    """Return the full name, surname first, as a string"""
     if not pref_name or pref_name == first_name:
         name = f"{surname}, {first_name}"
     else:
@@ -100,12 +100,17 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
+            # Shift_Number starts with 1 but we start shift numbers
+            # with 0 internally
+            start_dt = self.cmn.convert_watch_date(
+                i.Watch_ID, i.Shift_Number - 1)
+
             unit_st = "Car " + str(i.Car_Number)
             if i.Driver1_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Driver1_ID
                 te.unit_id = unit_st
-                te.service_date = i.InService_DateTime
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = False
@@ -122,7 +127,7 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Driver2_ID
                 te.unit_id = unit_st
-                te.service_date = i.InService_DateTime
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = False
@@ -139,7 +144,7 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
-                te.service_date = i.InService_DateTime
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = True
@@ -153,7 +158,7 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Observer
                 te.unit_id = unit_st + " Observer"
-                te.service_date = i.InService_DateTime
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = False
@@ -241,6 +246,11 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
+            # Shift_Number starts with 1 but we start shift numbers
+            # with 0 internally
+            start_dt = self.cmn.convert_watch_date(
+                i.Watch_ID, i.Shift_Number - 1)
+
             unit_st = "Unknown IC"
             if i.IC_Number == 1:
                 unit_st = "Rampart IC"
@@ -253,7 +263,7 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Monitor_ID
                 te.unit_id = unit_st
-                te.service_date = i.InService_DateTime
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = False
@@ -270,7 +280,7 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
-                te.service_date = i.InService_DateTime
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = i.Shift_Number
                 te.student = True
@@ -305,11 +315,15 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
+            # Shift_Number starts with 1 but we start shift numbers
+            # with 0 internally
+            start_dt = self.cmn.convert_watch_date(i.Watch_ID)
+
             if i.Watch_Commander_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_ID
                 te.unit_id = "Watch Commander"
-                te.service_date = i.Watch_Start
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = 0
                 te.second_shift = False
@@ -325,7 +339,7 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_Trainee_ID
                 te.unit_id = "Watch Commander Trainee"
-                te.service_date = i.Watch_Start
+                te.service_date = start_dt
                 te.watch_id = i.Watch_ID
                 te.shift_number = 0
                 te.second_shift = False
