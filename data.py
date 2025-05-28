@@ -10,6 +10,8 @@ import logging
 import settings
 
 DATE_FORMAT_MSACCESS = "#%m/%d/%Y#"
+MAXINT_MSACCESS = 2147483647
+MININT_MSACCESS = -2147483648
 
 
 def display_name(surname, first_name, pref_name):
@@ -82,12 +84,12 @@ class Data():
     def get_car_by_watch(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
 
-        # SQL BETWEEN includes both satart and end dates so we addjust
+        # SQL BETWEEN includes both start and end dates so we addjust
         s_watch_st = str(s_watch)
         e_watch_st = str(e_watch - 1)
 
         sql_statement = """
-            SELECT InService_DateTime, Car_Number, Watch_ID, Shift_Number,
+            SELECT InService_DateTime, Car_Number, Watch_Number, Shift_Number,
                 Driver1_ID, Driver1_Hours, Driver2_ID, Driver2_Hours,
                 Trainee_ID, Trainee_Hours, Observer, Observer_Hours
             FROM Car_Details
@@ -100,16 +102,16 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
-            start_dt = self.cmn.convert_watch_date(
-                i.Watch_ID, i.Shift_Number)
+            start_d, _, _ = self.cmn.normalize_shift_date(
+                i.InService_DateTime)
 
             unit_st = "Car " + str(i.Car_Number)
             if i.Driver1_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Driver1_ID
                 te.unit_id = unit_st
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = False
                 te.instructor = False
@@ -121,12 +123,13 @@ class Data():
                     te.unit_id = unit_st + " WC"
                     te.hours_rec = 0.0
                 te_list.append(te)
-            elif i.Driver2_ID:
+
+            if i.Driver2_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Driver2_ID
                 te.unit_id = unit_st
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = False
                 te.instructor = False
@@ -138,12 +141,13 @@ class Data():
                     te.unit_id = unit_st + " WC"
                     te.hours_rec = 0.0
                 te_list.append(te)
-            elif i.Trainee_ID:
+
+            if i.Trainee_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = True
                 te.instructor = False
@@ -152,12 +156,13 @@ class Data():
                     te.unit_id = unit_st + " WC"
                     te.hours_rec = 0.0
                 te_list.append(te)
-            elif i.Observer:
+
+            if i.Observer:
                 te = common.TimeEntry()
                 te.user_id = i.Observer
                 te.unit_id = unit_st + " Observer"
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = False
                 te.instructor = False
@@ -171,12 +176,12 @@ class Data():
     def get_dispatch_by_watch(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
 
-        # SQL BETWEEN includes both satart and end dates so we addjust
+        # SQL BETWEEN includes both start and end values so we addjust
         s_watch_st = str(s_watch)
         e_watch_st = str(e_watch - 1)
 
         sql_statement = """
-            SELECT Shift_Start, Watch_ID, Shift_Number,
+            SELECT Shift_Start, Watch_Number, Shift_Number,
                 Dispatcher1_ID, Dispatcher1_Hours,
                 Dispatcher2_ID, Dispatcher2_Hours
             FROM Dispatcher_Log
@@ -189,12 +194,14 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
+            start_d, _, _ = self.cmn.normalize_shift_date(i.Shift_Start)
+
             if i.Dispatcher1_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Dispatcher1_ID
                 te.unit_id = "Dispatcher"
-                te.service_date = i.Shift_Start
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = False
                 te.instructor = False
@@ -206,12 +213,13 @@ class Data():
                     te.unit_id = "Dispatcher WC"
                     te.hours_rec = 0.0
                 te_list.append(te)
-            elif i.Dispatcher2_ID:
+
+            if i.Dispatcher2_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Dispatcher2_ID
                 te.unit_id = "Dispatcher Trainee"
-                te.service_date = i.Shift_Start
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = True
                 te.instructor = False
@@ -225,13 +233,13 @@ class Data():
     def get_ic_by_watch(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
 
-        # SQL BETWEEN includes both satart and end dates so we addjust
+        # SQL BETWEEN includes both start and end dates so we addjust
         s_watch_st = str(s_watch)
         e_watch_st = str(e_watch - 1)
 
         sql_statement = """
             SELECT InService_DateTime, IC_Number,
-                Watch_ID, Shift_Number,
+                Watch_Number, Shift_Number,
                 Monitor_ID, Monitor_Hours,
                 Trainee_ID, Trainee_Hours
             FROM IC_Details
@@ -244,8 +252,8 @@ class Data():
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
-            start_dt = self.cmn.convert_watch_date(
-                i.Watch_ID, i.Shift_Number)
+            start_d, _, _ = self.cmn.normalize_shift_date(
+                i.InService_DateTime)
 
             unit_st = "Unknown IC"
             if i.IC_Number == 1:
@@ -259,8 +267,8 @@ class Data():
                 te = common.TimeEntry()
                 te.user_id = i.Monitor_ID
                 te.unit_id = unit_st
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = False
                 te.instructor = False
@@ -272,12 +280,13 @@ class Data():
                     te.unit_id = unit_st + " WC"
                     te.hours_rec = 0.0
                 te_list.append(te)
-            elif i.Trainee_ID:
+
+            if i.Trainee_ID:
                 te = common.TimeEntry()
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = i.Shift_Number
                 te.student = True
                 te.instructor = False
@@ -291,10 +300,13 @@ class Data():
     def get_wc_date_range(self, s_date_d, e_date_d):
         """Return list of Watch Commanders who worked during a date range"""
         # Date range includes the start date and excludes the end date
-        # (typical Python)
+        # (typical Python).
 
-        # SQL between includes both satart and end dates so we addjust
-        s_date_st = s_date_d.strftime(DATE_FORMAT_MSACCESS)
+        # Watch Commanders often start early so we adjust.
+        s_date_st = (s_date_d - datetime.timedelta(days=1)).strftime(
+            DATE_FORMAT_MSACCESS)
+
+        # SQL between includes both start and end dates so we addjust.
         e_date_st = (e_date_d - datetime.timedelta(days=1)).strftime(
             DATE_FORMAT_MSACCESS)
 
@@ -308,42 +320,50 @@ class Data():
 #       print()
         self.curs_disp.execute(sql_statement)
 
+        watch_id_first = MAXINT_MSACCESS
+        watch_id_last = MININT_MSACCESS
         te_list = []
         rows = self.curs_disp.fetchall()
         for i in rows:
-            start_dt = self.cmn.convert_watch_date(i.Watch_ID)
+            start_d, _ = self.cmn.normalize_watch_date(i.Watch_Start)
+            if start_d < s_date_d:
+                continue
 
             if i.Watch_Commander_ID:
+                watch_id_first = min(watch_id_first, i.Watch_ID)
+                watch_id_last = max(watch_id_last, i.Watch_ID)
                 te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_ID
                 te.unit_id = "Watch Commander"
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = 0
                 te.second_shift = False
                 te.student = False
                 te.instructor = False
                 if i.Watch_Commander_Trainee_ID:
-                    te.unit_id = "Watch Commander Trainer"
                     te.instructor = True
                 te.hours_rec = 12.0
                 te.hours_calc = 0.0
                 te_list.append(te)
-            elif i.Watch_Commander_Trainee_ID:
+
+            if i.Watch_Commander_Trainee_ID:
+                watch_id_first = min(watch_id_first, i.Watch_ID)
+                watch_id_last = max(watch_id_last, i.Watch_ID)
                 te = common.TimeEntry()
                 te.user_id = i.Watch_Commander_Trainee_ID
                 te.unit_id = "Watch Commander Trainee"
-                te.service_date = start_dt
-                te.watch_id = i.Watch_ID
+                te.service_date = start_d
+                te.watch_number = i.Watch_Number
                 te.shift_number = 0
                 te.second_shift = False
                 te.student = True
                 te.instructor = False
-                te.hours_rec = 12.0
+                te.hours_rec = 4.0
                 te.hours_calc = 0.0
                 te_list.append(te)
 
-        return te_list
+        return te_list, watch_id_first, watch_id_last + 1
 
     def get_active_members(self):
         """Return a dictionary with id:full_name"""

@@ -107,8 +107,8 @@ class DispatchDbReports():
            hours recoreded between dates in the dispatch DB"""
 
         time_dict = {}
-        te_list = cmn.dat.get_wc_date_range(start_d, end_d)
-        (watch_id_start, watch_id_end) = cmn.get_watch_range(te_list)
+        te_list, watch_id_start, watch_id_end \
+            = cmn.dat.get_wc_date_range(start_d, end_d)
         cmn.add_time_entries(time_dict, te_list)
 
         te_list = cmn.dat.get_dispatch_by_watch(watch_id_start, watch_id_end)
@@ -141,14 +141,18 @@ class DispatchDbReports():
             total_rec = 0.0
             output.write('<table>\n')
             output.write('<tr><th>Hours</th>'
-                + '<th>Date/Time</th></tr>'
+                + '<th>Date</th></tr>'
+                + '<th>Watch</th></tr>'
+                + '<th>Shift</th></tr>'
                 + '<th>Activity</th></tr>\n')
             for j in sorted(time_dict[i]):
                 total_rec += j.hours_rec
-                date_st = j.service_date.strftime(cmn.stns.get_format_datetime())
+                date_st = j.service_date.strftime(cmn.stns.get_format_date())
                 output.write(f'<tr><td style="text-align:right">'
                     + f'{j.hours_rec}</td>'
                     + f'<td>{date_st}</td>'
+                    + f'<td>{j.watch_number}</td>'
+                    + f'<td>{j.shift_number}</td>'
                     + f'<td>{j.unit_id}</td></tr>\n')
             output.write(f'<tr><td style="text-align:right">{total_rec}</td>'
                 + f'<td>TOTAL</td></tr>\n')
@@ -162,7 +166,7 @@ class TimeEntry():
     user_id = ""
     unit_id = ""
     service_date = None
-    watch_id = 0
+    watch_number = 0
     shift_number = 0
     second_shift = False
     student = False
@@ -244,26 +248,6 @@ class Common():
             else:
                 time_dict[i.user_id] = [i]
 
-    def convert_watch_date(self, watch_id, shift_num=0):
-        """Return the datetime when the watch (or shift) starts"""
-        num_watches = len(self.stns.get_names_watch())
-        watch_length = 24 / num_watches
-        num_shifts = len(self.stns.get_names_shift())
-        shift_length = watch_length / num_shifts
-
-        days, watch_num = divmod(watch_id, num_watches)
-        more_time = datetime.timedelta(days=days)
-        more_time = more_time + datetime.timedelta(
-            hours=watch_num * watch_length)
-        more_time = more_time + datetime.timedelta(
-            hours=shift_num * shift_length)
-        start_dt = self.stns.get_first_watch() + more_time
-        return start_dt
-
-    def get_hours(self, start_d, end_d):
-        """Return a list of TimeEntry objects for the date range"""
-        self.dat.get_wc_date_range(start_d, end_d)
-
     def get_last_work_week(self, date_d):
         """Returns datetime.date objects for first day of @date_d work
         week and the first day of the following week"""
@@ -272,16 +256,26 @@ class Common():
         end_d = start_d + datetime.timedelta(weeks=1)
         return start_d, end_d
 
-    def get_watch_range(self, te_list):
-        """Return smallest range of watches that includes all TimeEntry
-        objects in te_list"""
+    def normalize_shift_date(self, rec_dt):
+        """Return nominal shift date, etc. given the recorded datetime"""
+        length_shift = (24 / len(self.stns.get_names_watch())) / len(
+            self.stns.get_names_shift())
+        # Arbitrarily, times in the last quarter of a shift are early
+        # arrivals for the next shift.
+        temp_dt = rec_dt + datetime.timedelta(hours=length_shift / 4)
+        start_d = temp_dt.date()
+        watch_number = 0
+        shift_number = 0
+        # FIXME: Calculate the watch and shift numbers
+        return start_d, watch_number, shift_number
 
-        if te_list:
-            max_watch = min_watch = te_list[0].watch_id
-            for i in te_list:
-                max_watch = max(max_watch, i.watch_id)
-                min_watch = min(min_watch, i.watch_id)
-            max_watch += 1      # It's a Python thing
-        else:
-            min_watch = max_watch = None
-        return min_watch, max_watch
+    def normalize_watch_date(self, rec_dt):
+        """Return nominal watch date, etc. given the recorded datetime"""
+        length_watch = 24 / len(self.stns.get_names_watch())
+        # Arbitrarily, times in the last quarter of a watch are early
+        # arrivals for the next watch.
+        temp_dt = rec_dt + datetime.timedelta(hours=length_watch / 4)
+        start_d = temp_dt.date()
+        watch_number = 0
+        # FIXME: Calculate the watch number
+        return start_d, watch_number

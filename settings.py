@@ -73,9 +73,11 @@ class Settings():
             "Flashlight-4", "Flashlight-5", "Flashlight-6"])
 
     def get_names_shift(self):
+        # Watches are divided into named shifts of equal length
         return self._get('resources', 'shift-names', "1 2 3", "list")
 
     def get_names_watch(self):
+        # Days are divided into named watches of equal length
         return self._get('resources', 'watch-names', "1 2", "list")
 
     def get_pathname_dispatch_db(self):

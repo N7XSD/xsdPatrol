@@ -36,8 +36,8 @@ class TimekeepingMain():
         (start_d, end_d) = self.cmn.get_last_work_week(working_d)
         print("Date Range: %s -- %s" % (start_d, end_d))
 
-        te_list = cmn.dat.get_wc_date_range(start_d, end_d)
-        (watch_id_start, watch_id_end) = cmn.get_watch_range(te_list)
+        te_list, watch_id_start, watch_id_end \
+            = cmn.dat.get_wc_date_range(start_d, end_d)
         print("Watch Range: %s -- %s" % (watch_id_start, watch_id_end))
         cmn.add_time_entries(time_dict, te_list)
 
