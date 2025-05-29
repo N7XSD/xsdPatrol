@@ -398,9 +398,6 @@ class Data():
         name_dict = {}
         rows = self.curs_disp.fetchall()
         for i in rows:
-#           (surname, givname, prefname) = parse_dispatch_name(i.User_Name)
-#           name_dict[i.User_ID] = display_name_by_surname(
-#               surname, givname, prefname)
             name_dict[i.User_ID] = i.User_Name
         return name_dict
 
