@@ -31,14 +31,12 @@ class TimekeepingMain():
 
         working_d = (self.cmn.app_start_time_dt
             - datetime.timedelta(weeks=1)).date()
-        print("Working Date: %s" % working_d)
 
         (start_d, end_d) = self.cmn.get_last_work_week(working_d)
         print("Date Range: %s -- %s" % (start_d, end_d))
 
         te_list, watch_id_start, watch_id_end \
             = cmn.dat.get_wc_date_range(start_d, end_d)
-        print("Watch Range: %s -- %s" % (watch_id_start, watch_id_end))
         cmn.add_time_entries(time_dict, te_list)
 
         te_list = cmn.dat.get_dispatch_by_watch(watch_id_start, watch_id_end)
@@ -60,14 +58,18 @@ class TimekeepingMain():
             total_rec = 0.0
             total_calc = 0.0
             for j in sorted(time_dict[i]):
+                watch_name = str(j.watch_number)
+                shift_name = str(j.shift_number)
                 total_rec += j.hours_rec
                 total_calc += j.hours_calc
                 if j.hours_rec == j.hours_calc:
-                    print(f"\t{j.service_date}"
-                        f"\t{j.hours_rec:7} {j.hours_calc:8}\t{j.unit_id}")
+                    print(f"\t{j.service_date}\t"
+                        f"{watch_name:3} {shift_name:4}"
+                        f"{j.hours_rec:7} {j.hours_calc:8}\t{j.unit_id}")
                 else:
-                    print(f"*\t{j.service_date}"
-                        f"\t{j.hours_rec:7} {j.hours_calc:8}\t{j.unit_id}")
+                    print(f"\t{j.service_date}\t"
+                        f"{watch_name:3} {shift_name:4}"
+                        f"{j.hours_rec:7} {j.hours_calc:8}\t{j.unit_id}")
             print("\t\t\t\t=======  =======")
             print(f"\t\t\t\t{total_rec:7} {total_calc:8}")
 
