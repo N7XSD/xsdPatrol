@@ -128,7 +128,7 @@ class DispatchDbReports():
         output.write('<ul>\n')
         output.write('''<li>Hours are extracted from the dispatch log
             database.</li>\n''')
-        output.write('''<li>Date/Time is the nominal start of the shift.
+        output.write('''<li>Date is the nominal date of the shift.
             Actual arrival time is not recorded in the database.</li>\n''')
         output.write('''<li>When hours are recorded as "99" they are
             converted to zero and "WC" is appended to the activity.</li>\n''')
@@ -177,19 +177,27 @@ class TimeEntry():
     def __str__(self, other):
         return (
             f"{self.user_id:12}"
+            f" {self.service_date}"
             f" {self.watch_id}"
             f" {self.shift_number}"
             f" {self.hours_calc}")
 
     def __hash__(self):
-        return hash(user_id, unit_id, service_date, watch_id,
+        return hash(user_id, unit_id, service_date, watch_number,
             shift_number)
 
     def __eq__(self, other):
-        return self.service_date == other.service_date
+        return (self.service_date == other.service_date
+            and self.watch_number == other.watch_number
+            and self.shift_number == other.shift_number)
 
     def __lt__(self, other):
-        return self.service_date < other.service_date
+        return (self.service_date < other.service_date
+            or (self.service_date == other.service_date
+            and self.watch_number < other.watch_number)
+            or (self.service_date == other.service_date
+            and self.watch_number == other.watch_number)
+            and self.shift_number < other.shift_number)
 
 
 class Common():
