@@ -122,7 +122,10 @@ class TimekeepingMain(commonwx.CommonFrame):
         """Change the working date"""
         self.working_d = datetime.date.fromisoformat(
             _event.GetDate().FormatISODate())
-        self.start_d, self.end_d = self.cmn.get_last_work_week(self.working_d)
+#       print(self.working_d)
+        self.start_d = common.get_work_week_start_d(self.working_d)
+        self.end_d = self.start_d + datetime.timedelta(weeks=1)
+#       print(self.start_d, self.end_d)
 
     def on_import_di_db_hours(self, _event):
         """Open Dispatch DB import window"""

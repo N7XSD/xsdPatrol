@@ -71,10 +71,10 @@ def get_console_name():
 
 
 def get_work_week_start_d(date_d):
-    """Return a date object for the first day of the work for date"""
-    first_day = 0       # Work week starts on Sunday
+    """Return a date object for the first day of the work week for date"""
+    first_day = 6       # Work week starts on Sunday
     earlier_td = datetime.timedelta(
-        days=first_day + date_d.weekday() + 1)
+        days=((date_d.weekday() - first_day) % 7))
     start_day_d = date_d - earlier_td
     return start_day_d
 
@@ -119,6 +119,31 @@ class DispatchDbReports():
 
         te_list = cmn.dat.get_ic_by_watch(watch_id_start, watch_id_end)
         cmn.add_time_entries(time_dict, te_list)
+#       for i in sorted(time_dict):
+#           print(f'{i} : {time_dict[i]}')
+
+        user_ids = set()
+        for i in time_dict.values():
+            for j in i:
+                user_ids.add(j.user_id)
+
+        name_dict = cmn.dat.get_full_name(user_ids)
+        disp_name_dict = {}
+        for i in sorted(name_dict):
+#           print(f'{i} : {name_dict[i]}')
+            if i == name_dict[i]:
+                disp_name_dict[i] = i
+            else:
+#               disp_name_dict[i] = f'{name_dict[i]} ({i})'
+                disp_name_dict[f'{name_dict[i]} ({i})'] = i
+
+        for i in user_ids:
+            try:
+                for j in time_dict[i]:
+                    j.user_name = name_dict[i]
+            except KeyError:
+                for j in time_dict[i]:
+                    j.user_name = ''
 
         output.write('<html>\n')
         output.write('<body>\n')
@@ -135,9 +160,9 @@ class DispatchDbReports():
 #       output.write('''<li></li>\n''')
         output.write('</ul>\n')
 
-        name_dict = cmn.dat.get_full_name(time_dict.keys())
-        for i in sorted(name_dict, key=name_dict.get):
-            output.write(f'<p>{name_dict[i]} ({i})</p>\n')
+        user_keys = list(time_dict.keys())
+        for i in sorted(disp_name_dict):
+            output.write(f'<p>{i}</p>\n')
             total_rec = 0.0
             output.write('<table>\n')
             output.write('<tr><th>Hours</th>'
@@ -145,7 +170,7 @@ class DispatchDbReports():
                 + '<th>Watch</th></tr>'
                 + '<th>Shift</th></tr>'
                 + '<th>Activity</th></tr>\n')
-            for j in sorted(time_dict[i]):
+            for j in sorted(time_dict[disp_name_dict[i]]):
                 total_rec += j.hours_rec
                 date_st = j.service_date.strftime(cmn.stns.get_format_date())
                 output.write(f'<tr><td style="text-align:right">'
@@ -163,6 +188,7 @@ class DispatchDbReports():
 
 
 class TimeEntry():
+    user_name = ""
     user_id = ""
     unit_id = ""
     service_date = None
@@ -174,9 +200,10 @@ class TimeEntry():
     hours_rec = 0.0
     hours_calc = 0.0
 
-    def __str__(self, other):
+    def __str__(self):
         return (
-            f"{self.user_id:12}"
+            f"{self.user_name:12}"
+            f" {self.user_id:12}"
             f" {self.service_date}"
             f" {self.watch_id}"
             f" {self.shift_number}"
@@ -198,6 +225,9 @@ class TimeEntry():
             or (self.service_date == other.service_date
             and self.watch_number == other.watch_number)
             and self.shift_number < other.shift_number)
+
+    def get_display_name(self):
+        return f"{self.user_name} ({self.user_id})"
 
 
 class Common():
@@ -251,10 +281,12 @@ class Common():
         """Add a time recored to a user.  A new user is created,
         if needed"""
         for i in te_list:
-            if i.user_id in time_dict:
-                time_dict[i.user_id].append(i)
+#           user_key = f"{i.user_name} ({i.user_id})"
+            user_key = i.user_id
+            if user_key in time_dict:
+                time_dict[user_key].append(i)
             else:
-                time_dict[i.user_id] = [i]
+                time_dict[user_key] = [i]
 
     def get_last_work_week(self, date_d):
         """Returns datetime.date objects for first day of @date_d work

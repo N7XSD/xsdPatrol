@@ -305,10 +305,7 @@ class Data():
         # Watch Commanders often start early so we adjust.
         s_date_st = (s_date_d - datetime.timedelta(days=1)).strftime(
             DATE_FORMAT_MSACCESS)
-
-        # SQL between includes both start and end dates so we addjust.
-        e_date_st = (e_date_d - datetime.timedelta(days=1)).strftime(
-            DATE_FORMAT_MSACCESS)
+        e_date_st = e_date_d.strftime(DATE_FORMAT_MSACCESS)
 
         sql_statement = """
             SELECT Watch_ID, Watch_Start, Watch_Number,
@@ -326,7 +323,7 @@ class Data():
         rows = self.curs_disp.fetchall()
         for i in rows:
             start_d, _ = self.cmn.normalize_watch_date(i.Watch_Start)
-            if start_d < s_date_d:
+            if start_d < s_date_d or start_d >= e_date_d:
                 continue
 
             if i.Watch_Commander_ID:
@@ -416,6 +413,7 @@ class Data():
         self.curs_disp.execute(sql_statement)
         name_dict = {}
         rows = self.curs_disp.fetchall()
+#       print(f'Recored retrieved: {len(rows)}')
         for i in rows:
             if not i.User_Name:
                 full_Name = i.User_ID.strip()
