@@ -106,6 +106,7 @@ class DispatchDbReports():
         """Return a StringIO object conaining an HTML reports showing
            hours recoreded between dates in the dispatch DB"""
 
+        end1_d = end_d - datetime.timedelta(days=1)
         time_dict = {}
         te_list, watch_id_start, watch_id_end \
             = cmn.dat.get_wc_date_range(start_d, end_d)
@@ -148,7 +149,7 @@ class DispatchDbReports():
         output.write('<html>\n')
         output.write('<body>\n')
         output.write('<h1>Dispatch Log Hours Extract</h1>\n')
-        output.write(f'<h2>From {start_d} to {end_d}</h2>\n')
+        output.write(f'<h2>From {start_d} to {end1_d}</h2>\n')
         output.write('<p>Notes about hours.</p>\n')
         output.write('<ul>\n')
         output.write('''<li>Hours are extracted from the dispatch log

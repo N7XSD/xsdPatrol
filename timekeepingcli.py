@@ -33,7 +33,8 @@ class TimekeepingMain():
             - datetime.timedelta(weeks=1)).date()
 
         (start_d, end_d) = self.cmn.get_last_work_week(working_d)
-        print("Date Range: %s -- %s" % (start_d, end_d))
+        end1_d = end_d - datetime.timedelta(days=1)
+        print("Date Range: %s -- %s" % (start_d, end1_d))
 
         te_list, watch_id_start, watch_id_end \
             = cmn.dat.get_wc_date_range(start_d, end_d)
