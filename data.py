@@ -302,7 +302,8 @@ class Data():
         # Date range includes the start date and excludes the end date
         # (typical Python).
 
-        # Watch Commanders often start early so we adjust.
+        # Ask the DB for one day of data either side of the range so we
+        # can do a little date/time munging later in the code.
         s_date_st = (s_date_d - datetime.timedelta(days=1)).strftime(
             DATE_FORMAT_MSACCESS)
         e_date_st = e_date_d.strftime(DATE_FORMAT_MSACCESS)
