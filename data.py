@@ -402,8 +402,14 @@ class Data():
     def get_full_name(self, user_ids):
         """Return a dictionary with id:full_name"""
 
+        # Every User_ID with hours found in the DB is added to the name
+        # dictionary with a value intended to get attention.
+        # Names later found in the Users table are changed to something
+        # nicer.
+        name_dict = {}
         key_list = ""
-        for i in user_ids:
+        for i in sorted(user_ids):
+            name_dict[i] = f"### unexpected User_ID={i}"
             key_list += "'" + str(i) + "', "
         sql_statement = """
             SELECT User_ID, User_Name
@@ -412,7 +418,6 @@ class Data():
 #       print(sql_statement)
 #       print()
         self.curs_disp.execute(sql_statement)
-        name_dict = {}
         rows = self.curs_disp.fetchall()
 #       print(f'Recored retrieved: {len(rows)}')
         for i in rows:

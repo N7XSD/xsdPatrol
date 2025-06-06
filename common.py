@@ -147,7 +147,7 @@ class DispatchDbReports():
                     j.user_name = ''
 
         output.write('<html>\n')
-        output.write('<body>\n')
+        output.write('<body COLOR="black" BGCOLOR="white">\n')
         output.write('<h1>Dispatch Log Hours Extract</h1>\n')
         output.write(f'<h2>From {start_d} to {end1_d}</h2>\n')
         output.write('<p>Notes about hours.</p>\n')
@@ -163,7 +163,8 @@ class DispatchDbReports():
 
         user_keys = list(time_dict.keys())
         for i in sorted(disp_name_dict):
-            output.write(f'<p>{i}</p>\n')
+            s = i.replace('###', '<font COLOR="red">###</font>')
+            output.write(f'<p>{s}</p>\n')
             total_rec = 0.0
             output.write('<table>\n')
             output.write('<tr><th>Hours</th>'
