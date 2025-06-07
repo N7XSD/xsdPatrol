@@ -120,7 +120,7 @@ class Data():
                     te.instructor = True
                 te.hours_rec = float(i.Driver1_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = unit_st + " WC"
+                    te.unit_id = unit_st + " (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
 
@@ -138,7 +138,7 @@ class Data():
                     te.instructor = True
                 te.hours_rec = float(i.Driver2_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = unit_st + " WC"
+                    te.unit_id = unit_st + " (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
 
@@ -153,7 +153,7 @@ class Data():
                 te.instructor = False
                 te.hours_rec = float(i.Trainee_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = unit_st + " WC"
+                    te.unit_id = unit_st + " (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
 
@@ -168,7 +168,7 @@ class Data():
                 te.instructor = False
                 te.hours_rec = float(i.Observer_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = unit_st + " WC"
+                    te.unit_id = unit_st + " (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
         return te_list
@@ -210,7 +210,7 @@ class Data():
                     te.instructor = True
                 te.hours_rec = float(i.Dispatcher1_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = "Dispatcher WC"
+                    te.unit_id = "Dispatcher (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
 
@@ -225,7 +225,7 @@ class Data():
                 te.instructor = False
                 te.hours_rec = float(i.Dispatcher2_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = "Dispatcher WC"
+                    te.unit_id = "Dispatcher Trainee (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
         return te_list
@@ -277,7 +277,7 @@ class Data():
                     te.instructor = True
                 te.hours_rec = float(i.Monitor_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = unit_st + " WC"
+                    te.unit_id = unit_st + " (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
 
@@ -292,7 +292,7 @@ class Data():
                 te.instructor = False
                 te.hours_rec = float(i.Trainee_Hours)
                 if te.hours_rec == 99.0:
-                    te.unit_id = unit_st + " WC"
+                    te.unit_id = unit_st + " (no hours earned)"
                     te.hours_rec = 0.0
                 te_list.append(te)
         return te_list

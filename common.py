@@ -157,7 +157,8 @@ class DispatchDbReports():
         output.write('''<li>Date is the nominal date of the shift.
             Actual arrival time is not recorded in the database.</li>\n''')
         output.write('''<li>When hours are recorded as "99" they are
-            converted to zero and "WC" is appended to the activity.</li>\n''')
+            converted to zero and "(no hours earned) is appended to the
+            activity.</li>\n''')
 #       output.write('''<li></li>\n''')
         output.write('</ul>\n')
 
