@@ -111,8 +111,8 @@ class Data():
                 te.user_id = i.Driver1_ID
                 te.unit_id = unit_st
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = False
                 te.instructor = False
                 if i.Trainee_ID:
@@ -129,8 +129,8 @@ class Data():
                 te.user_id = i.Driver2_ID
                 te.unit_id = unit_st
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = False
                 te.instructor = False
                 if i.Trainee_ID:
@@ -147,8 +147,8 @@ class Data():
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = True
                 te.instructor = False
                 te.hours_rec = float(i.Trainee_Hours)
@@ -162,8 +162,8 @@ class Data():
                 te.user_id = i.Observer
                 te.unit_id = unit_st + " Observer"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = False
                 te.instructor = False
                 te.hours_rec = float(i.Observer_Hours)
@@ -201,8 +201,8 @@ class Data():
                 te.user_id = i.Dispatcher1_ID
                 te.unit_id = "Dispatcher"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = False
                 te.instructor = False
                 if i.Dispatcher2_ID:
@@ -219,8 +219,8 @@ class Data():
                 te.user_id = i.Dispatcher2_ID
                 te.unit_id = "Dispatcher Trainee"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = True
                 te.instructor = False
                 te.hours_rec = float(i.Dispatcher2_Hours)
@@ -268,8 +268,8 @@ class Data():
                 te.user_id = i.Monitor_ID
                 te.unit_id = unit_st
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = False
                 te.instructor = False
                 if i.Trainee_ID:
@@ -286,8 +286,8 @@ class Data():
                 te.user_id = i.Trainee_ID
                 te.unit_id = unit_st + " Trainee"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = i.Shift_Number
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = i.Shift_Number - 1
                 te.student = True
                 te.instructor = False
                 te.hours_rec = float(i.Trainee_Hours)
@@ -334,8 +334,8 @@ class Data():
                 te.user_id = i.Watch_Commander_ID
                 te.unit_id = "Watch Commander"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = 0
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = -1
                 te.second_shift = False
                 te.student = False
                 te.instructor = False
@@ -352,8 +352,8 @@ class Data():
                 te.user_id = i.Watch_Commander_Trainee_ID
                 te.unit_id = "Watch Commander Trainee"
                 te.service_date = start_d
-                te.watch_number = i.Watch_Number
-                te.shift_number = 0
+                te.watch_number = i.Watch_Number - 1
+                te.shift_number = -1
                 te.second_shift = False
                 te.student = True
                 te.instructor = False

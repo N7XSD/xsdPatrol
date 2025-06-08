@@ -176,11 +176,16 @@ class DispatchDbReports():
             for j in sorted(time_dict[disp_name_dict[i]]):
                 total_rec += j.hours_rec
                 date_st = j.service_date.strftime(cmn.stns.get_format_date())
+                watch_st = str(j.watch_number + 1)
+                if j.shift_number < 0:
+                    shift_st = ""
+                else:
+                    shift_st = str(j.shift_number + 1)
                 output.write(f'<tr><td style="text-align:right">'
                     + f'{j.hours_rec}</td>'
-                    + f'<td>{date_st}</td>'
-                    + f'<td>{j.watch_number}</td>'
-                    + f'<td>{j.shift_number}</td>'
+                    + f'<td ALIGN="center">{date_st}</td>'
+                    + f'<td ALIGN="center">{watch_st}</td>'
+                    + f'<td ALIGN="center">{shift_st}</td>'
                     + f'<td>{j.unit_id}</td></tr>\n')
             output.write(f'<tr><td style="text-align:right">{total_rec}</td>'
                 + f'<td>TOTAL</td></tr>\n')
