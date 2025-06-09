@@ -82,8 +82,8 @@ class Settings():
 
     def get_pathname_dispatch_db(self):
         """Return full pathname for Dispatcher/WC log DB"""
-#       default = r"//SERVER/SecurityLogDB2/SecurityLog.mdb"
-        default = r"/Users/josep/SCS-Patrol-data/SecurityLogDB2/SecurityLog.mdb"
+        default = r"//SERVER/SecurityLogDB2/SecurityLog.mdb"
+#       default = r"/Users/josep/SCS-Patrol-data/SecurityLogDB2/SecurityLog.mdb"
         return self._get('data', 'dispatch-db', default)
 
     def get_pathname_member_db(self):
