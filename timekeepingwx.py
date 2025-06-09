@@ -9,7 +9,8 @@ import datetime
 import io
 import logging
 import wx
-import wx.adv as wxadv
+import wx.adv
+import wx.html
 
 import common
 import commonwx
@@ -24,6 +25,8 @@ class TimekeepingMain(commonwx.CommonFrame):
     def __init__(self, parent, cmn, title):
         commonwx.CommonFrame.__init__(self, parent, cmn, title)
         logging.debug("Init timekeepingwx.TimekeepingMain")
+        self.reports = common.DispatchDbReports()
+        self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
 
         self.Show()
 
@@ -38,13 +41,20 @@ class TimekeepingMain(commonwx.CommonFrame):
         exit_mitem = wx.MenuItem(None, wx.ID_EXIT)
         self.Bind(wx.EVT_MENU, self.on_exit, exit_mitem)
 
-        import_di_mitem = wx.MenuItem(None, wx.ID_ANY,
-            "Import Dispatch DB Hours")
-        self.Bind(wx.EVT_MENU, self.on_import_di_db_hours, import_di_mitem)
+        display_di_import_mitem = wx.MenuItem(None, wx.ID_PREVIEW,
+            "Display Dispatch DB Hours")
+        self.Bind(wx.EVT_MENU, self.on_display_import_di_db_hours,
+            display_di_import_mitem)
+
+        print_di_import_mitem = wx.MenuItem(None, wx.ID_ANY,
+            "Print Dispatch DB Hours")
+        self.Bind(wx.EVT_MENU, self.on_print_import_di_db_hours,
+            print_di_import_mitem)
 
         # File menu
         file_menu = wx.Menu()
-        file_menu.Append(import_di_mitem)
+        file_menu.Append(display_di_import_mitem)
+        file_menu.Append(print_di_import_mitem)
         file_menu.AppendSeparator()
         file_menu.Append(exit_mitem)
 
@@ -71,7 +81,8 @@ class TimekeepingMain(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        ctrl_start_date = wxadv.CalendarCtrl(self.pnl)
+        ctrl_start_date = wx.adv.CalendarCtrl(self.pnl)
+        print_button = wx.Button(self.pnl, wx.ID_PREVIEW)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
 
         # wx.DateTime months start at zero
@@ -86,11 +97,14 @@ class TimekeepingMain(commonwx.CommonFrame):
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
-        self.pnl.Bind(wxadv.EVT_CALENDAR,
+        self.Bind(wx.EVT_BUTTON, self.on_print_import_di_db_hours,
+            print_button)
+
+        self.pnl.Bind(wx.adv.EVT_CALENDAR,
             self.on_date_changed, ctrl_start_date)
-        self.pnl.Bind(wxadv.EVT_CALENDAR_PAGE_CHANGED,
+        self.pnl.Bind(wx.adv.EVT_CALENDAR_PAGE_CHANGED,
             self.on_date_changed, ctrl_start_date)
-        self.pnl.Bind(wxadv.EVT_CALENDAR_SEL_CHANGED,
+        self.pnl.Bind(wx.adv.EVT_CALENDAR_SEL_CHANGED,
             self.on_date_changed, ctrl_start_date)
 
         # BOX 0
@@ -105,6 +119,7 @@ class TimekeepingMain(commonwx.CommonFrame):
         # BOX n
         # Create a sizer to hold the buttons
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_button.Add(print_button, 0)
 
         sizer_button.AddStretchSpacer()
         sizer_button.Add(exit_button, 0)
@@ -127,18 +142,29 @@ class TimekeepingMain(commonwx.CommonFrame):
         self.end_d = self.start_d + datetime.timedelta(weeks=1)
 #       print(self.start_d, self.end_d)
 
-    def on_import_di_db_hours(self, _event):
-        """Open Dispatch DB import window"""
+    def on_display_import_di_db_hours(self, _event):
+        """Open a window to display data imported from dispatch DB"""
 #       timeimportdi.TimeImportDispatchHours(self, self.cmn)
 
-        reports = common.DispatchDbReports()
         web_page = io.StringIO()
-        reports.dispatch_db_hours(self.cmn, web_page, self.start_d, self.end_d)
+        self.reports.dispatch_db_hours(self.cmn, web_page, self.start_d,
+            self.end_d)
         web_page.seek(0)
         report_viewer = commonwx.ShowHTML(self, self.cmn, web_page,
             "Import from Dispatch DB")
         report_viewer.Show()
         web_page.close()
+
+    def on_print_import_di_db_hours(self, _event):
+        """Print data imported from dispatch DB"""
+
+        web_page = io.StringIO()
+        self.reports.dispatch_db_hours(self.cmn, web_page, self.start_d,
+            self.end_d)
+        web_page.seek(0)
+        self.html_print.PreviewText(web_page.read())
+#       web_page.seek(0)
+#       self.html_print.PrintText(web_page.read())
 
 
 if __name__ == '__main__':
