@@ -10,7 +10,7 @@ import datetime
 import logging
 
 ID_NAME = "xsdPatrol"
-ID_VER = "0.1.1"
+ID_VER = "0.1.2"
 ID_CONF_VER = "1"
 
 #Logging levels are: CRITICAL, ERROR, WARNING, INFO, and DEBUG.

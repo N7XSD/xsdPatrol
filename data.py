@@ -93,11 +93,11 @@ class Data():
                 Driver1_ID, Driver1_Hours, Driver2_ID, Driver2_Hours,
                 Trainee_ID, Trainee_Hours, Observer, Observer_Hours
             FROM Car_Details
-            WHERE Watch_ID BETWEEN """ + s_watch_st + """
-                AND """ + e_watch_st
+            WHERE Watch_ID BETWEEN ? AND ?"""
 #       print(sql_statement)
+#       print(s_watch_st, e_watch_st)
 #       print()
-        self.curs_disp.execute(sql_statement)
+        self.curs_disp.execute(sql_statement, (s_watch_st, e_watch_st))
 
         te_list = []
         rows = self.curs_disp.fetchall()
@@ -185,11 +185,11 @@ class Data():
                 Dispatcher1_ID, Dispatcher1_Hours,
                 Dispatcher2_ID, Dispatcher2_Hours
             FROM Dispatcher_Log
-            WHERE Watch_ID BETWEEN """ + s_watch_st + """
-                AND """ + e_watch_st
+            WHERE Watch_ID BETWEEN ? AND ?"""
 #       print(sql_statement)
+#       print(s_watch_st, e_watch_st)
 #       print()
-        self.curs_disp.execute(sql_statement)
+        self.curs_disp.execute(sql_statement, (s_watch_st, e_watch_st))
 
         te_list = []
         rows = self.curs_disp.fetchall()
@@ -243,11 +243,11 @@ class Data():
                 Monitor_ID, Monitor_Hours,
                 Trainee_ID, Trainee_Hours
             FROM IC_Details
-            WHERE Watch_ID BETWEEN """ + s_watch_st + """
-                AND """ + e_watch_st
+            WHERE Watch_ID BETWEEN ? AND ?"""
 #       print(sql_statement)
+#       print(s_watch_st, e_watch_st)
 #       print()
-        self.curs_disp.execute(sql_statement)
+        self.curs_disp.execute(sql_statement, (s_watch_st, e_watch_st))
 
         te_list = []
         rows = self.curs_disp.fetchall()
@@ -304,19 +304,17 @@ class Data():
 
         # Ask the DB for one day of data either side of the range so we
         # can do a little date/time munging later in the code.
-        s_date_st = (s_date_d - datetime.timedelta(days=1)).strftime(
-            DATE_FORMAT_MSACCESS)
-        e_date_st = e_date_d.strftime(DATE_FORMAT_MSACCESS)
+        s_date1_d = s_date_d - datetime.timedelta(days=1)
 
         sql_statement = """
             SELECT Watch_ID, Watch_Start, Watch_Number,
                 Watch_Commander_ID, Watch_Commander_Trainee_ID
             FROM Watch_Commander_Log
-            WHERE Watch_Start BETWEEN """ + s_date_st + """
-                AND """ + e_date_st
+            WHERE Watch_Start BETWEEN ? AND ?"""
 #       print(sql_statement)
+#       print(s_date1_d, e_date_d)
 #       print()
-        self.curs_disp.execute(sql_statement)
+        self.curs_disp.execute(sql_statement, (s_date1_d, e_date_d))
 
         watch_id_first = MAXINT_MSACCESS
         watch_id_last = MININT_MSACCESS
@@ -415,6 +413,7 @@ class Data():
             FROM Users
             WHERE User_ID IN (""" + placeholders + ")"
 #       print(sql_statement)
+#       print(list(user_ids))
 #       print()
         self.curs_disp.execute(sql_statement, list(user_ids))
         rows = self.curs_disp.fetchall()
