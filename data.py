@@ -407,19 +407,18 @@ class Data():
         # Names later found in the Users table are changed to something
         # nicer.
         name_dict = {}
-        key_list = ""
         for i in sorted(user_ids):
             name_dict[i] = f"### unexpected User_ID={i}"
-            key_list += "'" + str(i) + "', "
+        placeholders = ", ".join(["?"] * len(user_ids))
         sql_statement = """
             SELECT User_ID, User_Name
             FROM Users
-            WHERE User_ID IN (""" + key_list + ")"
+            WHERE User_ID IN (""" + placeholders + ")"
 #       print(sql_statement)
 #       print()
-        self.curs_disp.execute(sql_statement)
+        self.curs_disp.execute(sql_statement, list(user_ids))
         rows = self.curs_disp.fetchall()
-#       print(f'Recored retrieved: {len(rows)}')
+#       print(f'Recoreds retrieved: {len(rows)}')
         for i in rows:
             if not i.User_Name:
                 full_Name = i.User_ID.strip()
@@ -429,6 +428,8 @@ class Data():
                 full_name = display_name_by_surname(
                     sname, gname, pname)
             name_dict[i.User_ID] = full_name
+#       for i, j in sorted(name_dict.items()):
+#           print(f"{i}: {j}")
         return name_dict
 
     def open_dispatch_db(self):

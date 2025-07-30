@@ -10,7 +10,7 @@ import datetime
 import logging
 
 ID_NAME = "xsdPatrol"
-ID_VER = "0.1"
+ID_VER = "0.1.1"
 ID_CONF_VER = "1"
 
 #Logging levels are: CRITICAL, ERROR, WARNING, INFO, and DEBUG.
@@ -82,8 +82,8 @@ class Settings():
 
     def get_pathname_dispatch_db(self):
         """Return full pathname for Dispatcher/WC log DB"""
-#       default = r"/Users/josep/SCS-Patrol-data/SecurityLogDB2/SecurityLog.mdb"
         default = r"//SERVER/SecurityLogDB2/SecurityLog.mdb"
+#       default = r"/Users/josep/SCS-Patrol-data/SecurityLogDB2/SecurityLog.mdb"
         return self._get('data', 'dispatch-db', default)
 
     def get_pathname_member_db(self):
