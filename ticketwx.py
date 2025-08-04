@@ -56,6 +56,7 @@ class SelectEvent(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        selection_list = wx.ListCtrl(self.pnl)
         filter_button = wx.Button(self.pnl, wx.ID_ANY, "Filter")
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
@@ -68,13 +69,13 @@ class SelectEvent(commonwx.CommonFrame):
         self.pnl.Bind(wx.EVT_BUTTON, self.on_refresh, refresh_button)
 
         # BOX 0
-        # Event List
-#       sizer_heading_date = wx.BoxSizer(wx.HORIZONTAL)
-#       sizer_heading_date.Add(ctrl_start_date, 1)
+        # Selection List
+        sizer_selection_list = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_selection_list.Add(selection_list, 1, wx.EXPAND)
 
-#       sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
 #       sizer_box0_main.Add(label_start_date)
-#       sizer_box0_main.Add(sizer_heading_date, 1, wx.EXPAND)
+        sizer_box0_main.Add(sizer_selection_list, 1, wx.EXPAND)
 
         # BOX n
         # Create a sizer to hold the buttons
@@ -88,8 +89,8 @@ class SelectEvent(commonwx.CommonFrame):
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
-#       sizer_main.Add(sizer_box0_main, 1, wx.EXPAND | wx.ALL,
-#           border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_box0_main, 1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
 
