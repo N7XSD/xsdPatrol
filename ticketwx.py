@@ -46,7 +46,25 @@ class SelectEvent(commonwx.CommonFrame):
                 list_item.SetId(i)
                 list_item.SetColumn(j)
                 list_item.SetText(list_of_stuff[i][j])
-#               print(i, j, list_of_stuff[i][j])
+
+                # All this for a debuging print
+                list_for_print = []
+                if list_item.GetMask() & wx.LIST_MASK_STATE:
+                    list_for_print.append("LIST_MASK_STATE")
+                if list_item.GetMask() & wx.LIST_MASK_TEXT:
+                    list_for_print.append("LIST_MASK_TEXT")
+                if list_item.GetMask() & wx.LIST_MASK_IMAGE:
+                    list_for_print.append("LIST_MASK_IMAGE")
+                if list_item.GetMask() & wx.LIST_MASK_DATA:
+                    list_for_print.append("LIST_MASK_DATA")
+                if list_item.GetMask() & wx.LIST_MASK_WIDTH:
+                    list_for_print.append("LIST_MASK_WIDTH")
+                if list_item.GetMask() & wx.LIST_MASK_FORMAT:
+                    list_for_print.append("LIST_MASK_FORMAT")
+                print(list_item.GetColumn(), list_item.GetId(),
+                    list_item.GetText(), list_item.GetData(),
+                    list_for_print)
+
                 s_list.InsertItem(list_item)
         # End test data creation
 
