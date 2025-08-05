@@ -23,6 +23,33 @@ class SelectEvent(commonwx.CommonFrame):
 
         self.Show()
 
+    def build_selection_list(self, s_list):
+        """Data, pretty data"""
+
+        # Begin test data creation
+        list_of_stuff = (
+            ("2025-04-01 08:00", "one"),
+            ("2025-04-01 09:00", "two"),
+            ("2025-04-01 10:00", "three"),
+            ("2025-04-01 11:00", "four"),
+            ("2025-04-01 12:00", "five"),
+            ("2025-04-01 13:00", "six"),
+            ("2025-04-01 14:00", "seven"),
+            ("2025-04-01 15:00", "eight"),
+            ("2025-04-01 16:00", "nine"),
+            ("2025-04-01 17:00", "last"))
+        s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
+        s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
+        for i in range(len(list_of_stuff)):
+            for j in range(len(list_of_stuff[i])):
+                list_item = wx.ListItem()
+                list_item.SetId(i)
+                list_item.SetColumn(j)
+                list_item.SetText(list_of_stuff[i][j])
+#               print(i, j, list_of_stuff[i][j])
+                s_list.InsertItem(list_item)
+        # End test data creation
+
     def create_menu_bar(self):
         """Create the menu bar"""
 
@@ -56,7 +83,8 @@ class SelectEvent(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        selection_list = wx.ListCtrl(self.pnl)
+        self.selection_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
+        self.build_selection_list(self.selection_list)
         filter_button = wx.Button(self.pnl, wx.ID_ANY, "Filter")
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
@@ -71,10 +99,9 @@ class SelectEvent(commonwx.CommonFrame):
         # BOX 0
         # Selection List
         sizer_selection_list = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_selection_list.Add(selection_list, 1, wx.EXPAND)
+        sizer_selection_list.Add(self.selection_list, 1, wx.EXPAND)
 
         sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
-#       sizer_box0_main.Add(label_start_date)
         sizer_box0_main.Add(sizer_selection_list, 1, wx.EXPAND)
 
         # BOX n
