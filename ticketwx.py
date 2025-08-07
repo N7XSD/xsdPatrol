@@ -27,7 +27,7 @@ class SelectEvent(commonwx.CommonFrame):
         """Data, pretty data"""
 
         # Begin test data creation
-        list_of_stuff = (
+        list_of_stuff = [
             ("2025-04-01 08:00", "one"),
             ("2025-04-01 09:00", "two"),
             ("2025-04-01 10:00", "three"),
@@ -37,63 +37,18 @@ class SelectEvent(commonwx.CommonFrame):
             ("2025-04-01 14:00", "seven"),
             ("2025-04-01 15:00", "eight"),
             ("2025-04-01 16:00", "nine"),
-            ("2025-04-01 17:00", "last"))
+            ("2025-04-01 17:00", "last")]
         s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
-        for i in range(len(list_of_stuff)):
-            for j in range(len(list_of_stuff[i])):
-                list_item = wx.ListItem()
-                list_item.SetId(i)
-                list_item.SetColumn(j)
-                list_item.SetText(list_of_stuff[i][j])
-
-                # All this for a debuging print
-                list_for_print = []
-                if list_item.GetMask() & wx.LIST_MASK_STATE:
-                    list_for_print.append("LIST_MASK_STATE")
-                if list_item.GetMask() & wx.LIST_MASK_TEXT:
-                    list_for_print.append("LIST_MASK_TEXT")
-                if list_item.GetMask() & wx.LIST_MASK_IMAGE:
-                    list_for_print.append("LIST_MASK_IMAGE")
-                if list_item.GetMask() & wx.LIST_MASK_DATA:
-                    list_for_print.append("LIST_MASK_DATA")
-                if list_item.GetMask() & wx.LIST_MASK_WIDTH:
-                    list_for_print.append("LIST_MASK_WIDTH")
-                if list_item.GetMask() & wx.LIST_MASK_FORMAT:
-                    list_for_print.append("LIST_MASK_FORMAT")
-                print(list_item.GetColumn(), list_item.GetId(),
-                    list_item.GetText(), list_item.GetData(),
-                    list_for_print)
-
-                s_list.InsertItem(list_item)
+        for i in list_of_stuff:
+            index = s_list.InsertItem(s_list.GetItemCount(), i[0])
+            for j, j_text in enumerate(i[1:]):
+                s_list.SetItem(index, j+1, j_text)
         # End test data creation
 
     def create_menu_bar(self):
-        """Create the menu bar"""
-
-        # Create MenuItems
-        # Note: About and Exit are moved to the application menu in macOS
-        about_mitem = wx.MenuItem(None, wx.ID_ABOUT)
-        self.Bind(wx.EVT_MENU, self.on_about, about_mitem)
-
-        exit_mitem = wx.MenuItem(None, wx.ID_EXIT)
-        self.Bind(wx.EVT_MENU, self.on_exit, exit_mitem)
-
-        # File menu
-        file_menu = wx.Menu()
-#       file_menu.AppendSeparator()
-        file_menu.Append(exit_mitem)
-
-        # Help menu
-        help_menu = wx.Menu()
-        help_menu.Append(about_mitem)
-
-        # Create the menubar
-        menu_bar = wx.MenuBar()
-        menu_bar.Append(file_menu, "&File")
-        menu_bar.Append(help_menu, "&Help")
-
-        return menu_bar
+        """No menu bar"""
+        return None
 
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
@@ -159,5 +114,5 @@ if __name__ == '__main__':
     common_stuff = common.Common()
     stns = common_stuff.stns
     app = wx.App(False)
-    frame = SelectEvent(None, common_stuff, "Select")
+    frame = SelectEvent(None, common_stuff, "Select Event")
     app.MainLoop()
