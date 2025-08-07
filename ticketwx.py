@@ -12,6 +12,105 @@ import common
 import commonwx
 
 
+class ChangeFilter(commonwx.CommonFrame):
+    """
+    Window used to select a ticket
+    """
+
+    def __init__(self, parent, cmn, title):
+        commonwx.CommonFrame.__init__(self, parent, cmn, title)
+        logging.debug("Init ticketwx.SelectTicket")
+
+        self.Show()
+
+    def build_selection_list(self):
+        """Data, pretty data"""
+
+        # Begin test data creation
+        list_of_stuff = [
+            (True, 1002, "Return to base"),
+            (True, 1003, "Lunch / coffee Break"),
+            (True, 1004, "Message received"),
+            (True, 1005, "Radio check"),
+            (True, 1006, "Receiving clearly"),
+            (True, 1007, "Out of service"),
+            (True, 1008, "In service"),
+            (False, 1009, "Open Garage Door (Don't use)"),
+            (True, 1111, "Open Garage Door"),
+            (True, 1112, "911 Light"),
+            (True, 1113, "House check"),
+            (True, 1114, "Association property checked"),
+            (True, 1115, "Accident"),
+            (True, 1116, "Water problem"),
+            (False, 1117, "Home Inv/Rob/Burg (Don't use)"),
+            (True, 1118, "Suspicious situation"),
+            (True, 1119, "Concern for resident"),
+            (True, 1120, "Suspected SCAM"),
+            (True, 1121, "Misc / Other"),
+            (True, 1122, "Home invasion"),
+            (True, 1123, "Robbery"),
+            (True, 1124, "Burglary")]
+        # End test data creation
+        return list_of_stuff
+
+    def create_menu_bar(self):
+        """No menu bar"""
+        return None
+
+    def create_sizer_main(self):
+        """The main sizer holds everthing the user will interact with"""
+        # Static text
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
+        ok_button = wx.Button(self.pnl, wx.ID_OK)
+
+        choice_button = []
+        for i in self.build_selection_list():
+            if i[1] >= 1000 and i[1] <= 9999:
+                desc = str(i[1]) + " " + i[2]
+                desc = desc[:2] + "-" + desc[2:]
+            else:
+                desc = i[2]
+            cb = wx.CheckBox(self.pnl, label=desc)
+            cb.SetValue(i[0])
+            choice_button.append(cb)
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_ok, ok_button)
+
+        # BOX n - 1
+        # Choices
+        sizer_choice = wx.BoxSizer(wx.VERTICAL)
+        for i in choice_button:
+            sizer_choice.Add(i, 0)
+
+        # BOX n
+        # Create a sizer to hold the buttons
+        sizer_button = wx.BoxSizer(wx.HORIZONTAL)
+
+        sizer_button.AddStretchSpacer()
+        sizer_button.Add(cancel_button, 0)
+        sizer_button.Add(ok_button, 0)
+
+        # Use a vertical sizer to stack our window
+        sizer_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_main.Add(sizer_choice, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+
+        return sizer_main
+
+    def on_cancel(self, _event):
+        """Cancel the window"""
+
+    def on_ok(self, _event):
+        """Accept filter"""
+
+
 class SelectTicket(commonwx.CommonFrame):
     """
     Window used to select a ticket
@@ -224,4 +323,5 @@ if __name__ == '__main__':
     app = wx.App(False)
     frame1 = SelectTicket(None, common_stuff, "Select Ticket")
     frame2 = SelectEvent(None, common_stuff, "Select Event")
+    frame3 = ChangeFilter(None, common_stuff, "Change Filter")
     app.MainLoop()
