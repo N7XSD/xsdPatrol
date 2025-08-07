@@ -316,12 +316,147 @@ class SelectEvent(commonwx.CommonFrame):
         """Refresh the window"""
 
 
+class EditTicket(commonwx.CommonFrame):
+    """
+    Window used to edit a ticket
+    """
+
+    def __init__(self, parent, cmn, title):
+        commonwx.CommonFrame.__init__(self, parent, cmn, title)
+        logging.debug("Init ticketwx.EditTicket")
+
+        self.Show()
+
+    # Made up for testing
+    ticket_open_st = "2025-04-01 07:00"
+    ticket_code = 1116
+    initial_details = """Irrigation leak at 3008 Crib Point Drive.  No answer at door.  DI called 702-896-0507 and left voice mail.  DR flagged leak location"""
+
+    def build_followup_list(self, s_list):
+        """Data, pretty data"""
+
+        # Begin test data creation
+        list_of_stuff = [
+            ("2025-04-01 08:00", "one"),
+            ("2025-04-01 09:00", "two"),
+            ("2025-04-01 10:00", "three"),
+            ("2025-04-01 11:00", "four"),
+            ("2025-04-01 12:00", "five"),
+            ("2025-04-01 13:00", "six"),
+            ("2025-04-01 14:00", "seven"),
+            ("2025-04-01 15:00", "eight"),
+            ("2025-04-01 16:00", "nine"),
+            ("2025-04-01 17:00", "last")]
+        s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
+        s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
+        for i in list_of_stuff:
+            index = s_list.InsertItem(s_list.GetItemCount(), i[0])
+            for j, j_text in enumerate(i[1:]):
+                s_list.SetItem(index, j+1, j_text)
+        # End test data creation
+
+    def create_menu_bar(self):
+        """No menu bar"""
+        return None
+
+    def create_sizer_main(self):
+        """The main sizer holds everthing the user will interact with"""
+        # Static text
+        followup_label = wx.StaticText(self.pnl, label="Followup Events")
+        details_label = wx.StaticText(self.pnl, label="Initial Event Details")
+        responder_label = wx.StaticText(self.pnl, label="On Scene Responders")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
+        resp_dr_ctrl = wx.CheckBox(self.pnl, label="Driver")
+        resp_le_ctrl = wx.CheckBox(self.pnl, label="Law Enforcement")
+        resp_fr_ctrl = wx.CheckBox(self.pnl, label="Fire and Rescue")
+        resp_ambulance_ctrl = wx.CheckBox(self.pnl, label="Ambulance")
+        resp_other_ctrl = wx.CheckBox(self.pnl, label="Other")
+        initial_desc_ctrl = wx.TextCtrl(self.pnl,
+            value=self.initial_details,
+            style=wx.TE_MULTILINE)
+        self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
+        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
+        save_button = wx.Button(self.pnl, wx.ID_SAVE)
+
+        self.build_followup_list(self.followup_list)
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
+
+        # BOX 2
+        sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_responder.Add(resp_wc_ctrl)
+        sizer_responder.Add(resp_dr_ctrl)
+        sizer_responder.Add(resp_le_ctrl)
+        sizer_responder.Add(resp_fr_ctrl)
+        sizer_responder.Add(resp_ambulance_ctrl)
+        sizer_responder.Add(resp_other_ctrl)
+
+        sizer_box2_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_box2_main.Add(responder_label, 0)
+        sizer_box2_main.Add(sizer_responder)
+
+        # BOX 3
+        sizer_desc_ctrl = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_desc_ctrl.Add(initial_desc_ctrl, 1, wx.EXPAND)
+
+        sizer_box3_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_box3_main.Add(details_label, 0)
+        sizer_box3_main.Add(sizer_desc_ctrl, 1, wx.EXPAND)
+
+        # BOX 4
+        # Followup List
+        sizer_followup_list = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_followup_list.Add(self.followup_list, 1, wx.EXPAND)
+
+        sizer_box4_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_box4_main.Add(followup_label, 0)
+        sizer_box4_main.Add(sizer_followup_list, 1, wx.EXPAND)
+
+        # BOX n - 1
+        # Choices
+#       sizer_choice = wx.BoxSizer(wx.HORIZONTAL)
+#       sizer_choice.Add(include_closed_ctrl, 0)
+
+        # BOX n
+        # Create a sizer to hold the buttons
+        sizer_button = wx.BoxSizer(wx.HORIZONTAL)
+
+        sizer_button.AddStretchSpacer()
+        sizer_button.Add(save_button, 0)
+        sizer_button.Add(cancel_button, 0)
+
+        # Use a vertical sizer to stack our window
+        sizer_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_box3_main, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_box4_main, 1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+
+        return sizer_main
+
+    def on_cancel(self, _event):
+        """Cancel the window"""
+
+    def on_save(self, _event):
+        """Save ticket"""
+
+
 if __name__ == '__main__':
     common.init_logging()
     common_stuff = common.Common()
     stns = common_stuff.stns
     app = wx.App(False)
-    frame1 = SelectTicket(None, common_stuff, "Select Ticket")
-    frame2 = SelectEvent(None, common_stuff, "Select Event")
-    frame3 = ChangeFilter(None, common_stuff, "Change Filter")
+#   frame1 = SelectTicket(None, common_stuff, "Select Ticket")
+#   frame2 = SelectEvent(None, common_stuff, "Select Event")
+#   frame3 = ChangeFilter(None, common_stuff, "Change Filter")
+    frame4 = EditTicket(None, common_stuff, "Edit Ticket")
     app.MainLoop()
