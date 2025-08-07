@@ -58,11 +58,14 @@ class SelectTicket(commonwx.CommonFrame):
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         self.selection_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
-        self.build_selection_list(self.selection_list)
+        include_closed_ctrl = wx.CheckBox(self.pnl,
+            label="Include closed")
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         new_button = wx.Button(self.pnl, wx.ID_NEW)
-        open_button = wx.Button(self.pnl, wx.ID_OPEN)
+        open_button = wx.Button(self.pnl, wx.ID_ANY, "Open")
+
+        self.build_selection_list(self.selection_list)
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
@@ -78,6 +81,11 @@ class SelectTicket(commonwx.CommonFrame):
         sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
         sizer_box0_main.Add(sizer_selection_list, 1, wx.EXPAND)
 
+        # BOX n - 1
+        # Choices
+        sizer_choice = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_choice.Add(include_closed_ctrl, 0)
+
         # BOX n
         # Create a sizer to hold the buttons
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
@@ -91,6 +99,8 @@ class SelectTicket(commonwx.CommonFrame):
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
         sizer_main.Add(sizer_box0_main, 1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_choice, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
@@ -212,5 +222,6 @@ if __name__ == '__main__':
     common_stuff = common.Common()
     stns = common_stuff.stns
     app = wx.App(False)
-    frame = SelectTicket(None, common_stuff, "Select Ticket")
+    frame1 = SelectTicket(None, common_stuff, "Select Ticket")
+    frame2 = SelectEvent(None, common_stuff, "Select Event")
     app.MainLoop()
