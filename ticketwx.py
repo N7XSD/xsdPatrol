@@ -329,7 +329,8 @@ class EditTicket(commonwx.CommonFrame):
 
     # Made up for testing
     ticket_open_st = "2025-04-01 07:00"
-    ticket_code = 1116
+    ticket_code_id = 1116
+    ticket_code_desc = "Water problem"
     initial_details = """Irrigation leak at 3008 Crib Point Drive.  No answer at door.  DI called 702-896-0507 and left voice mail.  DR flagged leak location"""
 
     def build_followup_list(self, s_list):
@@ -365,9 +366,13 @@ class EditTicket(commonwx.CommonFrame):
         followup_label = wx.StaticText(self.pnl, label="Followup Events")
         details_label = wx.StaticText(self.pnl, label="Initial Event Details")
         responder_label = wx.StaticText(self.pnl, label="On Scene Responders")
+        ticket_desc_label = wx.StaticText(self.pnl, label=self.ticket_code_desc)
+        time_open_label = wx.StaticText(self.pnl, label="Open Time  ")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
+            style=wx.TE_READONLY)
         resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
         resp_dr_ctrl = wx.CheckBox(self.pnl, label="Driver")
         resp_le_ctrl = wx.CheckBox(self.pnl, label="Law Enforcement")
@@ -376,8 +381,9 @@ class EditTicket(commonwx.CommonFrame):
         resp_other_ctrl = wx.CheckBox(self.pnl, label="Other")
         initial_desc_ctrl = wx.TextCtrl(self.pnl,
             value=self.initial_details,
-            style=wx.TE_MULTILINE)
+            style=(wx.TE_MULTILINE + wx.TE_READONLY))
         self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
+        close_button = wx.Button(self.pnl, wx.ID_ANY, label="Close Ticket")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         save_button = wx.Button(self.pnl, wx.ID_SAVE)
 
@@ -385,7 +391,16 @@ class EditTicket(commonwx.CommonFrame):
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_close, close_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
+
+        # BOX 0
+        sizer_box0_main = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_box0_main.Add(ticket_desc_label, 0)
+
+        sizer_box0_main.AddStretchSpacer()
+        sizer_box0_main.Add(time_open_label, 0)
+        sizer_box0_main.Add(time_open_ctrl, 0)
 
         # BOX 2
         sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
@@ -402,7 +417,7 @@ class EditTicket(commonwx.CommonFrame):
 
         # BOX 3
         sizer_desc_ctrl = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_desc_ctrl.Add(initial_desc_ctrl, 1, wx.EXPAND)
+        sizer_desc_ctrl.Add(initial_desc_ctrl, 1)
 
         sizer_box3_main = wx.BoxSizer(wx.VERTICAL)
         sizer_box3_main.Add(details_label, 0)
@@ -425,13 +440,16 @@ class EditTicket(commonwx.CommonFrame):
         # BOX n
         # Create a sizer to hold the buttons
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_button.Add(close_button, 0)
 
         sizer_button.AddStretchSpacer()
-        sizer_button.Add(save_button, 0)
         sizer_button.Add(cancel_button, 0)
+        sizer_button.Add(save_button, 0)
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_main.Add(sizer_box0_main, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box3_main, 0, wx.EXPAND | wx.ALL,
@@ -444,6 +462,9 @@ class EditTicket(commonwx.CommonFrame):
         return sizer_main
 
     def on_cancel(self, _event):
+        """Cancel the window"""
+
+    def on_close(self, _event):
         """Cancel the window"""
 
     def on_save(self, _event):
