@@ -80,6 +80,7 @@ class CommonFrame(wx.Frame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
 
         # Bind widgets to methods
@@ -96,6 +97,7 @@ class CommonFrame(wx.Frame):
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
 
         sizer_button.AddStretchSpacer()
+        sizer_button.Add(cancel_button, 0)
         sizer_button.Add(exit_button, 0)
 
         # Use a vertical sizer to stack our window
@@ -115,9 +117,13 @@ class CommonFrame(wx.Frame):
         dlg.ShowModal() # Shows it
         dlg.Destroy() # finally destroy it when finished
 
+    def on_cancel(self, _event):
+        """Cancel"""
+        self.Destroy()  # Close the frame
+
     def on_exit(self, _event):
         """Exit"""
-        self.Close(True)  # Close the frame
+        self.Close()  # Close the frame
 
 
 if __name__ == '__main__':

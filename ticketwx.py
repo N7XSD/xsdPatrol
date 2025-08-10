@@ -104,9 +104,6 @@ class ChangeFilter(commonwx.CommonFrame):
 
         return sizer_main
 
-    def on_cancel(self, _event):
-        """Cancel the window"""
-
     def on_ok(self, _event):
         """Accept filter"""
 
@@ -206,9 +203,6 @@ class SelectTicket(commonwx.CommonFrame):
 
         return sizer_main
 
-    def on_cancel(self, _event):
-        """Cancel the window"""
-
     def on_new(self, _event):
         """Create a new ticket"""
 
@@ -302,9 +296,6 @@ class SelectEvent(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
-
-    def on_cancel(self, _event):
-        """Cancel the window"""
 
     def on_filter(self, _event):
         """Change the data filter"""
@@ -495,9 +486,6 @@ class EditTicket(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
-
-    def on_cancel(self, _event):
-        """Cancel the window"""
 
     def on_close(self, _event):
         """Cancel the window"""
