@@ -363,6 +363,7 @@ class EditTicket(commonwx.CommonFrame):
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
         # Static text
+        cones_label = wx.StaticText(self.pnl, label="Cones Used  ")
         followup_label = wx.StaticText(self.pnl, label="Followup Events")
         details_label = wx.StaticText(self.pnl, label="Initial Event Details")
         responder_label = wx.StaticText(self.pnl, label="On Scene Responders")
@@ -379,6 +380,7 @@ class EditTicket(commonwx.CommonFrame):
         resp_fr_ctrl = wx.CheckBox(self.pnl, label="Fire and Rescue")
         resp_ambulance_ctrl = wx.CheckBox(self.pnl, label="Ambulance")
         resp_other_ctrl = wx.CheckBox(self.pnl, label="Other")
+        cones_ctrl = wx.SpinCtrl(self.pnl)
         initial_desc_ctrl = wx.TextCtrl(self.pnl,
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
@@ -401,6 +403,11 @@ class EditTicket(commonwx.CommonFrame):
         sizer_box0_main.AddStretchSpacer()
         sizer_box0_main.Add(time_open_label, 0)
         sizer_box0_main.Add(time_open_ctrl, 0)
+
+        # BOX C
+        sizer_boxC_main = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_boxC_main.Add(cones_label, 0)
+        sizer_boxC_main.Add(cones_ctrl, 0)
 
         # BOX 2
         sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
@@ -451,6 +458,8 @@ class EditTicket(commonwx.CommonFrame):
         sizer_main.Add(sizer_box0_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_boxC_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box3_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
