@@ -328,6 +328,16 @@ class EditTicket(commonwx.CommonFrame):
         self.Show()
 
     # Made up for testing
+    area_list = (
+        "Area 1",
+        "Area 2",
+        "Area 3",
+        "Area 4")
+    subarea_list = (
+        "Unit A",
+        "Unit B",
+        "Unit C",
+        "Unit D")
     ticket_open_st = "2025-04-01 07:00"
     ticket_code_id = 1116
     ticket_code_desc = "Water problem"
@@ -363,6 +373,7 @@ class EditTicket(commonwx.CommonFrame):
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
         # Static text
+        address_label = wx.StaticText(self.pnl, label="Address")
         cones_label = wx.StaticText(self.pnl, label="Cones Used  ")
         followup_label = wx.StaticText(self.pnl, label="Followup Events")
         details_label = wx.StaticText(self.pnl, label="Initial Event Details")
@@ -372,6 +383,9 @@ class EditTicket(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        address_ctrl = wx.TextCtrl(self.pnl)
+        area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
+        subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
         time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
             style=wx.TE_READONLY)
         resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
@@ -403,6 +417,16 @@ class EditTicket(commonwx.CommonFrame):
         sizer_box0_main.AddStretchSpacer()
         sizer_box0_main.Add(time_open_label, 0)
         sizer_box0_main.Add(time_open_ctrl, 0)
+
+        # BOX 1
+        sizer_addr_ctrl = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_addr_ctrl.Add(address_ctrl, 1)
+        sizer_addr_ctrl.Add(area_ctrl, 0)
+        sizer_addr_ctrl.Add(subarea_ctrl, 0)
+
+        sizer_box1_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_box1_main.Add(address_label, 0)
+        sizer_box1_main.Add(sizer_addr_ctrl, 1, wx.EXPAND)
 
         # BOX C
         sizer_boxC_main = wx.BoxSizer(wx.HORIZONTAL)
@@ -457,6 +481,8 @@ class EditTicket(commonwx.CommonFrame):
         sizer_main = wx.BoxSizer(wx.VERTICAL)
         sizer_main.Add(sizer_box0_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(sizer_box1_main, 0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_boxC_main, 0, wx.EXPAND | wx.ALL,
@@ -485,8 +511,8 @@ if __name__ == '__main__':
     common_stuff = common.Common()
     stns = common_stuff.stns
     app = wx.App(False)
-#   frame1 = SelectTicket(None, common_stuff, "Select Ticket")
-#   frame2 = SelectEvent(None, common_stuff, "Select Event")
-#   frame3 = ChangeFilter(None, common_stuff, "Change Filter")
+    frame1 = SelectTicket(None, common_stuff, "Select Ticket")
+    frame2 = SelectEvent(None, common_stuff, "Select Event")
+    frame3 = ChangeFilter(None, common_stuff, "Change Filter")
     frame4 = EditTicket(None, common_stuff, "Edit Ticket")
     app.MainLoop()
