@@ -10,6 +10,7 @@ import wx
 
 import common
 import commonwx
+import data
 
 
 class ChangeFilter(commonwx.CommonFrame):
@@ -20,38 +21,9 @@ class ChangeFilter(commonwx.CommonFrame):
     def __init__(self, parent, cmn, title):
         commonwx.CommonFrame.__init__(self, parent, cmn, title)
         logging.debug("Init ticketwx.SelectTicket")
+        self.cmn = cmn
 
         self.Show()
-
-    def build_selection_list(self):
-        """Data, pretty data"""
-
-        # Begin test data creation
-        list_of_stuff = [
-            (True, 1002, "Return to base"),
-            (True, 1003, "Lunch / coffee Break"),
-            (True, 1004, "Message received"),
-            (True, 1005, "Radio check"),
-            (True, 1006, "Receiving clearly"),
-            (True, 1007, "Out of service"),
-            (True, 1008, "In service"),
-            (False, 1009, "Open Garage Door (Don't use)"),
-            (True, 1111, "Open Garage Door"),
-            (True, 1112, "911 Light"),
-            (True, 1113, "House check"),
-            (True, 1114, "Association property checked"),
-            (True, 1115, "Accident"),
-            (True, 1116, "Water problem"),
-            (False, 1117, "Home Inv/Rob/Burg (Don't use)"),
-            (True, 1118, "Suspicious situation"),
-            (True, 1119, "Concern for resident"),
-            (True, 1120, "Suspected SCAM"),
-            (True, 1121, "Misc / Other"),
-            (True, 1122, "Home invasion"),
-            (True, 1123, "Robbery"),
-            (True, 1124, "Burglary")]
-        # End test data creation
-        return list_of_stuff
 
     def create_menu_bar(self):
         """No menu bar"""
@@ -66,16 +38,18 @@ class ChangeFilter(commonwx.CommonFrame):
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         ok_button = wx.Button(self.pnl, wx.ID_OK)
 
-        choice_button = []
-        for i in self.build_selection_list():
-            if i[1] >= 1000 and i[1] <= 9999:
-                desc = str(i[1]) + " " + i[2]
+        codes = []
+        self.selection_ctrl = []
+        for j in self.cmn.get_activity_code_list():
+            codes.append(j[1])
+            if j[1] >= 1000 and j[1] <= 9999:
+                desc = str(j[1]) + " " + j[2]
                 desc = desc[:2] + "-" + desc[2:]
             else:
-                desc = i[2]
+                desc = j[2]
             cb = wx.CheckBox(self.pnl, label=desc)
-            cb.SetValue(i[0])
-            choice_button.append(cb)
+            cb.SetValue(j[0])
+            self.selection_ctrl.append(cb)
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
@@ -84,7 +58,7 @@ class ChangeFilter(commonwx.CommonFrame):
         # BOX n - 1
         # Choices
         sizer_choice = wx.BoxSizer(wx.VERTICAL)
-        for i in choice_button:
+        for i in self.selection_ctrl:
             sizer_choice.Add(i, 0)
 
         # BOX n
@@ -106,6 +80,9 @@ class ChangeFilter(commonwx.CommonFrame):
 
     def on_ok(self, _event):
         """Accept filter"""
+        for i, j in enumerate(self.selection_ctrl):
+            self.cmn.set_activity_code_item(i, j.IsChecked())
+        self.Close()    # Close the frame
 
 
 class SelectTicket(commonwx.CommonFrame):
@@ -299,6 +276,7 @@ class SelectEvent(commonwx.CommonFrame):
 
     def on_filter(self, _event):
         """Change the data filter"""
+        ChangeFilter(self, self.cmn, "Change Filter")
 
     def on_ok(self, _event):
         """The input is OK"""
@@ -498,9 +476,11 @@ if __name__ == '__main__':
     common.init_logging()
     common_stuff = common.Common()
     stns = common_stuff.stns
+    data_stuff = common_stuff.dat
+    common_stuff.set_activity_code_list(data_stuff.get_activity_codes())
+
     app = wx.App(False)
     frame1 = SelectTicket(None, common_stuff, "Select Ticket")
     frame2 = SelectEvent(None, common_stuff, "Select Event")
-    frame3 = ChangeFilter(None, common_stuff, "Change Filter")
     frame4 = EditTicket(None, common_stuff, "Edit Ticket")
     app.MainLoop()

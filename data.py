@@ -81,6 +81,21 @@ class Data():
         logging.debug("Init data.Data")
         self.cmn = cmn
 
+    def get_activity_codes(self):
+        """Return list of Activity Codes and Descriptions."""
+
+        sql_statement = """
+            SELECT Code, Description, IsActive
+            FROM Activity_Codes"""
+        self.curs_disp.execute(sql_statement)
+
+        code_list = []
+        rows = self.curs_disp.fetchall()
+        for i in rows:
+            code_list.append([bool(i.IsActive), int(i.Code),
+                str(i.Description)])
+        return(code_list)
+
     def get_car_by_watch(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
 

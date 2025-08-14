@@ -285,6 +285,8 @@ class Common():
         self.dat = data.Data(self)
         self.dat.open_dispatch_db()
 
+        self.activity_code_list = []
+
     def add_time_entries(self, time_dict, te_list):
         """Add a time recored to a user.  A new user is created,
         if needed"""
@@ -295,6 +297,10 @@ class Common():
                 time_dict[user_key].append(i)
             else:
                 time_dict[user_key] = [i]
+
+    def get_activity_code_list(self):
+        """Returns a list of (active, code, description) tuples"""
+        return self.activity_code_list
 
     def get_last_work_week(self, date_d):
         """Returns datetime.date objects for first day of @date_d work
@@ -327,3 +333,10 @@ class Common():
         watch_number = 0
         # FIXME: Calculate the watch number
         return start_d, watch_number
+
+    def set_activity_code_list(self, ac_list):
+        """Sets a list of (active, code, description) tuples"""
+        self.activity_code_list = ac_list
+
+    def set_activity_code_item(self, index, is_active):
+        self.activity_code_list[index][0] = is_active
