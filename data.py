@@ -245,6 +245,27 @@ class Data():
                 te_list.append(te)
         return te_list
 
+    def get_events_list(self, code_list, start_date=None):
+        """Return a list of events"""
+        start_date = datetime.datetime.now() - datetime.timedelta(days=5)
+        event_list = []
+        placeholders = ", ".join(["?"] * len(code_list))
+        sql_statement = """
+            SELECT Item_ID, Activity_DateTime, Ten_Code, Description
+            FROM Activities
+            WHERE IsActive AND Activity_DateTime > ?
+                AND Ten_Code IN (""" + placeholders + ")"
+#       print(sql_statement)
+#       print(start_date, list(code_list))
+#       print()
+        self.curs_disp.execute(sql_statement, [start_date] + code_list)
+        rows = self.curs_disp.fetchall()
+        for i in rows:
+            description = i.Description
+            event_list.append([i.Item_ID, i.Activity_DateTime,
+                i.Ten_Code, i.Description])
+        return event_list
+
     def get_ic_by_watch(self, s_watch, e_watch):
         """Return list of TimeEntry for watches in range."""
 
@@ -450,7 +471,8 @@ class Data():
         """Open Database used by Dispatch and WC logging applications"""
 
         conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-            r'DBQ=' + self.cmn.stns.get_pathname_dispatch_db() + r';')
+            r'DBQ=' + self.cmn.stns.get_pathname_dispatch_db() + r';'
+            r'Mode=Read;')
         logging.info("    connected to %s", conn_str)
         self.conn_disp = pyodbc.connect(conn_str)
         self.curs_disp = self.conn_disp.cursor()
@@ -459,7 +481,8 @@ class Data():
         """Open Database used by Dispatch and WC logging applications"""
 
         conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-            r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';')
+            r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';'
+            r'Mode=Read;')
         logging.info("    connected to %s", conn_str)
         self.conn_member = pyodbc.connect(conn_str)
         self.curs_member = self.conn_member.cursor()

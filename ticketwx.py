@@ -182,6 +182,8 @@ class SelectTicket(commonwx.CommonFrame):
 
     def on_new(self, _event):
         """Create a new ticket"""
+        SelectEvent(self, self.cmn, "Select Initial Event")
+#       self.Close()    # Close the frame
 
     def on_open(self, _event):
         """Open an existing ticket"""
@@ -204,25 +206,26 @@ class SelectEvent(commonwx.CommonFrame):
     def build_selection_list(self, s_list):
         """Data, pretty data"""
 
-        # Begin test data creation
-        list_of_stuff = [
-            ("2025-04-01 08:00", "one"),
-            ("2025-04-01 09:00", "two"),
-            ("2025-04-01 10:00", "three"),
-            ("2025-04-01 11:00", "four"),
-            ("2025-04-01 12:00", "five"),
-            ("2025-04-01 13:00", "six"),
-            ("2025-04-01 14:00", "seven"),
-            ("2025-04-01 15:00", "eight"),
-            ("2025-04-01 16:00", "nine"),
-            ("2025-04-01 17:00", "last")]
+        act_code_list_1 = self.cmn.get_active_activity_code_list()
+        act_code_list_2 = []
+        for i in act_code_list_1:
+            act_code_list_2.append(i[0])
+
+        list_of_stuff = []
+        for i, j in enumerate(self.cmn.dat.get_events_list(
+                act_code_list_2)):
+            if j[2] >= 1000 and j[2] <= 9999:
+                desc = str(j[2]) + " " + j[3]
+                desc = desc[:2] + "-" + desc[2:]
+            else:
+                desc = j[3]
+            list_of_stuff.append([str(j[1]), desc])
         s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
         for i in list_of_stuff:
             index = s_list.InsertItem(s_list.GetItemCount(), i[0])
             for j, j_text in enumerate(i[1:]):
                 s_list.SetItem(index, j+1, j_text)
-        # End test data creation
 
     def create_menu_bar(self):
         """No menu bar"""
@@ -480,7 +483,6 @@ if __name__ == '__main__':
     common_stuff.set_activity_code_list(data_stuff.get_activity_codes())
 
     app = wx.App(False)
-    frame1 = SelectTicket(None, common_stuff, "Select Ticket")
-    frame2 = SelectEvent(None, common_stuff, "Select Event")
-    frame4 = EditTicket(None, common_stuff, "Edit Ticket")
+    EditTicket(None, common_stuff, "Edit Ticket")
+    SelectTicket(None, common_stuff, "Select Ticket")
     app.MainLoop()

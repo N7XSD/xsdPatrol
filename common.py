@@ -298,6 +298,15 @@ class Common():
             else:
                 time_dict[user_key] = [i]
 
+    def get_active_activity_code_list(self):
+        """Returns a list of (code, description) tuples where active is
+        true"""
+        active_list = []
+        for i in self.activity_code_list:
+            if i[0]:
+                active_list.append([i[1], i[2]])
+        return active_list
+
     def get_activity_code_list(self):
         """Returns a list of (active, code, description) tuples"""
         return self.activity_code_list
