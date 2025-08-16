@@ -183,7 +183,6 @@ class SelectTicket(commonwx.CommonFrame):
     def on_new(self, _event):
         """Create a new ticket"""
         SelectEvent(self, self.cmn, "Select Initial Event")
-#       self.Close()    # Close the frame
 
     def on_open(self, _event):
         """Open an existing ticket"""
@@ -222,10 +221,12 @@ class SelectEvent(commonwx.CommonFrame):
             list_of_stuff.append([str(j[1]), desc])
         s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
+        index = None
         for i in list_of_stuff:
             index = s_list.InsertItem(s_list.GetItemCount(), i[0])
             for j, j_text in enumerate(i[1:]):
                 s_list.SetItem(index, j+1, j_text)
+        s_list.EnsureVisible(index)
 
     def create_menu_bar(self):
         """No menu bar"""
@@ -237,17 +238,25 @@ class SelectEvent(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        self.selection_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
+        self.selection_list = wx.ListCtrl(self.pnl,
+            style=wx.LC_REPORT + wx.LC_SINGLE_SEL + wx.LC_HRULES)
         self.build_selection_list(self.selection_list)
         filter_button = wx.Button(self.pnl, wx.ID_ANY, "Filter")
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
-        ok_button = wx.Button(self.pnl, wx.ID_OK)
+        self.ok_button = wx.Button(self.pnl, wx.ID_OK)
+
+        self.ok_button.Enable(False)
 
         # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_select_item,
+            self.selection_list)
+        self.pnl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_ok,
+            self.selection_list)
+
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_filter, filter_button)
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_ok, ok_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_ok, self.ok_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_refresh, refresh_button)
 
         # BOX 0
@@ -266,7 +275,7 @@ class SelectEvent(commonwx.CommonFrame):
 
         sizer_button.AddStretchSpacer()
         sizer_button.Add(cancel_button, 0)
-        sizer_button.Add(ok_button, 0)
+        sizer_button.Add(self.ok_button, 0)
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
@@ -282,10 +291,16 @@ class SelectEvent(commonwx.CommonFrame):
         ChangeFilter(self, self.cmn, "Change Filter")
 
     def on_ok(self, _event):
-        """The input is OK"""
+        """Open a new ticket using selected event"""
+        EditTicket(None, common_stuff, "Edit Ticket")
 
     def on_refresh(self, _event):
         """Refresh the window"""
+#       self.ok_button.Enable(True)
+
+    def on_select_item(self, _event):
+        """An item is selected"""
+        self.ok_button.Enable(True)
 
 
 class EditTicket(commonwx.CommonFrame):
@@ -483,6 +498,5 @@ if __name__ == '__main__':
     common_stuff.set_activity_code_list(data_stuff.get_activity_codes())
 
     app = wx.App(False)
-    EditTicket(None, common_stuff, "Edit Ticket")
     SelectTicket(None, common_stuff, "Select Ticket")
     app.MainLoop()
