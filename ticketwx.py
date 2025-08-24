@@ -226,7 +226,8 @@ class SelectEvent(commonwx.CommonFrame):
             index = s_list.InsertItem(s_list.GetItemCount(), i[0])
             for j, j_text in enumerate(i[1:]):
                 s_list.SetItem(index, j+1, j_text)
-        s_list.EnsureVisible(index)
+        if index is not None:
+            s_list.EnsureVisible(index)
 
     def create_menu_bar(self):
         """No menu bar"""
@@ -293,6 +294,7 @@ class SelectEvent(commonwx.CommonFrame):
     def on_ok(self, _event):
         """Open a new ticket using selected event"""
         EditTicket(None, common_stuff, "Edit Ticket")
+        self.Close()    # Close the SelectEvent frame
 
     def on_refresh(self, _event):
         """Refresh the window"""
@@ -308,7 +310,7 @@ class EditTicket(commonwx.CommonFrame):
     Window used to edit a ticket
     """
 
-    def __init__(self, parent, cmn, title):
+    def __init__(self, parent, cmn, title, ticket=None, event=None):
         commonwx.CommonFrame.__init__(self, parent, cmn, title)
         logging.debug("Init ticketwx.EditTicket")
 
