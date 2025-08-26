@@ -479,6 +479,25 @@ class Data():
 #           print(f"{i}: {j}")
         return name_dict
 
+    def get_responder_list(self):
+        """Ugly stub that returns a responder list."""
+
+        # FIXME: this should come from a DB table
+        ugly_list = [
+            "Watch Commander",
+            "Driver",
+            "Law Enforcement",
+            "Fire + Rescue",
+            "Ambulance"]
+        resp_list = []
+        for i, name in enumerate(ugly_list):
+            resp = common.Responder()
+            resp.resp_id = i
+            resp.sort_index = i
+            resp.name = str(name)
+            resp_list.append(resp)
+        return(resp_list)
+
     def open_dispatch_db(self):
         """Open Database used by Dispatch and WC logging applications"""
 

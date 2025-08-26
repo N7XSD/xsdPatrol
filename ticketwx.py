@@ -329,7 +329,6 @@ class EditTicket(commonwx.CommonFrame):
         self.pnl = wx.Panel(self)
         self.cmn = cmn
 
-        self.initial_details = "Just saying"
         if isinstance(event, common.Event):
             self.ticket_open_st = str(event.time_dt)
             self.ticket_code_id = event.code
@@ -375,26 +374,19 @@ class EditTicket(commonwx.CommonFrame):
         """The responder sizer holds controls for On Scene Responders
         and any neede static text"""
 
-        if True:
+        if len(self.cmn.responder_list):
             # Static text
             responder_label = wx.StaticText(self.pnl, label="On Scene Responders")
 
             # Create text controls, check boxes, buttons, etc.
             # in tab traversal order.
-            resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
-            resp_dr_ctrl = wx.CheckBox(self.pnl, label="Driver")
-            resp_le_ctrl = wx.CheckBox(self.pnl, label="Law Enforcement")
-            resp_fr_ctrl = wx.CheckBox(self.pnl, label="Fire and Rescue")
-            resp_ambulance_ctrl = wx.CheckBox(self.pnl, label="Ambulance")
-            resp_other_ctrl = wx.CheckBox(self.pnl, label="Other")
-
             sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
-            sizer_responder.Add(resp_wc_ctrl)
-            sizer_responder.Add(resp_dr_ctrl)
-            sizer_responder.Add(resp_le_ctrl)
-            sizer_responder.Add(resp_fr_ctrl)
-            sizer_responder.Add(resp_ambulance_ctrl)
-            sizer_responder.Add(resp_other_ctrl)
+            responder_ctrl_list = []
+            for resp in self.cmn.responder_list:
+                ctrl = wx.CheckBox(self.pnl, label=resp.name)
+                sizer_responder.Add(ctrl, 0)
+                sizer_responder.AddSpacer(8)
+                responder_ctrl_list.append(ctrl)
 
             sizer_box = wx.BoxSizer(wx.VERTICAL)
             sizer_box.Add(responder_label, 0)
@@ -530,6 +522,7 @@ if __name__ == '__main__':
     stns = common_stuff.stns
     data_stuff = common_stuff.dat
     common_stuff.set_activity_code_list(data_stuff.get_activity_codes())
+    common_stuff.set_responder_list(data_stuff.get_responder_list())
 
     app = wx.App(False)
     SelectTicket(None, common_stuff, "Select Ticket")

@@ -206,6 +206,13 @@ class Event():
     description = None
 
 
+class Responder():
+    resp_id = None
+    is_active = True
+    sort_index = 0
+    name = None
+
+
 class Ticket():
     ticket_state = "open"
     open_dt = None
@@ -307,6 +314,7 @@ class Common():
         self.dat.open_dispatch_db()
 
         self.activity_code_list = []
+        self.responder_list = []
 
     def add_time_entries(self, time_dict, te_list):
         """Add a time recored to a user.  A new user is created,
@@ -338,6 +346,10 @@ class Common():
     def get_activity_code_list(self):
         """Returns a list of (active, code, description) tuples"""
         return self.activity_code_list
+
+    def get_responder_list(self):
+        """Returns a list of Responder objects"""
+        return self.responder_list
 
     def get_last_work_week(self, date_d):
         """Returns datetime.date objects for first day of @date_d work
@@ -377,3 +389,7 @@ class Common():
 
     def set_activity_code_item(self, index, is_active):
         self.activity_code_list[index][0] = is_active
+
+    def set_responder_list(self, r_list):
+        """Sets a list of (active, code, description) tuples"""
+        self.responder_list = r_list
