@@ -200,6 +200,7 @@ class SelectEvent(commonwx.CommonFrame):
         commonwx.CommonFrame.__init__(self, parent, cmn, title)
         logging.debug("Init ticketwx.SelectEvent")
 
+        self.parent = parent
         self.Show()
 
     def build_selection_list(self, s_list):
@@ -210,23 +211,23 @@ class SelectEvent(commonwx.CommonFrame):
         for i in act_code_list_1:
             act_code_list_2.append(i[0])
 
-        list_of_stuff = []
-        for i, j in enumerate(self.cmn.dat.get_events_list(
-                act_code_list_2)):
-            if j[2] >= 1000 and j[2] <= 9999:
-                desc = str(j[2]) + " " + j[3]
+        self.event_list = self.cmn.dat.get_events_list(act_code_list_2)
+        item_list = []
+        for j in self.event_list:
+            if j.code >= 1000 and j.code <= 9999:
+                desc = str(j.code) + " " + j.description
                 desc = desc[:2] + "-" + desc[2:]
             else:
-                desc = j[3]
-            list_of_stuff.append([str(j[1]), desc])
+                desc = j.description
+            item_list.append([str(j.time_dt), desc])
         s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
         index = None
-        for i in list_of_stuff:
+        for i in item_list:
             index = s_list.InsertItem(s_list.GetItemCount(), i[0])
             for j, j_text in enumerate(i[1:]):
                 s_list.SetItem(index, j+1, j_text)
-        if index is not None:
+        if isinstance(index, int):
             s_list.EnsureVisible(index)
 
     def create_menu_bar(self):
@@ -242,11 +243,12 @@ class SelectEvent(commonwx.CommonFrame):
         self.selection_list = wx.ListCtrl(self.pnl,
             style=wx.LC_REPORT + wx.LC_SINGLE_SEL + wx.LC_HRULES)
         self.build_selection_list(self.selection_list)
+
         filter_button = wx.Button(self.pnl, wx.ID_ANY, "Filter")
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
-        self.ok_button = wx.Button(self.pnl, wx.ID_OK)
 
+        self.ok_button = wx.Button(self.pnl, wx.ID_OK)
         self.ok_button.Enable(False)
 
         # Bind widgets to methods
@@ -293,7 +295,8 @@ class SelectEvent(commonwx.CommonFrame):
 
     def on_ok(self, _event):
         """Open a new ticket using selected event"""
-        EditTicket(None, common_stuff, "Edit Ticket")
+        disp_event = self.event_list[_event.GetIndex()]
+        EditTicket(self.parent, common_stuff, "Edit Ticket", event=disp_event)
         self.Close()    # Close the SelectEvent frame
 
     def on_refresh(self, _event):
@@ -310,11 +313,10 @@ class EditTicket(commonwx.CommonFrame):
     Window used to edit a ticket
     """
 
-    def __init__(self, parent, cmn, title, ticket=None, event=None):
-        commonwx.CommonFrame.__init__(self, parent, cmn, title)
-        logging.debug("Init ticketwx.EditTicket")
-
-        self.Show()
+    ticket_code_id = 0
+    ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
+    ticket_open_st = "## MISSING TIME ##"
+    initial_details = "## MISSING DETAILS ##"
 
     # Made up for testing
     area_list = (
@@ -327,10 +329,28 @@ class EditTicket(commonwx.CommonFrame):
         "Unit B",
         "Unit C",
         "Unit D")
-    ticket_open_st = "2025-04-01 07:00"
-    ticket_code_id = 1116
-    ticket_code_desc = "Water problem"
-    initial_details = """Irrigation leak at 3008 Crib Point Drive.  No answer at door.  DI called 702-896-0507 and left voice mail.  DR flagged leak location"""
+
+    def __init__(self, parent, cmn, title, ticket=None, event=None):
+#       commonwx.CommonFrame.__init__(self, parent, cmn, title)
+        wx.Frame.__init__(self, parent, title=title)
+        logging.debug("Init ticketwx.EditTicket")
+
+        self.SetMinSize(wx.Size(256, 256))
+        self.pnl = wx.Panel(self)
+        self.cmn = cmn
+
+        self.initial_details = "Just saying"
+        if isinstance(event, common.Event):
+            self.ticket_open_st = str(event.time_dt)
+            self.ticket_code_id = event.code
+            self.initial_details = event.description
+
+        # Layout sizers
+        sizer_main = self.create_sizer_main()
+        self.pnl.SetSizer(sizer_main)
+        self.pnl.SetAutoLayout(1)
+        sizer_main.Fit(self)
+        self.Show()
 
     def build_followup_list(self, s_list):
         """Data, pretty data"""

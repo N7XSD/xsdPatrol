@@ -195,6 +195,27 @@ class DispatchDbReports():
         output.write('</html>')
 
 
+class Event():
+    item_id = None
+    watch_id = None
+    shift_number = None
+    time_dt = None
+    code = None
+    source = None
+    location = None
+    description = None
+
+
+class Ticket():
+    ticket_state = "open"
+    open_dt = None
+    address = None
+    responders = []
+    cones_used = 0
+    initial_event = None
+    folowup_events = []
+
+
 class TimeEntry():
     user_name = ""
     user_id = ""

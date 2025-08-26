@@ -251,7 +251,8 @@ class Data():
         event_list = []
         placeholders = ", ".join(["?"] * len(code_list))
         sql_statement = """
-            SELECT Item_ID, Activity_DateTime, Ten_Code, Description
+            SELECT Item_ID, Watch_ID, Shift_Number, Activity_DateTime,
+                Ten_Code, Activity_Source, Location, Description
             FROM Activities
             WHERE IsActive AND Activity_DateTime > ?
                 AND Ten_Code IN (""" + placeholders + ")"
@@ -261,9 +262,20 @@ class Data():
         self.curs_disp.execute(sql_statement, [start_date] + code_list)
         rows = self.curs_disp.fetchall()
         for i in rows:
-            description = i.Description
-            event_list.append([i.Item_ID, i.Activity_DateTime,
-                i.Ten_Code, i.Description])
+            event = common.Event()
+            event.item_id = i.Item_ID
+            event.watch_id = i.Watch_ID
+            event.shift_number = i.Shift_Number
+            event.time_dt = i.Activity_DateTime
+            event.code = i.Ten_Code
+            event.source = "unknown"
+            if i.Activity_Source == 1:
+                event.source = "DISPATCH"
+            elif i.Activity_Source == 2:
+                event.source = "WATCHDMDR"
+            event.location = i.Location
+            event.description = i.Description
+            event_list.append(event)
         return event_list
 
     def get_ic_by_watch(self, s_watch, e_watch):
