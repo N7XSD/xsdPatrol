@@ -371,6 +371,38 @@ class EditTicket(commonwx.CommonFrame):
         """No menu bar"""
         return None
 
+    def create_sizer_responder(self):
+        """The responder sizer holds controls for On Scene Responders
+        and any neede static text"""
+
+        if True:
+            # Static text
+            responder_label = wx.StaticText(self.pnl, label="On Scene Responders")
+
+            # Create text controls, check boxes, buttons, etc.
+            # in tab traversal order.
+            resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
+            resp_dr_ctrl = wx.CheckBox(self.pnl, label="Driver")
+            resp_le_ctrl = wx.CheckBox(self.pnl, label="Law Enforcement")
+            resp_fr_ctrl = wx.CheckBox(self.pnl, label="Fire and Rescue")
+            resp_ambulance_ctrl = wx.CheckBox(self.pnl, label="Ambulance")
+            resp_other_ctrl = wx.CheckBox(self.pnl, label="Other")
+
+            sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
+            sizer_responder.Add(resp_wc_ctrl)
+            sizer_responder.Add(resp_dr_ctrl)
+            sizer_responder.Add(resp_le_ctrl)
+            sizer_responder.Add(resp_fr_ctrl)
+            sizer_responder.Add(resp_ambulance_ctrl)
+            sizer_responder.Add(resp_other_ctrl)
+
+            sizer_box = wx.BoxSizer(wx.VERTICAL)
+            sizer_box.Add(responder_label, 0)
+            sizer_box.Add(sizer_responder)
+            return(sizer_box)
+
+        return(None)
+
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
         # Static text
@@ -378,12 +410,13 @@ class EditTicket(commonwx.CommonFrame):
         cones_label = wx.StaticText(self.pnl, label="Cones Used  ")
         followup_label = wx.StaticText(self.pnl, label="Followup Events")
         details_label = wx.StaticText(self.pnl, label="Initial Event Details")
-        responder_label = wx.StaticText(self.pnl, label="On Scene Responders")
         ticket_desc_label = wx.StaticText(self.pnl, label=self.ticket_code_desc)
         time_open_label = wx.StaticText(self.pnl, label="Open Time  ")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
+            style=wx.TE_READONLY)
         address_ctrl = wx.TextCtrl(self.pnl)
         area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
         area_ctrl.SetSelection(0)
@@ -391,14 +424,6 @@ class EditTicket(commonwx.CommonFrame):
         subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
         subarea_ctrl.SetSelection(0)
 
-        time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
-            style=wx.TE_READONLY)
-        resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
-        resp_dr_ctrl = wx.CheckBox(self.pnl, label="Driver")
-        resp_le_ctrl = wx.CheckBox(self.pnl, label="Law Enforcement")
-        resp_fr_ctrl = wx.CheckBox(self.pnl, label="Fire and Rescue")
-        resp_ambulance_ctrl = wx.CheckBox(self.pnl, label="Ambulance")
-        resp_other_ctrl = wx.CheckBox(self.pnl, label="Other")
         cones_ctrl = wx.SpinCtrl(self.pnl)
         initial_desc_ctrl = wx.TextCtrl(self.pnl,
             value=self.initial_details,
@@ -439,17 +464,7 @@ class EditTicket(commonwx.CommonFrame):
         sizer_boxC_main.Add(cones_ctrl, 0)
 
         # BOX 2
-        sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_responder.Add(resp_wc_ctrl)
-        sizer_responder.Add(resp_dr_ctrl)
-        sizer_responder.Add(resp_le_ctrl)
-        sizer_responder.Add(resp_fr_ctrl)
-        sizer_responder.Add(resp_ambulance_ctrl)
-        sizer_responder.Add(resp_other_ctrl)
-
-        sizer_box2_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_box2_main.Add(responder_label, 0)
-        sizer_box2_main.Add(sizer_responder)
+        sizer_box2_main = self.create_sizer_responder()
 
         # BOX 3
         sizer_desc_ctrl = wx.BoxSizer(wx.HORIZONTAL)
@@ -488,8 +503,9 @@ class EditTicket(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box1_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.get_widget_border_size())
+        if sizer_box2_main:
+            sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
+                border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_boxC_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box3_main, 0, wx.EXPAND | wx.ALL,
