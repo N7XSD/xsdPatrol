@@ -317,8 +317,6 @@ class EditTicket(commonwx.CommonFrame):
     ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
     ticket_open_st = "## MISSING TIME ##"
     initial_details = "## MISSING DETAILS ##"
-    area_list = ["Area UNK"]
-    subarea_list = ["Unit UNK"]
 
     def __init__(self, parent, cmn, title, ticket=None, event=None):
 #       commonwx.CommonFrame.__init__(self, parent, cmn, title)
@@ -328,6 +326,13 @@ class EditTicket(commonwx.CommonFrame):
         self.SetMinSize(wx.Size(256, 256))
         self.pnl = wx.Panel(self)
         self.cmn = cmn
+
+        self.area_list = ["UNKNOWN"]
+        if self.cmn.area_list:
+            self.area_list = self.cmn.area_list
+        self.subarea_list = ["UNK"]
+        if self.cmn.subarea_list:
+            self.subarea_list = self.cmn.subarea_list
 
         if isinstance(event, common.Event):
             self.ticket_open_st = str(event.time_dt)
@@ -523,6 +528,15 @@ if __name__ == '__main__':
     data_stuff = common_stuff.dat
     common_stuff.set_activity_code_list(data_stuff.get_activity_codes())
     common_stuff.set_responder_list(data_stuff.get_responder_list())
+
+    # Create the area and subarea lists.  In the future this will be
+    # extracted from the addresses table (yet to be designed).
+    common_stuff.area_list.append("Area UNK")
+    for i in range(4):
+        common_stuff.area_list.append("Area " + str(i + 1))
+    common_stuff.subarea_list.append("Unit UNK")
+    for i in range(50):
+        common_stuff.subarea_list.append("Unit " + str(i + 1))
 
     app = wx.App(False)
     SelectTicket(None, common_stuff, "Select Ticket")

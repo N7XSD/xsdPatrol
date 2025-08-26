@@ -314,6 +314,8 @@ class Common():
         self.dat.open_dispatch_db()
 
         self.activity_code_list = []
+        self.area_list = []
+        self.subarea_list = []
         self.responder_list = []
 
     def add_time_entries(self, time_dict, te_list):
