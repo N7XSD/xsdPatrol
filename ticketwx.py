@@ -317,18 +317,8 @@ class EditTicket(commonwx.CommonFrame):
     ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
     ticket_open_st = "## MISSING TIME ##"
     initial_details = "## MISSING DETAILS ##"
-
-    # Made up for testing
-    area_list = (
-        "Area 1",
-        "Area 2",
-        "Area 3",
-        "Area 4")
-    subarea_list = (
-        "Unit A",
-        "Unit B",
-        "Unit C",
-        "Unit D")
+    area_list = ["Area UNK"]
+    subarea_list = ["Unit UNK"]
 
     def __init__(self, parent, cmn, title, ticket=None, event=None):
 #       commonwx.CommonFrame.__init__(self, parent, cmn, title)
@@ -396,7 +386,11 @@ class EditTicket(commonwx.CommonFrame):
         # in tab traversal order.
         address_ctrl = wx.TextCtrl(self.pnl)
         area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
+        area_ctrl.SetSelection(0)
+
         subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
+        subarea_ctrl.SetSelection(0)
+
         time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
             style=wx.TE_READONLY)
         resp_wc_ctrl = wx.CheckBox(self.pnl, label="Watch Commander")
