@@ -343,6 +343,8 @@ class EditTicket(commonwx.CommonFrame):
         if isinstance(event, common.Event):
             self.ticket_open_st = str(event.time_dt)
             self.ticket_code_id = event.code
+            self.ticket_code_desc = \
+                self.cmn.get_activity_code_description(event.code)
             self.initial_details = event.description
 
         # Layout sizers

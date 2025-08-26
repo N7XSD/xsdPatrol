@@ -328,6 +328,13 @@ class Common():
                 active_list.append([i[1], i[2]])
         return active_list
 
+    def get_activity_code_description(self, code):
+        """Return the description for an activity code"""
+        for i in self.activity_code_list:
+            if code == i[1]:
+                return str(i[2])
+        return "Code " + str(code)
+
     def get_activity_code_list(self):
         """Returns a list of (active, code, description) tuples"""
         return self.activity_code_list
