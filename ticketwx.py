@@ -320,7 +320,6 @@ class EditTicket(commonwx.CommonFrame):
     ticket_folowup_events = []
     ticket_initial_event = None
     ticket_new = None
-    ticket_open_st = "## MISSING TIME ##"
     ticket_responders = []
     ticket_state = "open"
     initial_details = "## MISSING DETAILS ##"
@@ -345,7 +344,7 @@ class EditTicket(commonwx.CommonFrame):
             self.ticket_new = True
             self.ticket = common.Ticket()
             self.ticket_initial_event = event
-            self.ticket_open_st = str(event.time_dt)
+            self.ticket_open_dt = str(event.time_dt)
             self.initial_details = event.description
         elif isinstance(event, common.Ticket):
             self.ticket_new = False
@@ -353,7 +352,7 @@ class EditTicket(commonwx.CommonFrame):
             self.ticket_cones_used = int(ticket.cones_used)
             self.ticket_folowup_events = ticket.folowup_events
             self.ticket_initial_event = ticket.initial_event
-            self.ticket_open_st = str(ticket.open_dt)
+            self.ticket_open_dt = ticket.open_dt
             self.ticket_responders = ticket.responders
             self.ticket_state = str(ticket.ticket_state)
         self.ticket_code_desc = \
@@ -431,16 +430,16 @@ class EditTicket(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
-            style=wx.TE_READONLY)
-        address_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_address)
+        time_open_ctrl = wx.TextCtrl(self.pnl,
+            value=str(self.ticket_open_dt), style=wx.TE_READONLY)
+        self.address_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_address)
         area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
         area_ctrl.SetSelection(0)
 
         subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
         subarea_ctrl.SetSelection(0)
 
-        cones_ctrl = wx.SpinCtrl(self.pnl, initial=self.ticket_cones_used)
+        self.cones_ctrl = wx.SpinCtrl(self.pnl, initial=self.ticket_cones_used)
         initial_desc_ctrl = wx.TextCtrl(self.pnl,
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
@@ -468,7 +467,7 @@ class EditTicket(commonwx.CommonFrame):
 
         # BOX 1
         sizer_addr_ctrl = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_addr_ctrl.Add(address_ctrl, 1)
+        sizer_addr_ctrl.Add(self.address_ctrl, 1)
         sizer_addr_ctrl.Add(area_ctrl, 0)
         sizer_addr_ctrl.Add(subarea_ctrl, 0)
 
@@ -479,7 +478,7 @@ class EditTicket(commonwx.CommonFrame):
         # BOX C
         sizer_boxC_main = wx.BoxSizer(wx.HORIZONTAL)
         sizer_boxC_main.Add(cones_label, 0)
-        sizer_boxC_main.Add(cones_ctrl, 0)
+        sizer_boxC_main.Add(self.cones_ctrl, 0)
 
         # BOX 2
         sizer_box2_main = self.create_sizer_responder()
@@ -546,6 +545,13 @@ class EditTicket(commonwx.CommonFrame):
 
     def on_save(self, _event):
         """Save ticket"""
+        self.ticket.ticket_state = self.ticket_state
+        self.ticket.open_dt = self.ticket_open_dt
+        self.ticket.address = self.address_ctrl.GetValue()
+        self.ticket.cones_used = self.cones_ctrl.GetValue()
+        self.ticket.initial_event = self.ticket_initial_event
+        self.cmn.dat.save_ticket(self.ticket)
+        self.Close()
 
 
 if __name__ == '__main__':

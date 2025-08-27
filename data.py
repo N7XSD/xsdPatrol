@@ -518,6 +518,21 @@ class Data():
         self.conn_member = pyodbc.connect(conn_str)
         self.curs_member = self.conn_member.cursor()
 
+    def save_ticket(self, ticket):
+        """This is where we put the ticket back in the DB.  This could
+        be a new or existing record."""
+        print("SAVE TICKET")
+        print(f"ticket_id = {ticket.ticket_id}")
+        print(f"ticket_state = {ticket.ticket_state}")
+        print(f"open_dt = {ticket.open_dt}")
+        print(f"address = {ticket.address}")
+        print(f"responders = {ticket.responders}")
+        print(f"cones_used = {ticket.cones_used}")
+        print(f"initial_event.code = {ticket.initial_event.code}")
+        print(f"initial_event.description = {ticket.initial_event.description}")
+        print(f"folowup_events = {ticket.folowup_events}")
+        print()
+
 
 if __name__ == '__main__':
     cmn = common.Common()

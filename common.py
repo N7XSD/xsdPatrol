@@ -214,6 +214,7 @@ class Responder():
 
 
 class Ticket():
+    ticket_id = None
     ticket_state = "open"
     open_dt = None
     address = None
