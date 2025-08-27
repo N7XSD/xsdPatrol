@@ -445,7 +445,8 @@ class EditTicket(commonwx.CommonFrame):
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
         self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
-        close_button = wx.Button(self.pnl, wx.ID_ANY, label="Close Ticket")
+        self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
+            label="Close Ticket")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         save_button = wx.Button(self.pnl, wx.ID_SAVE)
 
@@ -453,7 +454,8 @@ class EditTicket(commonwx.CommonFrame):
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_close, close_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_ticket_state,
+            self.ticket_state_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
 
         # BOX 0
@@ -507,7 +509,7 @@ class EditTicket(commonwx.CommonFrame):
         # BOX n
         # Create a sizer to hold the buttons
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_button.Add(close_button, 0)
+        sizer_button.Add(self.ticket_state_button, 0)
 
         sizer_button.AddStretchSpacer()
         sizer_button.Add(cancel_button, 0)
@@ -519,7 +521,7 @@ class EditTicket(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box1_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        if sizer_box2_main:
+        if isinstance(sizer_box2_main, wx.Sizer):
             sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
                 border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_boxC_main, 0, wx.EXPAND | wx.ALL,
@@ -533,8 +535,14 @@ class EditTicket(commonwx.CommonFrame):
 
         return sizer_main
 
-    def on_close(self, _event):
-        """Cancel the window"""
+    def on_ticket_state(self, _event):
+        """Toggle ticket between open and closed"""
+        if self.ticket_state == "close":
+            self.ticket_state = "open"
+            self.ticket_state_button.SetLabel("Close Ticket")
+        else:
+            self.ticket_state = "close"
+            self.ticket_state_button.SetLabel("Open Ticket")
 
     def on_save(self, _event):
         """Save ticket"""
@@ -550,10 +558,10 @@ if __name__ == '__main__':
 
     # Create the area and subarea lists.  In the future this will be
     # extracted from the addresses table (yet to be designed).
-    common_stuff.area_list.append("Area UNK")
+    common_stuff.area_list.append("Select Area")
     for i in range(4):
         common_stuff.area_list.append("Area " + str(i + 1))
-    common_stuff.subarea_list.append("Unit UNK")
+    common_stuff.subarea_list.append("Select Unit")
     for i in range(50):
         common_stuff.subarea_list.append("Unit " + str(i + 1))
 
