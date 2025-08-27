@@ -313,9 +313,16 @@ class EditTicket(commonwx.CommonFrame):
     Window used to edit a ticket
     """
 
-    ticket_code_id = 0
+    ticket = None
+    ticket_address = ""
     ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
+    ticket_cones_used = 0
+    ticket_folowup_events = []
+    ticket_initial_event = None
+    ticket_new = None
     ticket_open_st = "## MISSING TIME ##"
+    ticket_responders = []
+    ticket_state = "open"
     initial_details = "## MISSING DETAILS ##"
 
     def __init__(self, parent, cmn, title, ticket=None, event=None):
@@ -335,11 +342,23 @@ class EditTicket(commonwx.CommonFrame):
             self.subarea_list = self.cmn.subarea_list
 
         if isinstance(event, common.Event):
+            self.ticket_new = True
+            self.ticket = common.Ticket()
+            self.ticket_initial_event = event
             self.ticket_open_st = str(event.time_dt)
-            self.ticket_code_id = event.code
-            self.ticket_code_desc = \
-                self.cmn.get_activity_code_description(event.code)
             self.initial_details = event.description
+        elif isinstance(event, common.Ticket):
+            self.ticket_new = False
+            self.ticket_address = str(ticket.address)
+            self.ticket_cones_used = int(ticket.cones_used)
+            self.ticket_folowup_events = ticket.folowup_events
+            self.ticket_initial_event = ticket.initial_event
+            self.ticket_open_st = str(ticket.open_dt)
+            self.ticket_responders = ticket.responders
+            self.ticket_state = str(ticket.ticket_state)
+        self.ticket_code_desc = \
+            self.cmn.get_activity_code_description(
+                self.ticket_initial_event.code)
 
         # Layout sizers
         sizer_main = self.create_sizer_main()
@@ -414,14 +433,14 @@ class EditTicket(commonwx.CommonFrame):
         # in tab traversal order.
         time_open_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_open_st,
             style=wx.TE_READONLY)
-        address_ctrl = wx.TextCtrl(self.pnl)
+        address_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_address)
         area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
         area_ctrl.SetSelection(0)
 
         subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
         subarea_ctrl.SetSelection(0)
 
-        cones_ctrl = wx.SpinCtrl(self.pnl)
+        cones_ctrl = wx.SpinCtrl(self.pnl, initial=self.ticket_cones_used)
         initial_desc_ctrl = wx.TextCtrl(self.pnl,
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
