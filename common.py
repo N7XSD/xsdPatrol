@@ -313,6 +313,7 @@ class Common():
         self.stns = settings.Settings()
         self.dat = data.Data(self)
         self.dat.open_dispatch_db()
+        self.dat.open_patrol_db()
 
         self.activity_code_list = []
         self.area_list = []

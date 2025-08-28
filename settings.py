@@ -92,6 +92,12 @@ class Settings():
             r"/Users/josep/SCS-Patrol-data/MemberDB/"
             + r"SPMemberDB.accdb")
 
+    def get_pathname_patrol_db(self):
+        """Return full pathname for patrol DB"""
+        return self._get('data', 'patrol-db',
+            r"/Users/josep/SCS-Patrol-data/Patrol-DB/"
+            + r"PatrolDB.accdb")
+
     def get_window_pos_time(self):
         return self._get('window', 'time-window-position', (32, 32))
 

@@ -509,7 +509,7 @@ class Data():
         self.curs_disp = self.conn_disp.cursor()
 
     def open_member_db(self):
-        """Open Database used by Dispatch and WC logging applications"""
+        """Open Database used by Brian Dodd's applications"""
 
         conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
             r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';'
@@ -518,42 +518,90 @@ class Data():
         self.conn_member = pyodbc.connect(conn_str)
         self.curs_member = self.conn_member.cursor()
 
+    def open_patrol_db(self):
+        """Open Database used by xsdPatrol applications"""
+
+        conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+            r'DBQ=' + self.cmn.stns.get_pathname_patrol_db() + r';'
+            r'Mode=Write;')
+        logging.info("    connected to %s", conn_str)
+        self.conn_patrol = pyodbc.connect(conn_str)
+        self.curs_patrol = self.conn_patrol.cursor()
+
     def save_ticket(self, ticket):
         """This is where we put the ticket back in the DB.  This could
         be a new or existing record."""
-        print("SAVE TICKET")
-        print(f"ticket_id = {ticket.ticket_id}")
-        print(f"ticket_state = {ticket.ticket_state}")
-        print(f"open_dt = {ticket.open_dt}")
-        print(f"address = {ticket.address}")
-        print(f"responders = {ticket.responders}")
-        print(f"cones_used = {ticket.cones_used}")
-        print(f"initial_event.code = {ticket.initial_event.code}")
-        print(f"initial_event.description = {ticket.initial_event.description}")
-        print(f"folowup_events = {ticket.folowup_events}")
-        print()
+
+        if ticket.ticket_id is None:
+             sql_statement = """
+                 INSERT INTO Ticket
+                     (ID_Event, State, Open, Address, Cones_Used)
+                 VALUES (?, ?, ?, ?, ?)"""
+#            print(sql_statement)
+#            print(ticket.initial_event.item_id, ticket.ticket_state,
+#                ticket.open_dt, ticket.address, ticket.cones_used)
+#            print()
+             self.curs_patrol.execute(sql_statement,
+                (ticket.initial_event.item_id, ticket.ticket_state,
+                 ticket.open_dt, ticket.address, ticket.cones_used))
+             self.conn_patrol.commit()
+        else:
+             sql_statement = """
+                 UPDATE Ticket
+                 SET State = ?, Open = ?, Address = ?, Cones_Used = ?)
+                 WHERE ID = ?"""
+             self.curs_patrol.execute(sql_statement,
+                (ticket.ticket_state, ticket.open_dt, ticket.address,
+                 ticket.cones_used, ticket.ticket_id))
+#            print(sql_statement)
+#            print(ticket.ticket_state, ticket.open_dt, ticket.address,
+#                ticket.cones_used, ticket.ticket_id)
+#            print()
+             self.conn_patrol.commit()
+
+#       print("SAVE TICKET")
+#       print(f"ticket_id = {ticket.ticket_id}")
+#       print(f"ticket_state = {ticket.ticket_state}")
+#       print(f"open_dt = {ticket.open_dt}")
+#       print(f"address = {ticket.address}")
+#       print(f"responders = {ticket.responders}")
+#       print(f"cones_used = {ticket.cones_used}")
+#       print(f"initial_event.code = {ticket.initial_event.code}")
+#       print(f"initial_event.description = {ticket.initial_event.description}")
+#       print(f"folowup_events = {ticket.folowup_events}")
+#       print()
 
 
 if __name__ == '__main__':
     cmn = common.Common()
     d = Data(cmn)
 
-    d.open_dispatch_db()
-    print()
-    print('Dispatch DB')
-    print('### Tables:')
-    for i in d.curs_disp.tables(tableType='TABLE'):
-        print(i.table_name)
-    print('### Views:')
-    for i in d.curs_disp.tables(tableType='VIEW'):
-        print(i.table_name)
+#   d.open_dispatch_db()
+#   print()
+#   print('Dispatch DB')
+#   print('### Tables:')
+#   for i in d.curs_disp.tables(tableType='TABLE'):
+#       print(i.table_name)
+#   print('### Views:')
+#   for i in d.curs_disp.tables(tableType='VIEW'):
+#       print(i.table_name)
 
-    d.open_member_db()
+#   d.open_member_db()
+#   print()
+#   print('Member DB')
+#   print('### Tables:')
+#   for i in d.curs_member.tables(tableType='TABLE'):
+#       print(i.table_name)
+#   print('### Views:')
+#   for i in d.curs_member.tables(tableType='VIEW'):
+#       print(i.table_name)
+
+    d.open_patrol_db()
     print()
-    print('Member DB')
+    print('Patrol DB')
     print('### Tables:')
-    for i in d.curs_member.tables(tableType='TABLE'):
+    for i in d.curs_patrol.tables(tableType='TABLE'):
         print(i.table_name)
     print('### Views:')
-    for i in d.curs_member.tables(tableType='VIEW'):
+    for i in d.curs_patrol.tables(tableType='VIEW'):
         print(i.table_name)
