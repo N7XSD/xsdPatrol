@@ -245,37 +245,53 @@ class Data():
                 te_list.append(te)
         return te_list
 
-    def get_events_list(self, code_list, start_date=None):
+    def get_events_list(self, code_list=None, start_date=None,
+            event_id_list=None):
         """Return a list of events"""
         start_date = datetime.datetime.now() - datetime.timedelta(days=5)
         event_list = []
-        placeholders = ", ".join(["?"] * len(code_list))
-        sql_statement = """
-            SELECT Item_ID, Watch_ID, Shift_Number, Activity_DateTime,
-                Ten_Code, Activity_Source, Location, Description
-            FROM Activities
-            WHERE IsActive AND Activity_DateTime > ?
-                AND Ten_Code IN (""" + placeholders + ")"
-#       print(sql_statement)
-#       print(start_date, list(code_list))
-#       print()
-        self.curs_disp.execute(sql_statement, [start_date] + code_list)
-        rows = self.curs_disp.fetchall()
-        for i in rows:
-            event = common.Event()
-            event.item_id = i.Item_ID
-            event.watch_id = i.Watch_ID
-            event.shift_number = i.Shift_Number
-            event.time_dt = i.Activity_DateTime
-            event.code = i.Ten_Code
-            event.source = "unknown"
-            if i.Activity_Source == 1:
-                event.source = "DISPATCH"
-            elif i.Activity_Source == 2:
-                event.source = "WATCHDMDR"
-            event.location = i.Location
-            event.description = i.Description
-            event_list.append(event)
+        rows = None
+        if code_list is not None:
+            placeholders = ", ".join(["?"] * len(code_list))
+            sql_statement = """
+                SELECT Item_ID, Watch_ID, Shift_Number, Activity_DateTime,
+                    Ten_Code, Activity_Source, Location, Description
+                FROM Activities
+                WHERE IsActive AND Activity_DateTime > ?
+                    AND Ten_Code IN (""" + placeholders + ")"
+#           print(sql_statement)
+#           print(start_date, list(code_list))
+#           print()
+            self.curs_disp.execute(sql_statement, [start_date] + code_list)
+            rows = self.curs_disp.fetchall()
+        elif event_id_list is not None:
+            sql_statement = """
+                SELECT Item_ID, Watch_ID, Shift_Number, Activity_DateTime,
+                    Ten_Code, Activity_Source, Location, Description
+                FROM Activities
+                WHERE IsActive
+                    AND Item_ID IN (""" + placeholders + ")"
+#           print(sql_statement)
+#           print(start_date, list(item_id_list))
+#           print()
+            self.curs_disp.execute(sql_statement, item_id_list)
+            rows = self.curs_disp.fetchall()
+        if rows is not None:
+            for i in rows:
+                event = common.Event()
+                event.item_id = i.Item_ID
+                event.watch_id = i.Watch_ID
+                event.shift_number = i.Shift_Number
+                event.time_dt = i.Activity_DateTime
+                event.code = i.Ten_Code
+                event.source = "unknown"
+                if i.Activity_Source == 1:
+                    event.source = "DISPATCH"
+                elif i.Activity_Source == 2:
+                    event.source = "WATCHDMDR"
+                event.location = i.Location
+                event.description = i.Description
+                event_list.append(event)
         return event_list
 
     def get_ic_by_watch(self, s_watch, e_watch):

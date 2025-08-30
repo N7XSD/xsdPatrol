@@ -366,28 +366,18 @@ class EditTicket(commonwx.CommonFrame):
         sizer_main.Fit(self)
         self.Show()
 
-    def build_followup_list(self, s_list):
+    def build_followup_list(self, s_list, e_list):
         """Data, pretty data"""
 
-        # Begin test data creation
-        list_of_stuff = [
-            ("2025-04-01 08:00", "one"),
-            ("2025-04-01 09:00", "two"),
-            ("2025-04-01 10:00", "three"),
-            ("2025-04-01 11:00", "four"),
-            ("2025-04-01 12:00", "five"),
-            ("2025-04-01 13:00", "six"),
-            ("2025-04-01 14:00", "seven"),
-            ("2025-04-01 15:00", "eight"),
-            ("2025-04-01 16:00", "nine"),
-            ("2025-04-01 17:00", "last")]
         s_list.AppendColumn("Time", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
-        for i in list_of_stuff:
-            index = s_list.InsertItem(s_list.GetItemCount(), i[0])
-            for j, j_text in enumerate(i[1:]):
-                s_list.SetItem(index, j+1, j_text)
-        # End test data creation
+        for i in e_list:
+            if isinstance(i, common.Event):
+                index = s_list.InsertItem(s_list.GetItemCount(),
+                    str(i.time_dt))
+                s_list.SetItem(index, 1, i.description)
+#               for j, j_text in enumerate(i[1:]):
+#                   s_list.SetItem(index, j+1, j_text)
 
     def create_menu_bar(self):
         """No menu bar"""
@@ -449,7 +439,8 @@ class EditTicket(commonwx.CommonFrame):
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         save_button = wx.Button(self.pnl, wx.ID_SAVE)
 
-        self.build_followup_list(self.followup_list)
+        self.build_followup_list(self.followup_list,
+            self.ticket_folowup_events)
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
