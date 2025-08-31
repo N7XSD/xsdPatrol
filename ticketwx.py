@@ -295,8 +295,16 @@ class SelectEvent(commonwx.CommonFrame):
 
     def on_ok(self, _event):
         """Open a new ticket using selected event"""
-        disp_event = self.event_list[_event.GetIndex()]
-        EditTicket(self.parent, common_stuff, "Edit Ticket", event=disp_event)
+        if isinstance(_event, wx._core.ListEvent):
+            disp_event = self.event_list[_event.GetIndex()]
+            EditTicket(self.parent, common_stuff, "Edit Ticket", event=disp_event)
+        elif isinstance(_event, wx._core.CommandEvent):
+            disp_event = self.event_list[
+                self.selection_list.GetFirstSelected()]
+            EditTicket(self.parent, common_stuff, "Edit Ticket", event=disp_event)
+        else:
+            logging.error("SelectTicket.on_ok wasn't expecting an object"
+                + " of type %s", type(_event))
         self.Close()    # Close the SelectEvent frame
 
     def on_refresh(self, _event):
@@ -355,6 +363,8 @@ class EditTicket(commonwx.CommonFrame):
             self.ticket_open_dt = ticket.open_dt
             self.ticket_responders = ticket.responders
             self.ticket_state = str(ticket.ticket_state)
+        else:
+            logging.error("Was expecting a Ticket or Event")
         self.ticket_code_desc = \
             self.cmn.get_activity_code_description(
                 self.ticket_initial_event.code)
@@ -376,8 +386,10 @@ class EditTicket(commonwx.CommonFrame):
                 index = s_list.InsertItem(s_list.GetItemCount(),
                     str(i.time_dt))
                 s_list.SetItem(index, 1, i.description)
-#               for j, j_text in enumerate(i[1:]):
-#                   s_list.SetItem(index, j+1, j_text)
+            else:
+                logging.error("Wasn't expecting an object"
+                    + " of type %s", type(_event))
+                break
 
     def create_menu_bar(self):
         """No menu bar"""
