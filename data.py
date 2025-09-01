@@ -245,7 +245,7 @@ class Data():
                 te_list.append(te)
         return te_list
 
-    def get_events_list(self, code_list=None, start_date=None,
+    def get_event_list(self, code_list=None, start_date=None,
             event_id_list=None):
         """Return a list of events"""
         start_date = datetime.datetime.now() - datetime.timedelta(days=5)
@@ -265,6 +265,7 @@ class Data():
             self.curs_disp.execute(sql_statement, [start_date] + code_list)
             rows = self.curs_disp.fetchall()
         elif event_id_list is not None:
+            placeholders = ", ".join(["?"] * len(event_id_list))
             sql_statement = """
                 SELECT Item_ID, Watch_ID, Shift_Number, Activity_DateTime,
                     Ten_Code, Activity_Source, Location, Description
@@ -272,9 +273,9 @@ class Data():
                 WHERE IsActive
                     AND Item_ID IN (""" + placeholders + ")"
 #           print(sql_statement)
-#           print(start_date, list(item_id_list))
+#           print(event_id_list)
 #           print()
-            self.curs_disp.execute(sql_statement, item_id_list)
+            self.curs_disp.execute(sql_statement, event_id_list)
             rows = self.curs_disp.fetchall()
         if rows is not None:
             for i in rows:
@@ -360,6 +361,42 @@ class Data():
                     te.hours_rec = 0.0
                 te_list.append(te)
         return te_list
+
+    def get_ticket_list(self, closed=False):
+        """Return list of Tickets"""
+        sql_statement = """
+            SELECT ID, ID_Event, State, Open, Address, Cones_Used
+            FROM Ticket"""
+        if not closed:
+            sql_statement += """ WHERE State <> 'close'"""
+#       print(sql_statement)
+#       print()
+        self.curs_patrol.execute(sql_statement)
+        rows = self.curs_patrol.fetchall()
+        ticket_list = []
+        if rows is not None:
+            for i in rows:
+                ticket = common.Ticket()
+                ticket.ticket_id = i.ID
+                ticket.ticket_state = i.State
+                ticket.open_dt = i.Open
+                ticket.address = i.Address
+                ticket.cones_used = i.Cones_Used
+                ticket.initial_event = i.ID_Event
+                ticket_list.append(ticket)
+
+        # ID_Event is the key to the event.  Replace those keys with
+        # Event objects.
+        event_numbers = set()
+        for i in ticket_list:
+            event_numbers.add(i.initial_event)
+        event_list = self.get_event_list(event_id_list=sorted(event_numbers))
+        event_dict = {}
+        for i in event_list:
+            event_dict[i.item_id] = i
+        for i in ticket_list:
+            i.initial_event = event_dict[i.initial_event]
+        return(sorted(ticket_list, key=lambda x: x.open_dt))
 
     def get_wc_date_range(self, s_date_d, e_date_d):
         """Return list of Watch Commanders who worked during a date range"""
@@ -574,18 +611,6 @@ class Data():
 #                ticket.cones_used, ticket.ticket_id)
 #            print()
              self.conn_patrol.commit()
-
-#       print("SAVE TICKET")
-#       print(f"ticket_id = {ticket.ticket_id}")
-#       print(f"ticket_state = {ticket.ticket_state}")
-#       print(f"open_dt = {ticket.open_dt}")
-#       print(f"address = {ticket.address}")
-#       print(f"responders = {ticket.responders}")
-#       print(f"cones_used = {ticket.cones_used}")
-#       print(f"initial_event.code = {ticket.initial_event.code}")
-#       print(f"initial_event.description = {ticket.initial_event.description}")
-#       print(f"folowup_events = {ticket.folowup_events}")
-#       print()
 
 
 if __name__ == '__main__':

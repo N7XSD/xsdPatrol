@@ -98,27 +98,17 @@ class SelectTicket(commonwx.CommonFrame):
 
     def build_selection_list(self, s_list):
         """Data, pretty data"""
-
-        # Begin test data creation
-        list_of_stuff = [
-            ("Closed", "2025-04-01 08:00", "one"),
-            ("Closed", "2025-04-01 09:00", "two"),
-            ("Closed", "2025-04-01 10:00", "three"),
-            ("", "2025-04-01 11:00", "four"),
-            ("", "2025-04-01 12:00", "five"),
-            ("", "2025-04-01 13:00", "six"),
-            ("", "2025-04-01 14:00", "seven"),
-            ("", "2025-04-01 15:00", "eight"),
-            ("", "2025-04-01 16:00", "nine"),
-            ("", "2025-04-01 17:00", "last")]
+        ticket_list = self.cmn.dat.get_ticket_list()
         s_list.AppendColumn("State", wx.LIST_FORMAT_LEFT, 64)
         s_list.AppendColumn("Time Opened", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
-        for i in list_of_stuff:
-            index = s_list.InsertItem(s_list.GetItemCount(), i[0])
-            for j, j_text in enumerate(i[1:]):
-                s_list.SetItem(index, j+1, j_text)
-        # End test data creation
+        for i in ticket_list:
+            state_st = str(i.ticket_state)
+            if state_st == "open":
+                state_st = ""
+            index = s_list.InsertItem(s_list.GetItemCount(), state_st)
+            s_list.SetItem(index, 1, str(i.open_dt))
+            s_list.SetItem(index, 2, str(i.initial_event.description))
 
     def create_menu_bar(self):
         """No menu bar"""
@@ -211,7 +201,7 @@ class SelectEvent(commonwx.CommonFrame):
         for i in act_code_list_1:
             act_code_list_2.append(i[0])
 
-        self.event_list = self.cmn.dat.get_events_list(act_code_list_2)
+        self.event_list = self.cmn.dat.get_event_list(act_code_list_2)
         item_list = []
         for j in self.event_list:
             if j.code >= 1000 and j.code <= 9999:
