@@ -103,9 +103,14 @@ class SelectTicket(commonwx.CommonFrame):
         s_list.AppendColumn("Time Opened", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
         for i in ticket_list:
+
+            # FIXME: We should look this up in the Ticket_State table
             state_st = str(i.ticket_state)
-            if state_st == "open":
+            if i.ticket_state == 1:
                 state_st = ""
+            elif i.ticket_state == 2:
+                state_st = "Closed"
+
             index = s_list.InsertItem(s_list.GetItemCount(), state_st)
             s_list.SetItem(index, 1, str(i.open_dt))
             s_list.SetItem(index, 2, str(i.initial_event.description))
@@ -319,7 +324,7 @@ class EditTicket(commonwx.CommonFrame):
     ticket_initial_event = None
     ticket_new = None
     ticket_responders = []
-    ticket_state = "open"
+    ticket_state = 1    # Open
     initial_details = "## MISSING DETAILS ##"
 
     def __init__(self, parent, cmn, title, ticket=None, event=None):
@@ -352,7 +357,7 @@ class EditTicket(commonwx.CommonFrame):
             self.ticket_initial_event = ticket.initial_event
             self.ticket_open_dt = ticket.open_dt
             self.ticket_responders = ticket.responders
-            self.ticket_state = str(ticket.ticket_state)
+            self.ticket_state = int(ticket.ticket_state)
         else:
             logging.error("Was expecting a Ticket or Event")
         self.ticket_code_desc = \
@@ -529,11 +534,13 @@ class EditTicket(commonwx.CommonFrame):
 
     def on_ticket_state(self, _event):
         """Toggle ticket between open and closed"""
-        if self.ticket_state == "close":
-            self.ticket_state = "open"
+        # FIXME: Instead of toggling between two states,
+        # we should use a pull down to select the state
+        if self.ticket_state == 2:  # Closed
+            self.ticket_state = 1
             self.ticket_state_button.SetLabel("Close Ticket")
         else:
-            self.ticket_state = "close"
+            self.ticket_state = 2
             self.ticket_state_button.SetLabel("Open Ticket")
 
     def on_save(self, _event):

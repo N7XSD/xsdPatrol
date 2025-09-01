@@ -368,7 +368,7 @@ class Data():
             SELECT ID, ID_Event, State, Open, Address, Cones_Used
             FROM Ticket"""
         if not closed:
-            sql_statement += """ WHERE State <> 'close'"""
+            sql_statement += """ WHERE State <> 2"""
 #       print(sql_statement)
 #       print()
         self.curs_patrol.execute(sql_statement)

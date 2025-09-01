@@ -215,7 +215,7 @@ class Responder():
 
 class Ticket():
     ticket_id = None
-    ticket_state = "open"
+    ticket_state = 1    # Open
     open_dt = None
     address = None
     responders = []
