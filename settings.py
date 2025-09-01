@@ -10,7 +10,7 @@ import datetime
 import logging
 
 ID_NAME = "xsdPatrol"
-ID_VER = "0.1.2"
+ID_VER = "0.1.3"
 ID_CONF_VER = "1"
 
 #Logging levels are: CRITICAL, ERROR, WARNING, INFO, and DEBUG.
@@ -82,21 +82,22 @@ class Settings():
 
     def get_pathname_dispatch_db(self):
         """Return full pathname for Dispatcher/WC log DB"""
-#       default = r"//SERVER/SecurityLogDB2/SecurityLog.mdb"
-        default = r"/Users/josep/SCS-Patrol-data/SecurityLogDB2/SecurityLog.mdb"
+#       default = r"//DISPATCH/Database/Dispatch/SecurityLog.mdb"
+        default = r"/Users/josep/srv-Patrol" \
+            + r"/Patrol-Database/Dispatch/SecurityLog.mdb"
         return self._get('data', 'dispatch-db', default)
 
     def get_pathname_member_db(self):
         """Return full pathname for member DB"""
-        return self._get('data', 'member-db',
-            r"/Users/josep/SCS-Patrol-data/MemberDB/"
-            + r"SPMemberDB.accdb")
+        default = r"/Users/josep/srv-Patrol" \
+            + r"/Patrol-Database/Member/SPMemberDB.accdb"
+        return self._get('data', 'member-db', default)
 
     def get_pathname_patrol_db(self):
         """Return full pathname for patrol DB"""
-        return self._get('data', 'patrol-db',
-            r"/Users/josep/SCS-Patrol-data/Patrol-DB/"
-            + r"PatrolDB.accdb")
+        default = r"/Users/josep/srv-Patrol" \
+            + r"/Patrol-Database/Patrol/PatrolDB.accdb"
+        return self._get('data', 'patrol-db', default)
 
     def get_window_pos_time(self):
         return self._get('window', 'time-window-position', (32, 32))
