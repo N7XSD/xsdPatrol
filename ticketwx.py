@@ -20,7 +20,7 @@ class ChangeFilter(commonwx.CommonFrame):
 
     def __init__(self, parent, cmn, title):
         commonwx.CommonFrame.__init__(self, parent, cmn, title)
-        logging.debug("Init ticketwx.SelectTicket")
+        logging.debug("Init ticketwx.ChangeFilter")
         self.cmn = cmn
 
         self.Show()
@@ -96,9 +96,9 @@ class SelectTicket(commonwx.CommonFrame):
 
         self.Show()
 
-    def build_selection_list(self, s_list):
+    def build_selection_list(self, s_list, include_closed=False):
         """Data, pretty data"""
-        ticket_list = self.cmn.dat.get_ticket_list()
+        ticket_list = self.cmn.dat.get_ticket_list(include_closed)
         s_list.AppendColumn("State", wx.LIST_FORMAT_LEFT, 64)
         s_list.AppendColumn("Time Opened", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
@@ -126,7 +126,7 @@ class SelectTicket(commonwx.CommonFrame):
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         self.selection_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
-        include_closed_ctrl = wx.CheckBox(self.pnl,
+        self.include_closed_ctrl = wx.CheckBox(self.pnl,
             label="Include closed")
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
@@ -152,7 +152,7 @@ class SelectTicket(commonwx.CommonFrame):
         # BOX n - 1
         # Choices
         sizer_choice = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_choice.Add(include_closed_ctrl, 0)
+        sizer_choice.Add(self.include_closed_ctrl, 0)
 
         # BOX n
         # Create a sizer to hold the buttons
@@ -184,6 +184,9 @@ class SelectTicket(commonwx.CommonFrame):
 
     def on_refresh(self, _event):
         """Refresh the window"""
+        self.selection_list.ClearAll()
+        self.build_selection_list(self.selection_list,
+            self.include_closed_ctrl.GetValue())
 
 
 class SelectEvent(commonwx.CommonFrame):
@@ -501,7 +504,7 @@ class EditTicket(commonwx.CommonFrame):
         # BOX n - 1
         # Choices
 #       sizer_choice = wx.BoxSizer(wx.HORIZONTAL)
-#       sizer_choice.Add(include_closed_ctrl, 0)
+#       sizer_choice.Add(self.include_closed_ctrl, 0)
 
         # BOX n
         # Create a sizer to hold the buttons

@@ -362,12 +362,12 @@ class Data():
                 te_list.append(te)
         return te_list
 
-    def get_ticket_list(self, closed=False):
+    def get_ticket_list(self, include_closed=False):
         """Return list of Tickets"""
         sql_statement = """
             SELECT ID, ID_Event, State, Open, Address, Cones_Used
             FROM Ticket"""
-        if not closed:
+        if not include_closed:
             sql_statement += """ WHERE State <> 2"""
 #       print(sql_statement)
 #       print()
