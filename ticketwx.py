@@ -366,7 +366,6 @@ class EditTicket(commonwx.CommonFrame):
         if self.cmn.subarea_list:
             self.subarea_list = self.cmn.subarea_list
 
-        print(type(ticket), type(event))
         if isinstance(event, common.Event):
             self.ticket_new = True
             self.ticket = common.Ticket()
@@ -441,7 +440,7 @@ class EditTicket(commonwx.CommonFrame):
         return(None)
 
     def create_sizer_main(self):
-        """The main sizer holds everthing the user will interact with"""
+        """The main sizer holds everything the user will interact with"""
         # Static text
         address_label = wx.StaticText(self.pnl, label="Address")
         cones_label = wx.StaticText(self.pnl, label="Cones Used  ")
@@ -466,8 +465,10 @@ class EditTicket(commonwx.CommonFrame):
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
         self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
-        self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
-            label="Close Ticket")
+#       self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
+#           label="Close Ticket")
+        add_followup_button = wx.Button(self.pnl, wx.ID_ANY,
+            label="Add Followup Event")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         save_button = wx.Button(self.pnl, wx.ID_SAVE)
 
@@ -476,8 +477,8 @@ class EditTicket(commonwx.CommonFrame):
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_ticket_state,
-            self.ticket_state_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_add_event,
+            add_followup_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
 
         # BOX 0
@@ -531,7 +532,7 @@ class EditTicket(commonwx.CommonFrame):
         # BOX n
         # Create a sizer to hold the buttons
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_button.Add(self.ticket_state_button, 0)
+        sizer_button.Add(add_followup_button, 0)
 
         sizer_button.AddStretchSpacer()
         sizer_button.Add(cancel_button, 0)
@@ -556,6 +557,9 @@ class EditTicket(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
+
+    def on_add_event(self, _event):
+        """Add a followup event to the Ticket"""
 
     def on_ticket_state(self, _event):
         """Toggle ticket between open and closed"""
