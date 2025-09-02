@@ -414,6 +414,27 @@ class EditTicket(commonwx.CommonFrame):
         """No menu bar"""
         return None
 
+    def create_sizer_header(self):
+        """This sizer holds labels and controls at the top of the frame."""
+        # Static text
+        ticket_desc_label = wx.StaticText(self.pnl, label=self.ticket_code_desc)
+        time_open_label = wx.StaticText(self.pnl, label="Open Time  ")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        time_open_ctrl = wx.TextCtrl(self.pnl,
+            value=str(self.ticket_open_dt), style=wx.TE_READONLY)
+#       self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
+#           label="Close Ticket")
+
+        sizer_box = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_box.Add(ticket_desc_label, 0)
+
+        sizer_box.AddStretchSpacer()
+        sizer_box.Add(time_open_label, 0)
+        sizer_box.Add(time_open_ctrl, 0)
+        return sizer_box
+
     def create_sizer_responder(self):
         """The responder sizer holds controls for On Scene Responders
         and any neede static text"""
@@ -437,7 +458,7 @@ class EditTicket(commonwx.CommonFrame):
             sizer_box.Add(sizer_responder)
             return(sizer_box)
 
-        return(None)
+        return None
 
     def create_sizer_main(self):
         """The main sizer holds everything the user will interact with"""
@@ -446,13 +467,9 @@ class EditTicket(commonwx.CommonFrame):
         cones_label = wx.StaticText(self.pnl, label="Cones Used  ")
         followup_label = wx.StaticText(self.pnl, label="Followup Events")
         details_label = wx.StaticText(self.pnl, label="Initial Event Details")
-        ticket_desc_label = wx.StaticText(self.pnl, label=self.ticket_code_desc)
-        time_open_label = wx.StaticText(self.pnl, label="Open Time  ")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        time_open_ctrl = wx.TextCtrl(self.pnl,
-            value=str(self.ticket_open_dt), style=wx.TE_READONLY)
         self.address_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_address)
         area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
         area_ctrl.SetSelection(0)
@@ -465,8 +482,6 @@ class EditTicket(commonwx.CommonFrame):
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
         self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
-#       self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
-#           label="Close Ticket")
         add_followup_button = wx.Button(self.pnl, wx.ID_ANY,
             label="Add Followup Event")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
@@ -476,18 +491,13 @@ class EditTicket(commonwx.CommonFrame):
             self.ticket_folowup_events)
 
         # Bind widgets to methods
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_add_event,
             add_followup_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
 
         # BOX 0
-        sizer_box0_main = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_box0_main.Add(ticket_desc_label, 0)
-
-        sizer_box0_main.AddStretchSpacer()
-        sizer_box0_main.Add(time_open_label, 0)
-        sizer_box0_main.Add(time_open_ctrl, 0)
+        sizer_box0_main = self.create_sizer_header()
 
         # BOX 1
         sizer_addr_ctrl = wx.BoxSizer(wx.HORIZONTAL)
