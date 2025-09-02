@@ -98,11 +98,11 @@ class SelectTicket(commonwx.CommonFrame):
 
     def build_selection_list(self, s_list, include_closed=False):
         """Data, pretty data"""
-        ticket_list = self.cmn.dat.get_ticket_list(include_closed)
+        self.ticket_list = self.cmn.dat.get_ticket_list(include_closed)
         s_list.AppendColumn("State", wx.LIST_FORMAT_LEFT, 64)
         s_list.AppendColumn("Time Opened", wx.LIST_FORMAT_LEFT, 128)
         s_list.AppendColumn("Description", wx.LIST_FORMAT_LEFT, 256)
-        for i in ticket_list:
+        for i in self.ticket_list:
 
             # FIXME: We should look this up in the Ticket_State table
             state_st = str(i.ticket_state)
@@ -131,14 +131,20 @@ class SelectTicket(commonwx.CommonFrame):
         refresh_button = wx.Button(self.pnl, wx.ID_ANY, "Refresh")
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         new_button = wx.Button(self.pnl, wx.ID_NEW)
-        open_button = wx.Button(self.pnl, wx.ID_ANY, "Open")
+        self.open_button = wx.Button(self.pnl, wx.ID_ANY, "Open")
+        self.open_button.Enable(False)
 
         self.build_selection_list(self.selection_list)
 
         # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_select_item,
+            self.selection_list)
+        self.pnl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_open,
+            self.selection_list)
+
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_new, new_button)
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_open, open_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_open, self.open_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_refresh, refresh_button)
 
         # BOX 0
@@ -162,7 +168,7 @@ class SelectTicket(commonwx.CommonFrame):
         sizer_button.AddStretchSpacer()
         sizer_button.Add(cancel_button, 0)
         sizer_button.Add(new_button, 0)
-        sizer_button.Add(open_button, 0)
+        sizer_button.Add(self.open_button, 0)
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
@@ -181,12 +187,26 @@ class SelectTicket(commonwx.CommonFrame):
 
     def on_open(self, _event):
         """Open an existing ticket"""
+        if isinstance(_event, wx._core.ListEvent):
+            disp_item = self.ticket_list[_event.GetIndex()]
+            EditTicket(self, common_stuff, "Edit Ticket", ticket=disp_item)
+        elif isinstance(_event, wx._core.CommandEvent):
+            disp_item = self.ticket_list[
+                self.selection_list.GetFirstSelected()]
+            EditTicket(self, common_stuff, "Edit Ticket", ticket=disp_item)
+        else:
+            logging.error("SelectTicket.on_open wasn't expecting an object"
+                + " of type %s", type(_event))
 
     def on_refresh(self, _event):
         """Refresh the window"""
         self.selection_list.ClearAll()
         self.build_selection_list(self.selection_list,
             self.include_closed_ctrl.GetValue())
+
+    def on_select_item(self, _event):
+        """An item is selected"""
+        self.open_button.Enable(True)
 
 
 class SelectEvent(commonwx.CommonFrame):
@@ -346,18 +366,20 @@ class EditTicket(commonwx.CommonFrame):
         if self.cmn.subarea_list:
             self.subarea_list = self.cmn.subarea_list
 
+        print(type(ticket), type(event))
         if isinstance(event, common.Event):
             self.ticket_new = True
             self.ticket = common.Ticket()
             self.ticket_initial_event = event
             self.ticket_open_dt = str(event.time_dt)
             self.initial_details = event.description
-        elif isinstance(event, common.Ticket):
+        elif isinstance(ticket, common.Ticket):
             self.ticket_new = False
             self.ticket_address = str(ticket.address)
             self.ticket_cones_used = int(ticket.cones_used)
             self.ticket_folowup_events = ticket.folowup_events
             self.ticket_initial_event = ticket.initial_event
+            self.initial_details = ticket.initial_event.description
             self.ticket_open_dt = ticket.open_dt
             self.ticket_responders = ticket.responders
             self.ticket_state = int(ticket.ticket_state)
