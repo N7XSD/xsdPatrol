@@ -417,22 +417,34 @@ class EditTicket(commonwx.CommonFrame):
     def create_sizer_header(self):
         """This sizer holds labels and controls at the top of the frame."""
         # Static text
+        cones_label = wx.StaticText(self.pnl, label="Cones Used")
         ticket_desc_label = wx.StaticText(self.pnl, label=self.ticket_code_desc)
-        time_open_label = wx.StaticText(self.pnl, label="Open Time  ")
+        time_open_label = wx.StaticText(self.pnl, label="Open Time")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        self.cones_ctrl = wx.SpinCtrl(self.pnl, initial=self.ticket_cones_used)
         time_open_ctrl = wx.TextCtrl(self.pnl,
             value=str(self.ticket_open_dt), style=wx.TE_READONLY)
 #       self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
 #           label="Close Ticket")
 
-        sizer_box = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_box.Add(ticket_desc_label, 0)
+        sizer_cones = wx.BoxSizer(wx.VERTICAL)
+        sizer_cones.Add(cones_label, 0)
+        sizer_cones.Add(self.cones_ctrl, 0)
 
-        sizer_box.AddStretchSpacer()
-        sizer_box.Add(time_open_label, 0)
-        sizer_box.Add(time_open_ctrl, 0)
+        sizer_open_time = wx.BoxSizer(wx.VERTICAL)
+        sizer_open_time.Add(time_open_label, 0)
+        sizer_open_time.Add(time_open_ctrl, 0)
+
+        sizer_details = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_details.Add(sizer_cones, 0)
+        sizer_details.AddStretchSpacer()
+        sizer_details.Add(sizer_open_time, 0)
+
+        sizer_box = wx.BoxSizer(wx.VERTICAL)
+        sizer_box.Add(ticket_desc_label, 0)
+        sizer_box.Add(sizer_details, 0, wx.EXPAND)
         return sizer_box
 
     def create_sizer_responder(self):
@@ -464,7 +476,6 @@ class EditTicket(commonwx.CommonFrame):
         """The main sizer holds everything the user will interact with"""
         # Static text
         address_label = wx.StaticText(self.pnl, label="Address")
-        cones_label = wx.StaticText(self.pnl, label="Cones Used  ")
         followup_label = wx.StaticText(self.pnl, label="Followup Events")
         details_label = wx.StaticText(self.pnl, label="Initial Event Details")
 
@@ -477,7 +488,6 @@ class EditTicket(commonwx.CommonFrame):
         subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
         subarea_ctrl.SetSelection(0)
 
-        self.cones_ctrl = wx.SpinCtrl(self.pnl, initial=self.ticket_cones_used)
         initial_desc_ctrl = wx.TextCtrl(self.pnl,
             value=self.initial_details,
             style=(wx.TE_MULTILINE + wx.TE_READONLY))
@@ -508,11 +518,6 @@ class EditTicket(commonwx.CommonFrame):
         sizer_box1_main = wx.BoxSizer(wx.VERTICAL)
         sizer_box1_main.Add(address_label, 0)
         sizer_box1_main.Add(sizer_addr_ctrl, 1, wx.EXPAND)
-
-        # BOX C
-        sizer_boxC_main = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_boxC_main.Add(cones_label, 0)
-        sizer_boxC_main.Add(self.cones_ctrl, 0)
 
         # BOX 2
         sizer_box2_main = self.create_sizer_responder()
@@ -557,8 +562,6 @@ class EditTicket(commonwx.CommonFrame):
         if isinstance(sizer_box2_main, wx.Sizer):
             sizer_main.Add(sizer_box2_main, 0, wx.EXPAND | wx.ALL,
                 border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(sizer_boxC_main, 0, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box3_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box4_main, 1, wx.EXPAND | wx.ALL,
