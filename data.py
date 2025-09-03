@@ -542,14 +542,29 @@ class Data():
             "Law Enforcement",
             "Fire + Rescue",
             "Ambulance"]
-        resp_list = []
+        item_list = []
         for i, name in enumerate(ugly_list):
-            resp = common.Responder()
-            resp.resp_id = i
-            resp.sort_index = i
-            resp.name = str(name)
-            resp_list.append(resp)
-        return(resp_list)
+            item = common.Responder()
+            item.item_id = i
+            item.sort_index = i
+            item.name = str(name)
+            item_list.append(item)
+        return(item_list)
+
+    def get_state_list(self):
+        """Ugly stub that returns a state list."""
+
+        # FIXME: this should come from a DB table
+        ugly_list = [
+            "Open",
+            "Closed"]
+        item_list = []
+        for i, name in enumerate(ugly_list):
+            item = common.TicketState()
+            item.item_id = i
+            item.name = str(name)
+            item_list.append(item)
+        return(item_list)
 
     def open_dispatch_db(self):
         """Open Database used by Dispatch and WC logging applications"""

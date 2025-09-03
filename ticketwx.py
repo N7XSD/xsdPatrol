@@ -416,18 +416,25 @@ class EditTicket(commonwx.CommonFrame):
 
     def create_sizer_header(self):
         """This sizer holds labels and controls at the top of the frame."""
+
+        state_name_list = []
+        for i in self.cmn.state_list:
+            state_name_list.append(i.name)
+
         # Static text
         cones_label = wx.StaticText(self.pnl, label="Cones Used")
+        state_label = wx.StaticText(self.pnl, label="State")
         ticket_desc_label = wx.StaticText(self.pnl, label=self.ticket_code_desc)
         time_open_label = wx.StaticText(self.pnl, label="Open Time")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
+        self.state_ctrl = wx.Choice(self.pnl, choices=state_name_list)
+        self.state_ctrl.SetSelection(self.ticket_state - 1)  # DB indexing one based
+
         self.cones_ctrl = wx.SpinCtrl(self.pnl, initial=self.ticket_cones_used)
         time_open_ctrl = wx.TextCtrl(self.pnl,
             value=str(self.ticket_open_dt), style=wx.TE_READONLY)
-#       self.ticket_state_button = wx.Button(self.pnl, wx.ID_ANY,
-#           label="Close Ticket")
 
         sizer_cones = wx.BoxSizer(wx.VERTICAL)
         sizer_cones.Add(cones_label, 0)
@@ -437,13 +444,20 @@ class EditTicket(commonwx.CommonFrame):
         sizer_open_time.Add(time_open_label, 0)
         sizer_open_time.Add(time_open_ctrl, 0)
 
+        sizer_state = wx.BoxSizer(wx.VERTICAL)
+        sizer_state.Add(state_label, 0)
+        sizer_state.Add(self.state_ctrl, 0)
+
         sizer_details = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_details.Add(sizer_state, 0)
+        sizer_details.AddSpacer(8)
         sizer_details.Add(sizer_cones, 0)
         sizer_details.AddStretchSpacer()
         sizer_details.Add(sizer_open_time, 0)
 
         sizer_box = wx.BoxSizer(wx.VERTICAL)
         sizer_box.Add(ticket_desc_label, 0)
+        sizer_box.AddSpacer(8)
         sizer_box.Add(sizer_details, 0, wx.EXPAND)
         return sizer_box
 
@@ -587,7 +601,10 @@ class EditTicket(commonwx.CommonFrame):
 
     def on_save(self, _event):
         """Save ticket"""
-        self.ticket.ticket_state = self.ticket_state
+        # DB indexing one based
+        print(type(self.ticket))
+        self.ticket.ticket_state = self.state_ctrl.GetSelection() + 1
+
         self.ticket.open_dt = self.ticket_open_dt
         self.ticket.address = self.address_ctrl.GetValue()
         self.ticket.cones_used = self.cones_ctrl.GetValue()
@@ -603,6 +620,7 @@ if __name__ == '__main__':
     data_stuff = common_stuff.dat
     common_stuff.set_activity_code_list(data_stuff.get_activity_codes())
     common_stuff.set_responder_list(data_stuff.get_responder_list())
+    common_stuff.set_state_list(data_stuff.get_state_list())
 
     # Create the area and subarea lists.  In the future this will be
     # extracted from the addresses table (yet to be designed).

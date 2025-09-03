@@ -224,6 +224,12 @@ class Ticket():
     folowup_events = []
 
 
+class TicketState():
+    state_id = None
+    is_active = True
+    name = None
+
+
 class TimeEntry():
     user_name = ""
     user_id = ""
@@ -319,6 +325,7 @@ class Common():
         self.area_list = []
         self.subarea_list = []
         self.responder_list = []
+        self.state_list = []
 
     def add_time_entries(self, time_dict, te_list):
         """Add a time recored to a user.  A new user is created,
@@ -394,6 +401,10 @@ class Common():
     def set_activity_code_item(self, index, is_active):
         self.activity_code_list[index][0] = is_active
 
-    def set_responder_list(self, r_list):
+    def set_responder_list(self, i_list):
         """Sets a list of (active, code, description) tuples"""
-        self.responder_list = r_list
+        self.responder_list = i_list
+
+    def set_state_list(self, i_list):
+        """Sets a list of (active, code, description) tuples"""
+        self.state_list = i_list
