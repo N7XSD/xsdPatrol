@@ -616,15 +616,15 @@ class Data():
         else:
              sql_statement = """
                  UPDATE Ticket
-                 SET State = ?, Open = ?, Address = ?, Cones_Used = ?)
+                 SET State = ?, Open = ?, Address = ?, Cones_Used = ?
                  WHERE ID = ?"""
-             self.curs_patrol.execute(sql_statement,
-                (ticket.ticket_state, ticket.open_dt, ticket.address,
-                 ticket.cones_used, ticket.ticket_id))
 #            print(sql_statement)
 #            print(ticket.ticket_state, ticket.open_dt, ticket.address,
 #                ticket.cones_used, ticket.ticket_id)
 #            print()
+             self.curs_patrol.execute(sql_statement,
+                (ticket.ticket_state, ticket.open_dt, ticket.address,
+                 ticket.cones_used, ticket.ticket_id))
              self.conn_patrol.commit()
 
 

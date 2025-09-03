@@ -374,6 +374,7 @@ class EditTicket(commonwx.CommonFrame):
             self.initial_details = event.description
         elif isinstance(ticket, common.Ticket):
             self.ticket_new = False
+            self.ticket = ticket
             self.ticket_address = str(ticket.address)
             self.ticket_cones_used = int(ticket.cones_used)
             self.ticket_folowup_events = ticket.folowup_events
@@ -602,7 +603,6 @@ class EditTicket(commonwx.CommonFrame):
     def on_save(self, _event):
         """Save ticket"""
         # DB indexing one based
-        print(type(self.ticket))
         self.ticket.ticket_state = self.state_ctrl.GetSelection() + 1
 
         self.ticket.open_dt = self.ticket_open_dt
