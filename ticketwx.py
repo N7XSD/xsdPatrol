@@ -339,6 +339,8 @@ class EditTicket(commonwx.CommonFrame):
     Window used to edit a ticket
     """
 
+    area_list = ["UNKNOWN"]
+    subarea_list = ["UNK"]
     ticket = None
     ticket_address = ""
     ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
@@ -359,10 +361,8 @@ class EditTicket(commonwx.CommonFrame):
         self.pnl = wx.Panel(self)
         self.cmn = cmn
 
-        self.area_list = ["UNKNOWN"]
         if self.cmn.area_list:
             self.area_list = self.cmn.area_list
-        self.subarea_list = ["UNK"]
         if self.cmn.subarea_list:
             self.subarea_list = self.cmn.subarea_list
 
@@ -385,6 +385,7 @@ class EditTicket(commonwx.CommonFrame):
             self.ticket_state = int(ticket.ticket_state)
         else:
             logging.error("Was expecting a Ticket or Event")
+
         self.ticket_code_desc = \
             self.cmn.get_activity_code_description(
                 self.ticket_initial_event.code)
@@ -414,6 +415,97 @@ class EditTicket(commonwx.CommonFrame):
     def create_menu_bar(self):
         """No menu bar"""
         return None
+
+    def create_sizer_address(self):
+        """The address sizer holds controls for the address"""
+        # Static text
+        address_label = wx.StaticText(self.pnl, label="Address")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        self.address_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_address)
+        area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
+        area_ctrl.SetSelection(0)
+
+        subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
+        subarea_ctrl.SetSelection(0)
+
+        sizer_addr_ctrl = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_addr_ctrl.Add(self.address_ctrl, 1)
+        sizer_addr_ctrl.Add(area_ctrl, 0)
+        sizer_addr_ctrl.Add(subarea_ctrl, 0)
+
+        sizer_box = wx.BoxSizer(wx.VERTICAL)
+        sizer_box.Add(address_label, 0)
+        sizer_box.Add(sizer_addr_ctrl, 1, wx.EXPAND)
+
+        return(sizer_box)
+
+    def create_sizer_details(self):
+        """The details sizer holds controls for the details"""
+        # Static text
+        details_label = wx.StaticText(self.pnl, label="Initial Event Details")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        initial_desc_ctrl = wx.TextCtrl(self.pnl,
+            value=self.initial_details,
+            style=(wx.TE_MULTILINE + wx.TE_READONLY))
+
+        sizer_desc_ctrl = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_desc_ctrl.Add(initial_desc_ctrl, 1)
+
+        sizer_box = wx.BoxSizer(wx.VERTICAL)
+        sizer_box.Add(details_label, 0)
+        sizer_box.Add(sizer_desc_ctrl, 1, wx.EXPAND)
+
+        return sizer_box
+
+    def create_sizer_followup(self):
+        """The followup sizer holds controls for the followup list"""
+        # Static text
+        followup_label = wx.StaticText(self.pnl, label="Followup Events")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
+
+        self.build_followup_list(self.followup_list,
+            self.ticket_folowup_events)
+
+        sizer_followup_list = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_followup_list.Add(self.followup_list, 1, wx.EXPAND)
+
+        sizer_box = wx.BoxSizer(wx.VERTICAL)
+        sizer_box.Add(followup_label, 0)
+        sizer_box.Add(sizer_followup_list, 1, wx.EXPAND)
+
+        return sizer_box
+
+    def create_sizer_footer(self):
+        """The footer sizer holds controls for the footer"""
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        add_followup_button = wx.Button(self.pnl, wx.ID_ANY,
+            label="Add Followup Event")
+        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
+        save_button = wx.Button(self.pnl, wx.ID_SAVE)
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_add_event,
+            add_followup_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
+
+        # Create a sizer to hold the buttons
+        sizer_button = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_button.Add(add_followup_button, 0)
+
+        sizer_button.AddStretchSpacer()
+        sizer_button.Add(cancel_button, 0)
+        sizer_button.Add(save_button, 0)
+
+        return sizer_button
 
     def create_sizer_header(self):
         """This sizer holds labels and controls at the top of the frame."""
@@ -464,7 +556,7 @@ class EditTicket(commonwx.CommonFrame):
 
     def create_sizer_responder(self):
         """The responder sizer holds controls for On Scene Responders
-        and any neede static text"""
+        and any needed static text"""
 
         if len(self.cmn.responder_list):
             # Static text
@@ -489,84 +581,12 @@ class EditTicket(commonwx.CommonFrame):
 
     def create_sizer_main(self):
         """The main sizer holds everything the user will interact with"""
-        # Static text
-        address_label = wx.StaticText(self.pnl, label="Address")
-        followup_label = wx.StaticText(self.pnl, label="Followup Events")
-        details_label = wx.StaticText(self.pnl, label="Initial Event Details")
-
-        # Create text controls, check boxes, buttons, etc.
-        # in tab traversal order.
-        self.address_ctrl = wx.TextCtrl(self.pnl, value=self.ticket_address)
-        area_ctrl = wx.Choice(self.pnl, choices=self.area_list)
-        area_ctrl.SetSelection(0)
-
-        subarea_ctrl = wx.Choice(self.pnl, choices=self.subarea_list)
-        subarea_ctrl.SetSelection(0)
-
-        initial_desc_ctrl = wx.TextCtrl(self.pnl,
-            value=self.initial_details,
-            style=(wx.TE_MULTILINE + wx.TE_READONLY))
-        self.followup_list = wx.ListCtrl(self.pnl, style=wx.LC_REPORT)
-        add_followup_button = wx.Button(self.pnl, wx.ID_ANY,
-            label="Add Followup Event")
-        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
-        save_button = wx.Button(self.pnl, wx.ID_SAVE)
-
-        self.build_followup_list(self.followup_list,
-            self.ticket_folowup_events)
-
-        # Bind widgets to methods
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_add_event,
-            add_followup_button)
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_save, save_button)
-
-        # BOX 0
         sizer_box0_main = self.create_sizer_header()
-
-        # BOX 1
-        sizer_addr_ctrl = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_addr_ctrl.Add(self.address_ctrl, 1)
-        sizer_addr_ctrl.Add(area_ctrl, 0)
-        sizer_addr_ctrl.Add(subarea_ctrl, 0)
-
-        sizer_box1_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_box1_main.Add(address_label, 0)
-        sizer_box1_main.Add(sizer_addr_ctrl, 1, wx.EXPAND)
-
-        # BOX 2
+        sizer_box1_main = self.create_sizer_address()
         sizer_box2_main = self.create_sizer_responder()
-
-        # BOX 3
-        sizer_desc_ctrl = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_desc_ctrl.Add(initial_desc_ctrl, 1)
-
-        sizer_box3_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_box3_main.Add(details_label, 0)
-        sizer_box3_main.Add(sizer_desc_ctrl, 1, wx.EXPAND)
-
-        # BOX 4
-        # Followup List
-        sizer_followup_list = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_followup_list.Add(self.followup_list, 1, wx.EXPAND)
-
-        sizer_box4_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_box4_main.Add(followup_label, 0)
-        sizer_box4_main.Add(sizer_followup_list, 1, wx.EXPAND)
-
-        # BOX n - 1
-        # Choices
-#       sizer_choice = wx.BoxSizer(wx.HORIZONTAL)
-#       sizer_choice.Add(self.include_closed_ctrl, 0)
-
-        # BOX n
-        # Create a sizer to hold the buttons
-        sizer_button = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_button.Add(add_followup_button, 0)
-
-        sizer_button.AddStretchSpacer()
-        sizer_button.Add(cancel_button, 0)
-        sizer_button.Add(save_button, 0)
+        sizer_box3_main = self.create_sizer_details()
+        sizer_box4_main = self.create_sizer_followup()
+        sizer_box5_main = self.create_sizer_footer()
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
@@ -581,7 +601,7 @@ class EditTicket(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(sizer_box4_main, 1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
+        sizer_main.Add(sizer_box5_main, 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
