@@ -2,7 +2,7 @@
 Next generation of software to support SCS Patrol. 
 
 As of September 2025, Patrol volunteers use multiple applications
-and spreadsheets for their work.  These modules will, in time, replace
+and spreadsheets for their work.  xsdPatrol modules will, in time, replace
 existing applications.  Priorities
 1.  Automate paper processes.
 1.  Replace spreadsheets with Python applications.
