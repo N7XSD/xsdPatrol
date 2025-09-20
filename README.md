@@ -1,11 +1,21 @@
 # xsdPatrol
 Next generation of software to support SCS Patrol. 
 
+As of September 2025, Patrol volunteers use multiple applications
+and spreadsheets for their work.  These modules will, in time, replace
+existing applications.  Priorities
+1.  Automate paper processes.
+1.  Replace spreadsheets with Python applications.
+1.  Replace MS Access forms and reports with python applications.
+1.  Replace Dispatch and Watch Commander logging
+    wwith Python applications.
+1.  Migrate data to MariaDB.
+
 Goals
-* FOSS with repository on Github
-* Run software on Windows, Linux, and macOS
-* Store data in MS Access, SQLite, or MariaDB
-* Customizable through SQL tables and config files
+* FOSS with repository on Github.
+* Run software on Windows, Linux, and macOS.
+* Store data in MS Access or MariaDB.
+* Customizable through SQL tables and config files.
 
 ## Ticket Tracking Module
 Automated Ongoing Event Reports using data from DispatchDB.
