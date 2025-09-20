@@ -5,13 +5,13 @@ As of September 2025, Patrol volunteers use multiple applications
 and spreadsheets for their work.  xsdPatrol modules will, in time, replace
 existing applications.
 
-Goals
+### Goals
 * FOSS with repository on Github.
 * Run software on Windows, Linux, and macOS.
 * Store data in MS Access or MariaDB.
 * Customizable through SQL tables and config files.
 
-Priorities
+### Priorities
 1.  Automate paper processes.
 1.  Replace spreadsheets with Python applications.
 1.  Replace MS Access forms and reports with python applications.
