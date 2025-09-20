@@ -1,3 +1,47 @@
 # xsdPatrol
+Next generation of software to support SCS Patrol. 
 
-This is the README file for xsdPatrol.
+Goals
+* FOSS with repository on Github
+* Run software on Windows, Linux, and macOS
+* Store data in MS Access, SQLite, or MariaDB
+* Customizable through SQL tables and config files
+
+## Ticket Tracking Module
+Automated Ongoing Event Reports using data from DispatchDB.
+
+New tables go in PatrolDB:
+* The Tickets table itself
+* Source numbers to console names mapping
+
+## Time Reporting Module
+Write a Python program to assist the Patrol Timekeepers. 
+
+### Minimal Requirements
+Give the timekeepers something better than paging through the log book. 
+* Read the previous week's dispatch logs. 
+* Collect the names of each person who worked and provide a sum of hours. 
+* Create a simple report that can be printed or emailed. A window that allows text to be copied is good enough. Look at wx.ListCtrl and wx.dataview.DataViewCtrl.
+* Run from an icon on the desktop. 
+
+### Additions
+* Sanity check hours
+    * Calculate expected hours for each shift
+    * Print exceptions when they don't match
+    * Print both entered and calculated hours
+* Produce a simple CSV report
+* Sanity check names
+    * Read active members from MemberDB
+    * Mark dispatch log names that are not active members
+    * Produce separate report IT Officer and Personnel  can use to harmonize names
+* GUI interface to allow Timekeepers to edit data
+* Allow Timekeepers to enter data
+    * This may require separate forms for meetings, etc. 
+    * Create form to accept CSV files from the web and require Timekeeper acceptance
+* Produce HTML "Hours Monthly" report
+* Produce HTML "Hours Summary" report
+* Produce report for awards officer
+* Allow awards officer to edit awards level
+* Limit data editing to appropriate people
+* Keep time data in PatrolDB
+
