@@ -15,8 +15,8 @@ Priorities
 1.  Automate paper processes.
 1.  Replace spreadsheets with Python applications.
 1.  Replace MS Access forms and reports with python applications.
-1.  Replace Dispatch and Watch Commander logging
-    wwith Python applications.
+1.  Replace Dispatch and Watch Commander Visual Basic logging
+    applications with Python applications.
 1.  Migrate data to MariaDB.
 
 ## Ticket Tracking Module
