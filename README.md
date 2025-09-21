@@ -51,9 +51,9 @@ Data is collected by reading printed dispatch logs.
 ### Completed features
 * Read a selected week's dispatch logs. 
 * Create a simple report that can be printed.
-* The report contains a section for each member with a list of
-  hours earned, date, and duties performed.
-* The report highlites names that don't exist in Users table.
+    * The report contains a section for each member with a list of
+      hours earned, date, and duties performed.
+    * The report highlites names that don't exist in Users table.
 * Run the application from an icon on the desktop. 
 
 ### Additional features
