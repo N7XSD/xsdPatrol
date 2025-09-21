@@ -41,7 +41,12 @@ Events must be edited in the Dispatch or Watch Commander applications.
 * Add a "Consoles" table to map an integer to a name.
 
 ## Time Reporting Module
-Write a Python program to assist the Patrol Timekeepers. 
+Timekeepers enter hours credited to members into an Excel workbook.
+The workbook holds data for one year and has sheets for each month.
+Hours for a week are entered as formulas so Excel can do the sums.
+Sheets are written to PDF to provide reports for members.
+
+Data is collected by reading printed dispatch logs.
 
 ### Minimal Requirements
 Give the timekeepers something better than paging through the log book. 
