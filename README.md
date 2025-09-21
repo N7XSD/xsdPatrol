@@ -48,14 +48,15 @@ Sheets are written to PDF to provide reports for members.
 
 Data is collected by reading printed dispatch logs.
 
-### Minimal Requirements
-Give the timekeepers something better than paging through the log book. 
-* Read the previous week's dispatch logs. 
-* Collect the names of each person who worked and provide a sum of hours. 
-* Create a simple report that can be printed or emailed. A window that allows text to be copied is good enough. Look at wx.ListCtrl and wx.dataview.DataViewCtrl.
-* Run from an icon on the desktop. 
+### Completed features
+* Read a selected week's dispatch logs. 
+* Create a simple report that can be printed.
+* The report contains a section for each member with a list of
+  hours earned, date, and duties performed.
+* The report highlites names that don't exist in Users table.
+* Run the application from an icon on the desktop. 
 
-### Additions
+### Additional features
 * Sanity check hours
     * Calculate expected hours for each shift
     * Print exceptions when they don't match
@@ -64,11 +65,13 @@ Give the timekeepers something better than paging through the log book.
 * Sanity check names
     * Read active members from MemberDB
     * Mark dispatch log names that are not active members
-    * Produce separate report IT Officer and Personnel  can use to harmonize names
+    * Produce separate report IT Officer and Personnel
+      can use to harmonize names
 * GUI interface to allow Timekeepers to edit data
 * Allow Timekeepers to enter data
     * This may require separate forms for meetings, etc. 
-    * Create form to accept CSV files from the web and require Timekeeper acceptance
+    * Create form to accept CSV files from the web and
+      require Timekeeper acceptance
 * Produce HTML "Hours Monthly" report
 * Produce HTML "Hours Summary" report
 * Produce report for awards officer
