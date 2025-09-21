@@ -25,8 +25,19 @@ The paper process is a single page Ongoing Event Report
 multiple shifts are recorded on the form.  The form has room
 for updates and is discarded when the event is no longer active.
 
-## Changes fequired for DispatchDB
+The Ticket application will present a window that is similar to
+the paper form.  The ticket is opened by selecting an initial
+event. Information needed for the ticket that is not available
+in the event is added by the user (often the dispatcher).
+Follow up events can be added to the ticket.
+
+The application can print a report similar to the manual form.
+
+Events must be edited in the Dispatch or Watch Commander applications.
+
+### Changes required for DispatchDB
 * Add a "Tickets" table.
+* Add a "Responder" table to map an integer to a name.
 * Add a "Consoles" table to map an integer to a name.
 
 ## Time Reporting Module
