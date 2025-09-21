@@ -20,11 +20,14 @@ existing applications.
 1.  Migrate data to MariaDB.
 
 ## Ticket Tracking Module
-Automated Ongoing Event Reports using data from DispatchDB.
+The paper process is a single page Ongoing Event Report
+(OER, AKA pink sheet).  Events that will have to be tracked by
+multiple shifts are recorded on the form.  The form has room
+for updates and is discarded when the event is no longer active.
 
-New tables go in PatrolDB:
-* The Tickets table itself
-* Source numbers to console names mapping
+## Changes fequired for DispatchDB
+* Add a "Tickets" table.
+* Add a "Consoles" table to map an integer to a name.
 
 ## Time Reporting Module
 Write a Python program to assist the Patrol Timekeepers. 
