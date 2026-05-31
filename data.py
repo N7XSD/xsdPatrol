@@ -360,41 +360,41 @@ class Data():
                 te_list.append(te)
         return te_list
 
-    def get_ticket_list(self, include_closed=False):
-        """Return list of Tickets"""
-        sql_statement = """
-            SELECT ID, ID_Event, State, Open, Address, Cones_Used
-            FROM Ticket"""
-        if not include_closed:
-            sql_statement += """ WHERE State <> 2"""
-#       print(sql_statement)
-#       print()
-        self.curs_patrol.execute(sql_statement)
-        rows = self.curs_patrol.fetchall()
-        ticket_list = []
-        if rows is not None:
-            for i in rows:
-                ticket = common.Ticket()
-                ticket.ticket_id = i.ID
-                ticket.ticket_state = i.State
-                ticket.open_dt = i.Open
-                ticket.address = i.Address
-                ticket.cones_used = i.Cones_Used
-                ticket.initial_event = i.ID_Event
-                ticket_list.append(ticket)
+#   def get_ticket_list(self, include_closed=False):
+#       """Return list of Tickets"""
+#       sql_statement = """
+#           SELECT ID, ID_Event, State, Open, Address, Cones_Used
+#           FROM Ticket"""
+#       if not include_closed:
+#           sql_statement += """ WHERE State <> 2"""
+##      print(sql_statement)
+##      print()
+#       self.curs_patrol.execute(sql_statement)
+#       rows = self.curs_patrol.fetchall()
+#       ticket_list = []
+#       if rows is not None:
+#           for i in rows:
+#               ticket = common.Ticket()
+#               ticket.ticket_id = i.ID
+#               ticket.ticket_state = i.State
+#               ticket.open_dt = i.Open
+#               ticket.address = i.Address
+#               ticket.cones_used = i.Cones_Used
+#               ticket.initial_event = i.ID_Event
+#               ticket_list.append(ticket)
 
-        # ID_Event is the key to the event.  Replace those keys with
-        # Event objects.
-        event_numbers = set()
-        for i in ticket_list:
-            event_numbers.add(i.initial_event)
-        event_list = self.get_event_list(event_id_list=sorted(event_numbers))
-        event_dict = {}
-        for i in event_list:
-            event_dict[i.item_id] = i
-        for i in ticket_list:
-            i.initial_event = event_dict[i.initial_event]
-        return(sorted(ticket_list, key=lambda x: x.open_dt))
+#       # ID_Event is the key to the event.  Replace those keys with
+#       # Event objects.
+#       event_numbers = set()
+#       for i in ticket_list:
+#           event_numbers.add(i.initial_event)
+#       event_list = self.get_event_list(event_id_list=sorted(event_numbers))
+#       event_dict = {}
+#       for i in event_list:
+#           event_dict[i.item_id] = i
+#       for i in ticket_list:
+#           i.initial_event = event_dict[i.initial_event]
+#       return(sorted(ticket_list, key=lambda x: x.open_dt))
 
     def get_wc_date_range(self, s_date_d, e_date_d):
         """Return list of Watch Commanders who worked during a date range"""
@@ -510,26 +510,26 @@ class Data():
 #           print(f"{i}: {j}")
         return name_dict
 
-    def get_responder_list(self):
-        """Returns a responder list."""
+#   def get_responder_list(self):
+#       """Returns a responder list."""
 
-        sql_statement = """
-            SELECT ID, Is_Active, Sort_Index, Responder_Name
-            FROM Responder
-            WHERE Is_Active
-            ORDER BY Sort_Index"""
-#       print(sql_statement)
-#       print()
-        self.curs_patrol.execute(sql_statement)
-        item_list = []
-        rows = self.curs_patrol.fetchall()
-        for i in rows:
-            item = common.Responder()
-            item.item_id = i.ID
-            item.sort_index = i.Sort_Index
-            item.name = str(i.Responder_Name)
-            item_list.append(item)
-        return(item_list)
+#       sql_statement = """
+#           SELECT ID, Is_Active, Sort_Index, Responder_Name
+#           FROM Responder
+#           WHERE Is_Active
+#           ORDER BY Sort_Index"""
+##      print(sql_statement)
+##      print()
+#       self.curs_patrol.execute(sql_statement)
+#       item_list = []
+#       rows = self.curs_patrol.fetchall()
+#       for i in rows:
+#           item = common.Responder()
+#           item.item_id = i.ID
+#           item.sort_index = i.Sort_Index
+#           item.name = str(i.Responder_Name)
+#           item_list.append(item)
+#       return(item_list)
 
     def get_state_list(self):
         """Ugly stub that returns a state list."""
@@ -561,73 +561,73 @@ class Data():
         except:
             return None
 
-    def open_patrol_db(self):
-        """Open Database used by xsdPatrol applications"""
+#   def open_patrol_db(self):
+#       """Open Database used by xsdPatrol applications"""
 
-        try:
-            import pyodbc
-            conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-                r'DBQ=' + self.cmn.stns.get_pathname_patrol_db() + r';'
-                r'Mode=Write;')
-            logging.info("    connected to %s", conn_str)
-            self.conn_patrol = pyodbc.connect(conn_str)
-            self.curs_patrol = self.conn_patrol.cursor()
-            return conn_str
-        except:
-            return None
+#       try:
+#           import pyodbc
+#           conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+#               r'DBQ=' + self.cmn.stns.get_pathname_patrol_db() + r';'
+#               r'Mode=Write;')
+#           logging.info("    connected to %s", conn_str)
+#           self.conn_patrol = pyodbc.connect(conn_str)
+#           self.curs_patrol = self.conn_patrol.cursor()
+#           return conn_str
+#       except:
+#           return None
 
-    def save_ticket(self, ticket):
-        """This is where we put the ticket back in the DB.  This could
-        be a new or existing record."""
+#   def save_ticket(self, ticket):
+#       """This is where we put the ticket back in the DB.  This could
+#       be a new or existing record."""
 
-        if ticket.ticket_id is None:
-             sql_statement = """
-                 INSERT INTO Ticket
-                     (ID_Event, State, Open, Address, Cones_Used)
-                 VALUES (?, ?, ?, ?, ?)"""
-#            print(sql_statement)
-#            print(ticket.initial_event.item_id, ticket.ticket_state,
-#                ticket.open_dt, ticket.address, ticket.cones_used)
-#            print()
-             self.curs_patrol.execute(sql_statement,
-                (ticket.initial_event.item_id, ticket.ticket_state,
-                 ticket.open_dt, ticket.address, ticket.cones_used))
-             self.conn_patrol.commit()
-        else:
-             sql_statement = """
-                 UPDATE Ticket
-                 SET State = ?, Open = ?, Address = ?, Cones_Used = ?
-                 WHERE ID = ?"""
-#            print(sql_statement)
-#            print(ticket.ticket_state, ticket.open_dt, ticket.address,
-#                ticket.cones_used, ticket.ticket_id)
-#            print()
-             self.curs_patrol.execute(sql_statement,
-                (ticket.ticket_state, ticket.open_dt, ticket.address,
-                 ticket.cones_used, ticket.ticket_id))
-             self.conn_patrol.commit()
+#       if ticket.ticket_id is None:
+#            sql_statement = """
+#                INSERT INTO Ticket
+#                    (ID_Event, State, Open, Address, Cones_Used)
+#                VALUES (?, ?, ?, ?, ?)"""
+##           print(sql_statement)
+##           print(ticket.initial_event.item_id, ticket.ticket_state,
+##               ticket.open_dt, ticket.address, ticket.cones_used)
+##           print()
+#            self.curs_patrol.execute(sql_statement,
+#               (ticket.initial_event.item_id, ticket.ticket_state,
+#                ticket.open_dt, ticket.address, ticket.cones_used))
+#            self.conn_patrol.commit()
+#       else:
+#            sql_statement = """
+#                UPDATE Ticket
+#                SET State = ?, Open = ?, Address = ?, Cones_Used = ?
+#                WHERE ID = ?"""
+##           print(sql_statement)
+##           print(ticket.ticket_state, ticket.open_dt, ticket.address,
+##               ticket.cones_used, ticket.ticket_id)
+##           print()
+#            self.curs_patrol.execute(sql_statement,
+#               (ticket.ticket_state, ticket.open_dt, ticket.address,
+#                ticket.cones_used, ticket.ticket_id))
+#            self.conn_patrol.commit()
 
 
 if __name__ == '__main__':
     cmn = common.Common()
     d = Data(cmn)
 
-#   d.open_dispatch_db()
-#   print()
-#   print('Dispatch DB')
-#   print('### Tables:')
-#   for i in d.curs_disp.tables(tableType='TABLE'):
-#       print(i.table_name)
-#   print('### Views:')
-#   for i in d.curs_disp.tables(tableType='VIEW'):
-#       print(i.table_name)
-
-    d.open_patrol_db()
+    d.open_dispatch_db()
     print()
-    print('Patrol DB')
+    print('Dispatch DB')
     print('### Tables:')
-    for i in d.curs_patrol.tables(tableType='TABLE'):
+    for i in d.curs_disp.tables(tableType='TABLE'):
         print(i.table_name)
     print('### Views:')
-    for i in d.curs_patrol.tables(tableType='VIEW'):
+    for i in d.curs_disp.tables(tableType='VIEW'):
         print(i.table_name)
+
+#   d.open_patrol_db()
+#   print()
+#   print('Patrol DB')
+#   print('### Tables:')
+#   for i in d.curs_patrol.tables(tableType='TABLE'):
+#       print(i.table_name)
+#   print('### Views:')
+#   for i in d.curs_patrol.tables(tableType='VIEW'):
+#       print(i.table_name)

@@ -318,9 +318,9 @@ class Common():
 #       print(self.app_start_time_dt)
 
         self.stns = settings.Settings()
-        self.dat = data.Data(self)
         self.patrol_db_open_info = None
-        self.patrol_db_open_info = self.dat.open_patrol_db()
+
+        self.dat = data.Data(self)
         self.dispatch_db_open_info = None
         self.dispatch_db_open_info = self.dat.open_dispatch_db()
 

@@ -17,23 +17,24 @@ class EditTicket(commonwx.CommonFrame):
     Window used to edit a ticket
     """
 
-    area_list = ["UNKNOWN"]
-    subarea_list = ["UNK"]
-    ticket = None
-    ticket_address = ""
-    ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
-    ticket_cones_used = 0
-    ticket_folowup_events = []
-    ticket_initial_event = None
-    ticket_new = None
-    ticket_responders = []
-    ticket_state = 1    # Open
-    initial_details = "## MISSING DETAILS ##"
 
     def __init__(self, parent, cmn, title, ticket=None, event=None):
-#       commonwx.CommonFrame.__init__(self, parent, cmn, title)
         wx.Frame.__init__(self, parent, title=title)
         logging.debug("Init ticketwx.EditTicket")
+
+        self.area_list = ["UNKNOWN"]
+        self.initial_details = "## MISSING DETAILS ##"
+        self.responder_ctrl_list = []
+        self.subarea_list = ["UNK"]
+        self.ticket = None
+        self.ticket_address = ""
+        self.ticket_code_desc = "## MISSING CODE DESCRIPTION ##"
+        self.ticket_cones_used = 0
+        self.ticket_folowup_events = []
+        self.ticket_initial_event = None
+        self.ticket_new = None
+        self.ticket_responders = []
+        self.ticket_state = 1    # Open
 
         self.SetMinSize(wx.Size(256, 256))
         self.pnl = wx.Panel(self)
@@ -243,12 +244,11 @@ class EditTicket(commonwx.CommonFrame):
             # Create text controls, check boxes, buttons, etc.
             # in tab traversal order.
             sizer_responder = wx.BoxSizer(wx.HORIZONTAL)
-            responder_ctrl_list = []
             for resp in self.cmn.responder_list:
                 ctrl = wx.CheckBox(self.pnl, label=resp.name)
                 sizer_responder.Add(ctrl, 0)
                 sizer_responder.AddSpacer(8)
-                responder_ctrl_list.append(ctrl)
+                self.responder_ctrl_list.append(ctrl)
 
             sizer_box = wx.BoxSizer(wx.VERTICAL)
             sizer_box.Add(responder_label, 0)
@@ -287,25 +287,20 @@ class EditTicket(commonwx.CommonFrame):
     def on_add_event(self, _event):
         """Add a followup event to the Ticket"""
 
-    def on_ticket_state(self, _event):
-        """Toggle ticket between open and closed"""
-        # FIXME: Instead of toggling between two states,
-        # we should use a pull down to select the state
-        if self.ticket_state == 2:  # Closed
-            self.ticket_state = 1
-            self.ticket_state_button.SetLabel("Close Ticket")
-        else:
-            self.ticket_state = 2
-            self.ticket_state_button.SetLabel("Open Ticket")
-
     def on_save(self, _event):
         """Save ticket"""
         # DB indexing one based
+        # FIXME: This fails when some of the ticket states are not active
         self.ticket.ticket_state = self.state_ctrl.GetSelection() + 1
-
         self.ticket.open_dt = self.ticket_open_dt
         self.ticket.address = self.address_ctrl.GetValue()
         self.ticket.cones_used = self.cones_ctrl.GetValue()
         self.ticket.initial_event = self.ticket_initial_event
+        self.ticket.responders = []
+        for i, j in enumerate(self.responder_ctrl_list):
+            if j.GetValue():
+                # FIXME: This fails when some of the responders are not active
+                self.ticket.responders.append(i + 1) # DB one based
+        print(self.ticket.responders)
         self.cmn.dat.save_ticket(self.ticket)
         self.Close()
