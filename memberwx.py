@@ -73,10 +73,19 @@ class MemberDBMain(commonwx.CommonFrame):
             label=f"Platform:  {pform}")
         label_user_name = wx.StaticText(self.pnl,
             label=f"User:  {user_name}@{hostname}")
+        label_db_patrol = wx.StaticText(self.pnl,
+            label=f"Patrol DB:  {self.cmn.patrol_db_open_info}")
+        label_db_dispatch = wx.StaticText(self.pnl,
+            label=f"Dispatch DB:  {self.cmn.dispatch_db_open_info}")
+        label_db_member = wx.StaticText(self.pnl,
+            label=f"Member DB:  {self.cmn.member_db_open_info}")
 
         this_sizer = wx.BoxSizer(wx.VERTICAL)
         this_sizer.Add(label_user_name)
         this_sizer.Add(label_platform)
+        this_sizer.Add(label_db_patrol)
+        this_sizer.Add(label_db_dispatch)
+        this_sizer.Add(label_db_member)
         return this_sizer
 
 if __name__ == '__main__':

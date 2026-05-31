@@ -2,8 +2,6 @@
 A place to keep data
 """
 
-import pyodbc
-
 import common
 import datetime
 import logging
@@ -533,21 +531,23 @@ class Data():
         return name_dict
 
     def get_responder_list(self):
-        """Ugly stub that returns a responder list."""
+        """Returns a responder list."""
 
-        # FIXME: this should come from a DB table
-        ugly_list = [
-            "Watch Commander",
-            "Driver",
-            "Law Enforcement",
-            "Fire + Rescue",
-            "Ambulance"]
+        sql_statement = """
+            SELECT ID, Is_Active, Sort_Index, Responder_Name
+            FROM Responder
+            WHERE Is_Active
+            ORDER BY Sort_Index"""
+#       print(sql_statement)
+#       print()
+        self.curs_patrol.execute(sql_statement)
         item_list = []
-        for i, name in enumerate(ugly_list):
+        rows = self.curs_patrol.fetchall()
+        for i in rows:
             item = common.Responder()
-            item.item_id = i
-            item.sort_index = i
-            item.name = str(name)
+            item.item_id = i.ID
+            item.sort_index = i.Sort_Index
+            item.name = str(i.Responder_Name)
             item_list.append(item)
         return(item_list)
 
@@ -569,32 +569,47 @@ class Data():
     def open_dispatch_db(self):
         """Open Database used by Dispatch and WC logging applications"""
 
-        conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-            r'DBQ=' + self.cmn.stns.get_pathname_dispatch_db() + r';'
-            r'Mode=Read;')
-        logging.info("    connected to %s", conn_str)
-        self.conn_disp = pyodbc.connect(conn_str)
-        self.curs_disp = self.conn_disp.cursor()
+        try:
+            import pyodbc
+            conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+                r'DBQ=' + self.cmn.stns.get_pathname_dispatch_db() + r';'
+                r'Mode=Read;')
+            logging.info("    connected to %s", conn_str)
+            self.conn_disp = pyodbc.connect(conn_str)
+            self.curs_disp = self.conn_disp.cursor()
+            return conn_str
+        except:
+            return None
 
     def open_member_db(self):
         """Open Database used by Brian Dodd's applications"""
 
-        conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-            r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';'
-            r'Mode=Read;')
-        logging.info("    connected to %s", conn_str)
-        self.conn_member = pyodbc.connect(conn_str)
-        self.curs_member = self.conn_member.cursor()
+        try:
+            import pyodbc
+            conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+                r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';'
+                r'Mode=Read;')
+            logging.info("    connected to %s", conn_str)
+            self.conn_member = pyodbc.connect(conn_str)
+            self.curs_member = self.conn_member.cursor()
+            return conn_str
+        except:
+            return None
 
     def open_patrol_db(self):
         """Open Database used by xsdPatrol applications"""
 
-        conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-            r'DBQ=' + self.cmn.stns.get_pathname_patrol_db() + r';'
-            r'Mode=Write;')
-        logging.info("    connected to %s", conn_str)
-        self.conn_patrol = pyodbc.connect(conn_str)
-        self.curs_patrol = self.conn_patrol.cursor()
+        try:
+            import pyodbc
+            conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+                r'DBQ=' + self.cmn.stns.get_pathname_patrol_db() + r';'
+                r'Mode=Write;')
+            logging.info("    connected to %s", conn_str)
+            self.conn_patrol = pyodbc.connect(conn_str)
+            self.curs_patrol = self.conn_patrol.cursor()
+            return conn_str
+        except:
+            return None
 
     def save_ticket(self, ticket):
         """This is where we put the ticket back in the DB.  This could
