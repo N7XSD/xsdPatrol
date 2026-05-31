@@ -10,7 +10,6 @@ import wx
 
 import common
 import commonwx
-import data
 import edit_ticket_wx
 
 

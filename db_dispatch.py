@@ -1,5 +1,5 @@
 """
-A place to keep data
+Access the Dispatch database
 """
 
 import common
@@ -66,9 +66,9 @@ def parse_dispatch_name(disp_name):
 
     return (surname, gname, pname)
 
-class Data():
+class DispatchDB():
     """
-    A class to manage data
+    A class to manage dispatch data
     """
     # All functions and methods must return date time values as
     # datetime objects.  They must accept date time as datetime
@@ -76,7 +76,7 @@ class Data():
     # we use ISO date strings.
 
     def __init__(self, cmn):
-        logging.debug("Init data.Data")
+        logging.debug("Init db_dispatch.DispatchDB")
         self.cmn = cmn
 
     def get_activity_codes(self):
