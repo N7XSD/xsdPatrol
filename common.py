@@ -16,7 +16,7 @@ import os
 import platform
 import sys
 
-import data
+#import data
 import settings
 
 def calc_earned_hours(watch_num, shift_num, second_shift=False,
@@ -317,9 +317,9 @@ class Common():
 #       print(self.app_start_time_dt)
 
         self.stns = settings.Settings()
-        self.dat = data.Data(self)
-        self.dat.open_dispatch_db()
-        self.dat.open_patrol_db()
+#       self.dat = data.Data(self)
+#       self.dat.open_dispatch_db()
+#       self.dat.open_patrol_db()
 
         self.activity_code_list = []
         self.area_list = []
