@@ -1,5 +1,5 @@
 """
-wxPython (GUI) for SCS Member DB
+wxPython (GUI) for SCS Patrol DB
 """
 
 import getpass
@@ -27,7 +27,8 @@ class MemberDBMain(commonwx.CommonFrame):
         """The main sizer holds everything the user will interact with"""
 
         # Static text
-        label_common_frame = wx.StaticText(self.pnl, label="MemberDB Main")
+        label_common_frame = wx.StaticText(self.pnl,
+            label="Maybe some intersting buttons.  Maybe.")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
@@ -94,7 +95,7 @@ if __name__ == '__main__':
     stns = common_stuff.stns
     app = wx.App(False)
     frame = MemberDBMain(None, common_stuff,
-        "Base for MemberDB")
+        "xsdPatrol")
 #    frame.SetPosition(stns.get_window_pos_time())
 #    frame.SetSize(stns.get_window_size_time())
     app.MainLoop()
