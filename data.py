@@ -460,26 +460,6 @@ class Data():
 
         return te_list, watch_id_first, watch_id_last + 1
 
-    def get_active_members(self):
-        """Return a dictionary with id:full_name"""
-
-        sql_statement = """
-            SELECT Members.MemberID, LastName, FirstName, PrefName
-            FROM Members INNER JOIN Service
-                ON (Members.MemberID = Service.MemberID)
-            WHERE Service.DateDropped IS NULL
-                OR (Service.DateRejoined IS NOT Null
-                AND Service.DateRedropped IS NULL)"""
-#       print(sql_statement)
-#       print()
-        self.curs_member.execute(sql_statement)
-        name_dict = {}
-        rows = self.curs_member.fetchall()
-        for i in rows:
-            name_dict[i.MemberID] = display_name(
-                i.LastName, i.FirstName, i.PrefName)
-        return name_dict
-
     def get_active_disp_users(self):
         """Return a dictionary with id:full_name"""
 
@@ -581,21 +561,6 @@ class Data():
         except:
             return None
 
-    def open_member_db(self):
-        """Open Database used by Brian Dodd's applications"""
-
-        try:
-            import pyodbc
-            conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-                r'DBQ=' + self.cmn.stns.get_pathname_member_db() + r';'
-                r'Mode=Read;')
-            logging.info("    connected to %s", conn_str)
-            self.conn_member = pyodbc.connect(conn_str)
-            self.curs_member = self.conn_member.cursor()
-            return conn_str
-        except:
-            return None
-
     def open_patrol_db(self):
         """Open Database used by xsdPatrol applications"""
 
@@ -655,16 +620,6 @@ if __name__ == '__main__':
 #       print(i.table_name)
 #   print('### Views:')
 #   for i in d.curs_disp.tables(tableType='VIEW'):
-#       print(i.table_name)
-
-#   d.open_member_db()
-#   print()
-#   print('Member DB')
-#   print('### Tables:')
-#   for i in d.curs_member.tables(tableType='TABLE'):
-#       print(i.table_name)
-#   print('### Views:')
-#   for i in d.curs_member.tables(tableType='VIEW'):
 #       print(i.table_name)
 
     d.open_patrol_db()

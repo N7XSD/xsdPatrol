@@ -17,6 +17,7 @@ import platform
 import sys
 
 import data
+import db_member
 import settings
 
 def calc_earned_hours(watch_num, shift_num, second_shift=False,
@@ -322,7 +323,10 @@ class Common():
         self.patrol_db_open_info = self.dat.open_patrol_db()
         self.dispatch_db_open_info = None
         self.dispatch_db_open_info = self.dat.open_dispatch_db()
+
+        self.member_db = db_member.MemberDB(self)
         self.member_db_open_info = None
+        self.member_db_open_info = self.member_db.open_member_db()
 
         self.activity_code_list = []
         self.area_list = []
