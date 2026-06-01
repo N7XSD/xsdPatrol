@@ -48,11 +48,10 @@ class MemberDB():
 
         sql_statement = """
             SELECT MemberID, LastName, FirstName, PrefName, Birthday,
-                DrLicenseNo, DLState, DrExpiryDate, CellPhone,
-                HomePhone, MAddress, City, State, ZIP, AssociationNo,
-                LeaseExpDate, Notes
+                `Deceased?`, DrLicenseNo, DLState, DrExpiryDate, CellPhone,
+                HomePhone, `E-Mail`, MAddress, City, State, ZIP, AssociationNo,
+                `Renter?`, LeaseExpDate, Notes
             FROM Members"""
-#       sql_statement = "SELECT * FROM Members"
         print(sql_statement)
         print()
         self.curs_member.execute(sql_statement)
@@ -65,7 +64,7 @@ class MemberDB():
             m.given_name = i.FirstName
             m.nickname = i.PrefName
             m.birthday = i.Birthday
-#           m.deceased = i.Deceased?
+            m.deceased = i[5]
             m.dl_number = i.DrLicenseNo
             m.dl_state_code = i.DLState	#FIXME: Compare to valid states
             m.dl_expiry_date = i.DrExpiryDate
@@ -79,11 +78,11 @@ class MemberDB():
                 home.phone_type = 2
                 home.phone_number = i.HomePhone
                 m.telephone_number.append(home)
-#           if i.E-mail:
-#               home = common.EmailAddress()
-#               home.phone_type = 2
-#               home.email_addr = i.E-Mail
-#               m.email_address.append(home)
+            if i[11]:
+                home = common.EmailAddress()
+                home.phone_type = 2
+                home.email_addr = i[11]
+                m.email_address.append(home)
             if i.MAddress or i.City or i.State or i.ZIP or i.AssociationNo:
                 home = common.PhysicalAddress()
                 home.phys_addr_type = 1 # SCSCAI address
@@ -92,7 +91,7 @@ class MemberDB():
                 home.city_name = i.City
 #               FIXME: Parse MAddress to get street_*
                 home.scscai_number = i.AssociationNo
-#               home.renter = i.Renter?
+                home.renter = i[17]
                 home.lease_expiry_date = i.LeaseExpDate
                 m.physical_address.append(home)
             if i.Notes:
