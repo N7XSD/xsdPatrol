@@ -46,29 +46,34 @@ class CommonFrame(wx.Frame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
-    def create_menu_bar(self):
-        """Create the menu bar"""
+    def create_file_menu(self):
+        """Create the File menu"""
 
-        # Create MenuItems
-        # Note: About and Exit are moved to the application menu in macOS
-        about_mitem = wx.MenuItem(None, wx.ID_ABOUT)
-        self.Bind(wx.EVT_MENU, self.on_about, about_mitem)
-
+        # Note: Exit is moved to the application menu in macOS
         exit_mitem = wx.MenuItem(None, wx.ID_EXIT)
         self.Bind(wx.EVT_MENU, self.on_exit, exit_mitem)
 
-        # File menu
-        file_menu = wx.Menu()
-        file_menu.Append(exit_mitem)
+        this_menu = wx.Menu()
+        this_menu.Append(exit_mitem)
+        return this_menu
 
-        # Help menu
-        help_menu = wx.Menu()
-        help_menu.Append(about_mitem)
+    def create_help_menu(self):
+        """Create the Help menu"""
 
-        # Create the menubar
+        # Note: About is moved to the application menu in macOS
+        about_mitem = wx.MenuItem(None, wx.ID_ABOUT)
+        self.Bind(wx.EVT_MENU, self.on_about, about_mitem)
+
+        this_menu = wx.Menu()
+        this_menu.Append(about_mitem)
+        return this_menu
+
+    def create_menu_bar(self):
+        """Create the menu bar"""
+
         menu_bar = wx.MenuBar()
-        menu_bar.Append(file_menu, "&File")
-        menu_bar.Append(help_menu, "&Help")
+        menu_bar.Append(self.create_file_menu(), "&File")
+        menu_bar.Append(self.create_help_menu(), "&Help")
 
         return menu_bar
 
