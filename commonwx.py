@@ -46,6 +46,8 @@ class CommonFrame(wx.Frame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
+        self.Show()
+
     def create_file_menu(self):
         """Create the File menu"""
 
@@ -80,6 +82,8 @@ class CommonFrame(wx.Frame):
     def create_sizer_bottom_buttons(self):
         """Create a sizer to hold the buttons"""
 
+        # Static text
+
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
@@ -96,24 +100,34 @@ class CommonFrame(wx.Frame):
 
         return this_sizer
 
-    def create_sizer_main(self):
-        """The main sizer holds everthing the user will interact with"""
+    def create_sizer_heading(self):
+        """Create a sizer to hold some text at the top of our frame"""
 
         # Static text
         label_common_frame = wx.StaticText(self.pnl, label="Common Frame")
 
-        # BOX 0
-        # Headings
-        sizer_common_frame = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_box0_main.Add(label_common_frame)
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+
+        # Bind widgets to methods
+
+        this_sizer = wx.BoxSizer(wx.VERTICAL)
+        this_sizer.Add(label_common_frame, 0)
+
+        return this_sizer
+
+    def create_sizer_main(self):
+        """The main sizer holds everthing the user will interact with"""
+
+#       sizer_common_frame = wx.BoxSizer(wx.HORIZONTAL)
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_main.Add(sizer_box0_main, 1, wx.EXPAND | wx.ALL,
+        sizer_main.Add(self.create_sizer_heading(),
+            1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(create_sizer_bottom_button(), 0,
-            wx.EXPAND | wx.ALL,
+        sizer_main.Add(self.create_sizer_bottom_buttons(),
+            0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main

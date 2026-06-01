@@ -23,30 +23,16 @@ class PatrolDBMain(commonwx.CommonFrame):
 
         self.Show()
 
-    def create_sizer_main(self):
-        """The main sizer holds everything the user will interact with"""
+    def create_sizer_heading(self):
+        """Create a sizer to hold some text at the top of our frame"""
 
         # Static text
         label_common_frame = wx.StaticText(self.pnl,
             label="Maybe some intersting buttons.  Maybe.")
 
-        # BOX 0
-        # Headings
-        sizer_common_frame = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_box0_main.Add(label_common_frame)
-
-        # Use a vertical sizer to stack our window
-        sizer_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_main.Add(sizer_box0_main, 1, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(self.create_sizer_info(), 0, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(self.create_sizer_bottom_buttons(),
-            0, wx.EXPAND | wx.ALL,
-            border=self.cmn.stns.get_widget_border_size())
-
-        return sizer_main
+        this_sizer = wx.BoxSizer(wx.VERTICAL)
+        this_sizer.Add(label_common_frame)
+        return this_sizer
 
     def create_sizer_info(self):
         """Static information for the user"""
@@ -73,6 +59,23 @@ class PatrolDBMain(commonwx.CommonFrame):
         this_sizer.Add(label_db_dispatch)
         this_sizer.Add(label_db_member)
         return this_sizer
+
+    def create_sizer_main(self):
+        """The main sizer holds everything the user will interact with"""
+
+        # Use a vertical sizer to stack our window
+        sizer_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_main.Add(self.create_sizer_heading(),
+            1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(self.create_sizer_info(),
+            0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(self.create_sizer_bottom_buttons(),
+            0, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
+
+        return sizer_main
 
 if __name__ == '__main__':
     common.init_logging()
