@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS members (
     deceased BOOLEAN,
     dl_number VARCHAR(255),
     dl_state_code CHAR(3)
-        COMMENT 'State/Province/Teritory code use by USPS or Post Canada',
+        COMMENT 'State/Province/Teritory code use by USPS or Canada Post',
     dl_expiry_date DATE,
     dl_report_date DATETIME
         COMMENT 'Date of most recent driver record report'
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS members (
 
 CREATE TABLE IF NOT EXISTS telephone_number (
     member_id INT NOT NULL,
+    active BOOLEAN
     phone_type INT,
     phone_country_code INT
         COMMENT 'Telco contry code, 1 for NADA (US, Canada, etc.)',

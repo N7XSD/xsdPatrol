@@ -9,6 +9,7 @@ import wx
 
 import common
 import commonwx
+import wx_member
 
 class PatrolDBMain(commonwx.CommonFrame):
     """
@@ -23,15 +24,23 @@ class PatrolDBMain(commonwx.CommonFrame):
 
         self.Show()
 
-    def create_sizer_heading(self):
-        """Create a sizer to hold some text at the top of our frame"""
+    def create_sizer_admin_buttons(self):
+        """Create a size for Admin task buttons"""
 
         # Static text
-        label_common_frame = wx.StaticText(self.pnl,
-            label="Maybe some intersting buttons.  Maybe.")
+        label_admin = wx.StaticText(self.pnl,
+            label="Administration")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        import_button = wx.Button(self.pnl, wx.ID_ANY, "Import")
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_import, import_button)
 
         this_sizer = wx.BoxSizer(wx.VERTICAL)
-        this_sizer.Add(label_common_frame)
+        this_sizer.Add(label_admin)
+        this_sizer.Add(import_button)
         return this_sizer
 
     def create_sizer_info(self):
@@ -65,7 +74,7 @@ class PatrolDBMain(commonwx.CommonFrame):
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_main.Add(self.create_sizer_heading(),
+        sizer_main.Add(self.create_sizer_admin_buttons(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(self.create_sizer_info(),
@@ -76,6 +85,11 @@ class PatrolDBMain(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
+
+    def on_import(self, _event):
+        """Import data from MemberDB"""
+
+        import_frame = wx_member.Import(self, self.cmn)
 
 if __name__ == '__main__':
     common.init_logging()

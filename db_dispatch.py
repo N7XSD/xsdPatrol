@@ -12,15 +12,6 @@ MAXINT_MSACCESS = 2147483647
 MININT_MSACCESS = -2147483648
 
 
-def display_name(surname, first_name, pref_name):
-    """Return the full name as a string"""
-    if not pref_name or pref_name == first_name:
-        name = f"{first_name} {surname}"
-    else:
-        name = f'{first_name} "{pref_name}" {surname}'
-    return name
-
-
 def display_name_by_surname(surname, first_name, pref_name):
     """Return the full name, surname first, as a string"""
     if not pref_name or pref_name == first_name:

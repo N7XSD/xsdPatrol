@@ -61,6 +61,15 @@ def calc_earned_hours(watch_num, shift_num, second_shift=False,
     return hours
 
 
+def display_name(surname, first_name, pref_name):
+    """Return the full name as a string"""
+    if not pref_name or pref_name == first_name:
+        name = f"{first_name} {surname}"
+    else:
+        name = f'{first_name} "{pref_name}" {surname}'
+    return name
+
+
 def get_console_name():
     """Return the console ID"""
 
@@ -207,11 +216,64 @@ class Event():
     description = None
 
 
+class EmailAddress():
+    active = True
+    email_type = None
+    email_addr = None
+
+
+class Member():
+    member_id = None
+    user_name_logdb = None
+    surname = None
+    given_name = None
+    nickname = None
+    birthday = None
+    deceased = None
+    dl_number = None
+    dl_state_code = None
+    dl_expiry_date = None
+    telephone_number = []
+    email_address = []
+    physical_address = []
+    member_notes = []
+
+
+class MemberNotes():
+    active = True
+    note_time = None
+    member_note = None
+
+
+class PhysicalAddress():
+    active = True
+    phys_addr_type = None
+    country_code = None
+    postal_code = None
+    state_code = None
+    city_name = None
+    unit_number = None
+    street_number = None
+    street_name = None
+    street_direction = None
+    scscai_number = None
+    renter = None
+    lease_exp_date = None
+
+
 class Responder():
     resp_id = None
     is_active = True
     sort_index = 0
     name = None
+
+
+class TelephoneNumber():
+    active = True
+    phone_type = None
+    phone_country_code = 1	# North American Dailing Area
+    phone_number = None
+    phone_ext = None
 
 
 class Ticket():
