@@ -10,14 +10,14 @@ import wx
 import common
 import commonwx
 
-class MemberDBMain(commonwx.CommonFrame):
+class PatrolDBMain(commonwx.CommonFrame):
     """
-    Frame for Member DB
+    Frame for Patrol DB
     """
 
     def __init__(self, parent, cmn, title):
         commonwx.CommonFrame.__init__(self, parent, cmn, title)
-        logging.debug("Init memberwx.MemberDBMain")
+        logging.debug("Init wx_patrol.PatrolBMain")
 #       self.reports = common.DispatchDbReports()
 #       self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
 
@@ -30,27 +30,11 @@ class MemberDBMain(commonwx.CommonFrame):
         label_common_frame = wx.StaticText(self.pnl,
             label="Maybe some intersting buttons.  Maybe.")
 
-        # Create text controls, check boxes, buttons, etc.
-        # in tab traversal order.
-        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
-        exit_button = wx.Button(self.pnl, wx.ID_EXIT)
-
-        # Bind widgets to methods
-        self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
-
         # BOX 0
         # Headings
         sizer_common_frame = wx.BoxSizer(wx.HORIZONTAL)
         sizer_box0_main = wx.BoxSizer(wx.VERTICAL)
         sizer_box0_main.Add(label_common_frame)
-
-        # BOX n
-        # Create a sizer to hold the buttons
-        sizer_button = wx.BoxSizer(wx.HORIZONTAL)
-
-        sizer_button.AddStretchSpacer()
-        sizer_button.Add(cancel_button, 0)
-        sizer_button.Add(exit_button, 0)
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
@@ -58,7 +42,8 @@ class MemberDBMain(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(self.create_sizer_info(), 0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(sizer_button, 0, wx.EXPAND | wx.ALL,
+        sizer_main.Add(self.create_sizer_bottom_buttons(),
+            0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
@@ -94,7 +79,7 @@ if __name__ == '__main__':
     common_stuff = common.Common()
     stns = common_stuff.stns
     app = wx.App(False)
-    frame = MemberDBMain(None, common_stuff,
+    frame = PatrolDBMain(None, common_stuff,
         "xsdPatrol")
 #    frame.SetPosition(stns.get_window_pos_time())
 #    frame.SetSize(stns.get_window_size_time())
