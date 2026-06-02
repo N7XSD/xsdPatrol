@@ -1,6 +1,6 @@
-CREATE DATABASE memberdb_v2;
+CREATE DATABASE patroldb;
 
-USE memberdb_v2;
+USE patroldb;
 
 /* These tables contain public data maintained by the administrator */
 
@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS telephone_number (
 
 CREATE TABLE IF NOT EXISTS email_address (
     member_id INT NOT NULL,
+    active BOOLEAN
     email_type INT,
     email_addr VARCHAR(255)
 );
