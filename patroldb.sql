@@ -40,23 +40,26 @@ CREATE TABLE IF NOT EXISTS members (
 CREATE TABLE IF NOT EXISTS telephone_number (
     member_id INT NOT NULL,
     active BOOLEAN
-    phone_type INT,
+    phone_type INT
+        COMMENT '1 - Mobile/Cell, 2 - Home',
     phone_country_code INT
         COMMENT 'Telco contry code, 1 for NADA (US, Canada, etc.)',
-    phone_number INT,
+    phone_number VARCHAR(255),
     phone_ext INT
 );
 
 CREATE TABLE IF NOT EXISTS email_address (
     member_id INT NOT NULL,
     active BOOLEAN
-    email_type INT,
+    email_type INT
+        COMMENT '2 - Home',
     email_addr VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS physical_address (
     member_id INT NOT NULL,
-    phys_addr_type INT,
+    phys_addr_type INT
+        COMMENT '1 - SCSCAI, 2 - Home (if not SCSCAI)',
     country_code CHAR(3)
         COMMENT 'ISO contry code',
     postal_code VARCHAR(16),

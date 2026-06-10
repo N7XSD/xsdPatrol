@@ -30,11 +30,10 @@ class CommonFrame(wx.Frame):
     Base class for xsdPatrol frames
     """
 
-    def __init__(self, parent, cmn, title):
-        wx.Frame.__init__(self, parent, title=title)
-        self.SetMinSize(wx.Size(256, 256))
-        self.pnl = wx.Panel(self)
+    def __init__(self, parent, cmn):
         self.cmn = cmn
+        wx.Frame.__init__(self, parent)
+        self.pnl = wx.Panel(self)
 
         # Create the menubar
         menu_bar = self.create_menu_bar()
@@ -46,6 +45,8 @@ class CommonFrame(wx.Frame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
+        self.SetTitle("Your Message Here")
+        self.SetMinSize(wx.Size(256, 256))
         self.Show()
 
     def create_file_menu(self):
@@ -104,7 +105,7 @@ class CommonFrame(wx.Frame):
         """Create a sizer to hold some text at the top of our frame"""
 
         # Static text
-        label_common_frame = wx.StaticText(self.pnl, label="Common Frame")
+        label_common_frame = wx.StaticText(self.pnl, label="We Are Here")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
@@ -118,8 +119,6 @@ class CommonFrame(wx.Frame):
 
     def create_sizer_main(self):
         """The main sizer holds everthing the user will interact with"""
-
-#       sizer_common_frame = wx.BoxSizer(wx.HORIZONTAL)
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)

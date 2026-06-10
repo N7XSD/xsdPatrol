@@ -16,12 +16,13 @@ class PatrolDBMain(commonwx.CommonFrame):
     Frame for Patrol DB
     """
 
-    def __init__(self, parent, cmn, title):
-        commonwx.CommonFrame.__init__(self, parent, cmn, title)
+    def __init__(self, parent, cmn):
+        commonwx.CommonFrame.__init__(self, parent, cmn)
         logging.debug("Init wx_patrol.PatrolBMain")
-#       self.reports = common.DispatchDbReports()
-#       self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
+##      self.reports = common.DispatchDbReports()
+##      self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
 
+        self.SetTitle("xsdPatrol")
         self.Show()
 
     def create_sizer_admin_buttons(self):
@@ -33,14 +34,15 @@ class PatrolDBMain(commonwx.CommonFrame):
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
-        import_button = wx.Button(self.pnl, wx.ID_ANY, "Import")
+        import_button = wx.Button(self.pnl, wx.ID_ANY,
+            "Import from Dispatch Log")
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_import, import_button)
 
         this_sizer = wx.BoxSizer(wx.VERTICAL)
-        this_sizer.Add(label_admin)
-        this_sizer.Add(import_button)
+        this_sizer.Add(label_admin, 0)
+        this_sizer.Add(import_button, 0)
         return this_sizer
 
     def create_sizer_info(self):
@@ -50,10 +52,10 @@ class PatrolDBMain(commonwx.CommonFrame):
         pform = platform.platform()
         user_name = getpass.getuser()
 
-        label_platform = wx.StaticText(self.pnl,
-            label=f"Platform:  {pform}")
         label_user_name = wx.StaticText(self.pnl,
             label=f"User:  {user_name}@{hostname}")
+        label_platform = wx.StaticText(self.pnl,
+            label=f"Platform:  {pform}")
         label_db_patrol = wx.StaticText(self.pnl,
             label=f"Patrol DB:  {self.cmn.patrol_db_open_info}")
         label_db_dispatch = wx.StaticText(self.pnl,
@@ -89,15 +91,13 @@ class PatrolDBMain(commonwx.CommonFrame):
     def on_import(self, _event):
         """Import data from MemberDB"""
 
-        import_frame = wx_member.Import(self, self.cmn)
+        print("Import window needed")
+#       import_frame = wx_member.Import(self, self.cmn)
 
 if __name__ == '__main__':
     common.init_logging()
     common_stuff = common.Common()
     stns = common_stuff.stns
     app = wx.App(False)
-    frame = PatrolDBMain(None, common_stuff,
-        "xsdPatrol")
-#    frame.SetPosition(stns.get_window_pos_time())
-#    frame.SetSize(stns.get_window_size_time())
+    frame = PatrolDBMain(None, common_stuff)
     app.MainLoop()

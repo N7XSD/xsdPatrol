@@ -2,6 +2,7 @@
 Access MemberDB.  After data is moved to PatrolDB, MemberDB will be abandoned
 """
 
+import datetime
 import logging
 
 import common
@@ -52,8 +53,8 @@ class MemberDB():
                 HomePhone, `E-Mail`, MAddress, City, State, ZIP, AssociationNo,
                 `Renter?`, LeaseExpDate, Notes
             FROM Members"""
-        print(sql_statement)
-        print()
+#       print(sql_statement)
+#       print()
         self.curs_member.execute(sql_statement)
         members = []
         rows = self.curs_member.fetchall()
@@ -64,24 +65,31 @@ class MemberDB():
             m.given_name = i.FirstName
             m.nickname = i.PrefName
             m.birthday = i.Birthday
-            m.deceased = i[5]
+            m.deceased = i[5] # Deceased?
             m.dl_number = i.DrLicenseNo
-            m.dl_state_code = i.DLState	#FIXME: Compare to valid states
+            m.dl_state_code = i.DLState
             m.dl_expiry_date = i.DrExpiryDate
+#           if not isinstance(m.birthday, datetime.datetime):
+#           if m.member_id > 780 or m.surname == "Scanlan":
+#               print(f"{m.member_id}:  {m.surname}, {m.given_name}")
             if i.CellPhone:
                 cell = common.TelephoneNumber()
-                cell.phone_type = 1
+                cell.phone_type = 1 # Mobile/Cell
                 cell.phone_number = i.CellPhone
                 m.telephone_number.append(cell)
+#               if m.member_id > 780 or m.surname == "Scanlan":
+#                   print(f"        M:{cell.phone_number}{type(cell.phone_number)}")
             if i.HomePhone:
                 home = common.TelephoneNumber()
-                home.phone_type = 2
+                home.phone_type = 2 # Home
                 home.phone_number = i.HomePhone
                 m.telephone_number.append(home)
-            if i[11]:
+#               if m.member_id > 780 or m.surname == "Scanlan":
+#                   print(f"        H:{home.phone_number}{type(home.phone_number)}")
+            if i[11]:	# E-mail
                 home = common.EmailAddress()
-                home.phone_type = 2
-                home.email_addr = i[11]
+                home.phone_type = 2 # Home
+                home.email_addr = i[11] # E-mail
                 m.email_address.append(home)
             if i.MAddress or i.City or i.State or i.ZIP or i.AssociationNo:
                 home = common.PhysicalAddress()
@@ -89,9 +97,15 @@ class MemberDB():
                 home.postal_code = i.ZIP
                 home.state_code = i.State
                 home.city_name = i.City
-#               FIXME: Parse MAddress to get street_*
+                if i.MAddress:
+                    m_address = i.MAddress.split(maxsplit=1)
+                    if isinstance(m_address[0], int):
+                        home.street_number = m_address[0]
+                        home.street_name = m_address[1]
+                    else:
+                        home.street_name = i.MAddress
                 home.scscai_number = i.AssociationNo
-                home.renter = i[17]
+                home.renter = i[17] # Renter?
                 home.lease_expiry_date = i.LeaseExpDate
                 m.physical_address.append(home)
             if i.Notes:
