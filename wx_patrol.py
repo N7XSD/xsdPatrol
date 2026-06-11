@@ -91,8 +91,7 @@ class PatrolDBMain(commonwx.CommonFrame):
     def on_import(self, _event):
         """Import data from MemberDB"""
 
-        print("Import window needed")
-#       import_frame = wx_member.Import(self, self.cmn)
+        import_frame = wx_member.Import(self, self.cmn)
 
 if __name__ == '__main__':
     common.init_logging()

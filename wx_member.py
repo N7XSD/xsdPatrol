@@ -14,22 +14,33 @@ class Import(commonwx.CommonFrame):
     """
 
     def __init__(self, parent, cmn):
-        title = "Import from MemberDB"
-        commonwx.CommonFrame.__init__(self, parent, cmn, title)
+        self.cmn = cmn
+        wx.Frame.__init__(self, parent)
+        self.pnl = wx.Panel(self)
         logging.debug("Init wx_member.Import")
 
 #      Checks that may need human attention
 #          dl_stat_code is a valide US state or Canadian Province/Territory
         self.members = self.cmn.member_db.get_members()
-        self.member_count = len(self.members)
 
+        # Create the menubar
+        menu_bar = self.create_menu_bar()
+        self.SetMenuBar(menu_bar)
+
+        # Layout sizers
+        sizer_main = self.create_sizer_main()
+        self.pnl.SetSizer(sizer_main)
+        self.pnl.SetAutoLayout(1)
+        sizer_main.Fit(self)
+
+        self.SetTitle("Import from MemberDB")
+        self.SetMinSize(wx.Size(256, 256))
         self.Show()
 
     def create_sizer_heading(self):
         """Create a sizer to hold some text at the top of our frame"""
 
         # Static text
-        print(f"{self.member_count} are here")
         r = len(self.members)
         label_common_frame = wx.StaticText(self.pnl,
             label=f"{r} records read.")
