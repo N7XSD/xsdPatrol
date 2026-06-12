@@ -81,6 +81,12 @@ CREATE TABLE IF NOT EXISTS member_notes (
     member_note VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS dl_report (
+    member_id INT NOT NULL,
+    dl_report_time DATETIME,
+    dl_report_note VARCHAR(255)
+);
+
 /*
 These tables created from the DispatchLogDB.
 */

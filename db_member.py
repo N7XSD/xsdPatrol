@@ -51,7 +51,7 @@ class MemberDB():
             SELECT MemberID, LastName, FirstName, PrefName, Birthday,
                 `Deceased?`, DrLicenseNo, DLState, DrExpiryDate, CellPhone,
                 HomePhone, `E-Mail`, MAddress, City, State, ZIP, AssociationNo,
-                `Renter?`, LeaseExpDate, Notes
+                `Renter?`, LeaseExpDate, Notes, DHRdate
             FROM Members"""
 #       print(sql_statement)
 #       print()
@@ -64,7 +64,7 @@ class MemberDB():
             m.surname = i.LastName
             m.given_name = i.FirstName
             m.nickname = i.PrefName
-            m.birthday = i.Birthday
+            m.birthdate = i.Birthday
             m.deceased = i[5] # Deceased?
             m.dl_number = i.DrLicenseNo
             m.dl_state_code = i.DLState
@@ -72,6 +72,7 @@ class MemberDB():
 #           if not isinstance(m.birthday, datetime.datetime):
 #           if m.member_id > 780 or m.surname == "Scanlan":
 #               print(f"{m.member_id}:  {m.surname}, {m.given_name}")
+            m.telephone_number = []
             if i.CellPhone:
                 cell = common.TelephoneNumber()
                 cell.phone_type = 1 # Mobile/Cell
@@ -86,11 +87,13 @@ class MemberDB():
                 m.telephone_number.append(home)
 #               if m.member_id > 780 or m.surname == "Scanlan":
 #                   print(f"        H:{home.phone_number}{type(home.phone_number)}")
+            m.email_address = []
             if i[11]:	# E-mail
                 home = common.EmailAddress()
-                home.phone_type = 2 # Home
+                home.email_type = 2 # Home
                 home.email_addr = i[11] # E-mail
                 m.email_address.append(home)
+            m.physical_address = []
             if i.MAddress or i.City or i.State or i.ZIP or i.AssociationNo:
                 home = common.PhysicalAddress()
                 home.phys_addr_type = 1 # SCSCAI address
@@ -99,7 +102,7 @@ class MemberDB():
                 home.city_name = i.City
                 if i.MAddress:
                     m_address = i.MAddress.split(maxsplit=1)
-                    if isinstance(m_address[0], int):
+                    if m_address[0].isdigit():
                         home.street_number = m_address[0]
                         home.street_name = m_address[1]
                     else:
@@ -108,10 +111,18 @@ class MemberDB():
                 home.renter = i[17] # Renter?
                 home.lease_expiry_date = i.LeaseExpDate
                 m.physical_address.append(home)
+            m.member_notes = []
             if i.Notes:
                 n = common.MemberNotes()
                 n.member_note = i.Notes
                 m.member_notes.append(n)
+            m.dl_history = []
+            if i.DHRdate:
+                n = common.DLHistory()
+                n.dl_history_date = i.DHRdate
+                n.dl_history_note = ""
+                m.dl_history.append(n)
+
             members.append(m)
         return members
 

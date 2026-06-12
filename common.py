@@ -222,16 +222,21 @@ class EmailAddress():
     email_addr = None
 
 
+class DLHistory():
+    dl_history_date = None
+    dl_history_note = ""
+
+
 class Member():
-    member_id = None
-    user_name_logdb = None
-    surname = None
-    given_name = None
-    nickname = None
+    member_id = -1
+    user_name_logdb = ""
+    surname = ""
+    given_name = ""
+    nickname = ""
     birthday = None
-    deceased = None
-    dl_number = None
-    dl_state_code = None
+    deceased = False
+    dl_number = ""
+    dl_state_code = ""
     dl_expiry_date = None
     telephone_number = []
     email_address = []
@@ -242,7 +247,7 @@ class Member():
 class MemberNotes():
     active = True
     note_time = None
-    member_note = None
+    member_note = ""
 
 
 class PhysicalAddress():
