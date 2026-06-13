@@ -3,6 +3,7 @@ Access MemberDB.  After data is moved to PatrolDB, MemberDB will be abandoned
 """
 
 import datetime
+from html.parser import HTMLParser
 import logging
 
 import common
@@ -10,6 +11,12 @@ import common
 DATE_FORMAT_MSACCESS = "#%m/%d/%Y#"
 MAXINT_MSACCESS = 2147483647
 MININT_MSACCESS = -2147483648
+
+
+class HTMLFilter(HTMLParser):
+    text = ""
+    def handle_data(self, data):
+        self.text += data + " "
 
 
 class MemberDB():
@@ -73,6 +80,11 @@ class MemberDB():
 #           if m.member_id > 780 or m.surname == "Scanlan":
 #               print(f"{m.member_id}:  {m.surname}, {m.given_name}")
             m.telephone_number = []
+            # Telephone numberes in the source data need a little
+            # cleaning up:
+            #     * strip non-digit caracters,
+            #     * prepend "702" to 7 digit numbers,
+            #     * format strings as "999-999-9999".
             if i.CellPhone:
                 cell = common.TelephoneNumber()
                 cell.phone_type = 1 # Mobile/Cell
@@ -106,6 +118,7 @@ class MemberDB():
                         home.street_number = m_address[0]
                         home.street_name = m_address[1]
                     else:
+                        home.street_number = None
                         home.street_name = i.MAddress
                 home.scscai_number = i.AssociationNo
                 home.renter = i[17] # Renter?
@@ -114,7 +127,9 @@ class MemberDB():
             m.member_notes = []
             if i.Notes:
                 n = common.MemberNotes()
-                n.member_note = i.Notes
+                f = HTMLFilter()
+                f.feed(i.Notes)
+                n.member_note = f.text.strip()
                 m.member_notes.append(n)
             m.dl_history = []
             if i.DHRdate:

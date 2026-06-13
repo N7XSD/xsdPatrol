@@ -68,8 +68,6 @@ class Import(commonwx.CommonFrame):
         member_grid.CreateGrid(len(self.members), len(field_headers))
         member_grid.HideRowLabels()
         member_grid.SetColFormatNumber(0)
-        member_grid.SetColFormatDate(8)
-#       member_grid.SetColFormatBool(9
         for i in range(len(field_headers)):
             member_grid.SetColLabelValue(i, field_headers[i])
         for i in range(len(self.members)):
