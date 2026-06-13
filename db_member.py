@@ -5,12 +5,32 @@ Access MemberDB.  After data is moved to PatrolDB, MemberDB will be abandoned
 import datetime
 from html.parser import HTMLParser
 import logging
+import re
 
 import common
 
 DATE_FORMAT_MSACCESS = "#%m/%d/%Y#"
 MAXINT_MSACCESS = 2147483647
 MININT_MSACCESS = -2147483648
+
+
+def format_telephone_number(in_string):
+    """
+    Strip non-digits and format telephone number
+    We assum all numbers are in the NADA and add
+    "702-" (Clark County, Nevada) to 7 digit numbers.
+    Numbers that are not 7 or 10 digits are returned
+    with non-digits stripped but not formatted.
+    """
+
+    if in_string is None:
+        return(None)
+    res = re.sub(r'[^0-9]', '', in_string)
+    if len(res) == 7:
+        res = "702" + res
+    if len(res) == 10:
+        res = f"{res[0:3]}-{res[3:6]}-{res[6:]}"
+    return(res)
 
 
 class HTMLFilter(HTMLParser):
@@ -85,20 +105,22 @@ class MemberDB():
             #     * strip non-digit caracters,
             #     * prepend "702" to 7 digit numbers,
             #     * format strings as "999-999-9999".
+            cell = None
             if i.CellPhone:
+#               print(m.member_id, i.CellPhone)
                 cell = common.TelephoneNumber()
                 cell.phone_type = 1 # Mobile/Cell
-                cell.phone_number = i.CellPhone
+                cell.phone_number = format_telephone_number(i.CellPhone)
                 m.telephone_number.append(cell)
-#               if m.member_id > 780 or m.surname == "Scanlan":
-#                   print(f"        M:{cell.phone_number}{type(cell.phone_number)}")
             if i.HomePhone:
                 home = common.TelephoneNumber()
                 home.phone_type = 2 # Home
-                home.phone_number = i.HomePhone
-                m.telephone_number.append(home)
-#               if m.member_id > 780 or m.surname == "Scanlan":
-#                   print(f"        H:{home.phone_number}{type(home.phone_number)}")
+                home.phone_number = format_telephone_number(i.HomePhone)
+                if cell:
+                    if cell.phone_number != home.phone_number:
+                        m.telephone_number.append(home)
+                else:
+                    m.telephone_number.append(home)
             m.email_address = []
             if i[11]:	# E-mail
                 home = common.EmailAddress()
