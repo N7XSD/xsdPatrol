@@ -430,6 +430,39 @@ member_dict = {
     614: 'DAVTHOM',       # Dave Thomas
     615: 'BOBAND',        # Bob Anderson
     616: 'SUSYOU',        # Susan Young
+    617: 'GUYCHI',        # Guy Chidiac
+    618: 'DEBALE',        # Deborah Alexander
+    619: 'GENEK',         # Gene Koch
+    620: 'MARYJO',        # Mary Jo Brown
+    621: 'PERCAN',        # Perry Cance
+    622: 'CATHYDUR',      # Cathy Durant
+    623: 'PATWIL',        # Patty Wills
+    624: 'TEKASUM',       # Teka Summers
+    625: 'SHERCH',        # Sherli Chin
+    626: 'CARSTIN',       # Carol Stinnett
+    627: 'ALONAS',        # Alona Stephenson
+    628: 'HOWSTE',        # Howard Stephenson
+    629: 'MARYJU',        # Mary Jane Ursem
+    630: 'MELWISE',       # Melanie Wiseman
+    631: 'MARKOR',        # Mark O'Rourke
+    632: 'FRANKPAT',      # Frank Patino
+    633: 'KATLEE',        # Katherine Lee
+    634: 'SANKRAU',       # Sandra Krause
+    635: 'GEORGEPER',     # George Perkins
+    636: 'DORISPER',      # Doris Perkins
+    637: 'LITASA',        # Lita Sadorra
+    638: 'DONHAMB',       # Don Hamby
+    639: 'MIKGAL',        # Michael Galovits
+    640: 'PATDAV',        # Patricia Davis
+    642: 'PATFAIV',       # Patrick Faivre
+    643: 'JULKISO',       # Julie Kisosondi
+    644: 'MATTKIS',       # Matthew Kisosondi
+    646: 'TOMPOST',       # Thomas Post
+    647: 'MARCOL',        # Margie Colyer
+    648: 'TONTOR',        # Tony Torres
+    649: 'MARKPY',        # Mark Pywell
+    651: 'JERTAK',        # Jerry Takier
+    652: 'DAWNCUN',       # Dawn Cunningham
     710: 'JOSEPHS',       # Joseph Scanlan
     711: 'LYNWORTH'       # Lynn Worthington
 }
@@ -444,7 +477,6 @@ member_dict = {
 #   999: 'ALEXFOR',       # Alex Fors
 #   999: 'ALLANB',        # remove
 #   999: 'ALLENT',        # Remove
-#   999: 'ALONAS',        # Alona Stephenson
 #   999: 'ANASTASIAC',    # remove
 #   999: 'ANDREAM',       # Remove
 #   999: 'ANDYS',         # Remove
@@ -513,10 +545,8 @@ member_dict = {
 #   999: 'CAROLEG',       # Remove
 #   999: 'CAROLJO',       # Caroline Jowers
 #   999: 'CAROLYNW',      # remove
-#   999: 'CARSTIN',       # Carol Stinnett
 #   999: 'CATHDUR',       # Cathy Durand
 #   999: 'CATHSUTH',      # Cathy Sutherland
-#   999: 'CATHYDUR',      # Cathy Durant
 #   999: 'CECED',         # remove
 #   999: 'CHARLESCO',     # remove
 #   999: 'CHARLESL',      # remove
@@ -552,9 +582,7 @@ member_dict = {
 #   999: 'DAVIDSL',       # remove
 #   999: 'DAVIDSTI',      # remove
 #   999: 'DAVPHI',        # David Phillips
-#   999: 'DAWNCUN',       # Dawn Cunningham
 #   999: 'DE ILAMEYER',   # De Ila Meyer
-#   999: 'DEBALE',        # Deborah Alexander
 #   999: 'DEBMADRI',      # Deb Madriaga
 #   999: 'DEEDEEKEM',     # DeeDee Kemper
 #   999: 'DENNISK',       # remove
@@ -567,11 +595,9 @@ member_dict = {
 #   999: 'DICKC',         # remove
 #   999: 'DOLLYM',        # remove
 #   999: 'DONC',          # removed
-#   999: 'DONHAMB',       # Don Hamby
 #   999: 'DONNAA',        # Donna Asher
 #   999: 'DONNAR',        # remove
 #   999: 'DORALYNLUKE',   # Doralyn Luke
-#   999: 'DORISPER',      # Doris Perkins
 #   999: 'DOROTHYH',      # remove
 #   999: 'DOTTYMAR',      # remove
 #   999: 'DUANECL',       # Duane Clement
@@ -599,7 +625,6 @@ member_dict = {
 #   999: 'FRANKCO',       # REMOVED
 #   999: 'FRANKE',        # remove
 #   999: 'FRANKF',        # remove
-#   999: 'FRANKPAT',      # Frank Patino
 #   999: 'FREDACRI',      # Fred Acri
 #   999: 'FREDRAY',       # Fred Ray
 #   999: 'GARBIE',        # Gary Biederer
@@ -607,12 +632,10 @@ member_dict = {
 #   999: 'GARYABEL',      # Gary Abelson
 #   999: 'GARYROSS',      # remove
 #   999: 'GARYSM',        # Gary Smith
-#   999: 'GENEK',         # Gene Koch
 #   999: 'GENES',         # remove
 #   999: 'GENET',         # Gene Thomas
 #   999: 'GEORGEFERN',    # George Fernandez
 #   999: 'GEORGEP',       # remove
-#   999: 'GEORGEPER',     # George Perkins
 #   999: 'GEORGEU',       # remove
 #   999: 'GEORGEW',       # remove
 #   999: 'GERALDINEG',    # Remove
@@ -627,7 +650,6 @@ member_dict = {
 #   999: 'GLOELM',        # Gloria Elmore
 #   999: 'GLORIANIC',     # remove
 #   999: 'GUYC',          # REMOVE
-#   999: 'GUYCHI',        # Guy Chidiac
 #   999: 'GWENS',         # Remove
 #   999: 'HARVEYL',       # Remove
 #   999: 'HEINZK',        # remove
@@ -638,7 +660,6 @@ member_dict = {
 #   999: 'HERBROLFES',    # Herb Rolfes
 #   999: 'HIRAML',        # remove
 #   999: 'HOLMESS',       # remove
-#   999: 'HOWSTE',        # Howard Stephenson
 #   999: 'HYL',           # remove
 #   999: 'ILENEW',        # remove
 #   999: 'IRENEW',        # remove
@@ -668,7 +689,6 @@ member_dict = {
 #   999: 'JERRYS',        # remove
 #   999: 'JERRYW',        # remove
 #   999: 'JERRYWI',       # Remove
-#   999: 'JERTAK',        # Jerry Takier
 #   999: 'JIMEN',         # remove
 #   999: 'JIMGAUG',       # remove
 #   999: 'JIMK',          # remove
@@ -706,7 +726,6 @@ member_dict = {
 #   999: 'JUDITHR',       # remove
 #   999: 'JUDYG',         # Remove
 #   999: 'JULIEF',        # Remove
-#   999: 'JULKISO',       # Julie Kisosondi
 #   999: 'JUNEP',         # remove
 #   999: 'KARENHEL',      # Karen Helander
 #   999: 'KARENPET',      # Remove
@@ -717,7 +736,6 @@ member_dict = {
 #   999: 'KATHIM',        # remove
 #   999: 'KATHRYNW',      # Kathryn Wirth
 #   999: 'KATHYLYONS',    # remove
-#   999: 'KATLEE',        # Katherine Lee
 #   999: 'KATVOS',        # Kathi Vosicky
 #   999: 'KAYB',          # remove
 #   999: 'KENM',          # remove
@@ -741,7 +759,6 @@ member_dict = {
 #   999: 'LINDASWIT',     # Linda Switzer
 #   999: 'LINNGU',        # Linda Nguyen
 #   999: 'LINS',          # Remove
-#   999: 'LITASA',        # Lita Sadorra
 #   999: 'LORETTAG',      # remove
 #   999: 'LORETTASAB',    # Loretta Sabella
 #   999: 'LOUFORT',       # remove
@@ -754,7 +771,6 @@ member_dict = {
 #   999: 'LYNNWOLFE',     # Lynn Wolfe
 #   999: 'MALK',          # remove
 #   999: 'MANNYA',        # Remove
-#   999: 'MARCOL',        # Margie Colyer
 #   999: 'MARFRAN',       # Marcia Frank
 #   999: 'MARGARETC',     # REMOVE
 #   999: 'MARGEBR',       # remove
@@ -762,8 +778,6 @@ member_dict = {
 #   999: 'MARIAMEL',      # Maria Melgarejo
 #   999: 'MARIANDESUM',   # Marian De Sumrak
 #   999: 'MARINELLB',     # Remove
-#   999: 'MARKOR',        # Mark O'Rourke
-#   999: 'MARKPY',        # Mark Pywell
 #   999: 'MARKWE',        # Mark West
 #   999: 'MARLAG',        # Marla Lagattuta
 #   999: 'MARSWIT',       # Mary Switzer
@@ -775,19 +789,14 @@ member_dict = {
 #   999: 'MARYBASHIST',   # Mary Bashist
 #   999: 'MARYENG',       # Mary Engle
 #   999: 'MARYF',         # remove
-#   999: 'MARYJO',        # Mary Jo Brown
-#   999: 'MARYJU',        # Mary Jane Ursem
-#   999: 'MATTKIS',       # Matthew Kisosondi
 #   999: 'MAXR',          # remove
 #   999: 'MAYTAH',        # May Tahmassebi
-#   999: 'MELWISE',       # Melanie Wiseman
 #   999: 'MICHAELT',      # remove
 #   999: 'MICHBIRN',      # Michael Birnbaum
 #   999: 'MICHELEVANT',   # Michele VanTassell
 #   999: 'MIKEC',         # remove
 #   999: 'MIKEFEFFER',    # remove
 #   999: 'MIKEMAYNE',     # Mike Mayne
-#   999: 'MIKGAL',        # Michael Galovits
 #   999: 'MILESG',        # Remove
 #   999: 'MILTBERK',      # Milton Berkowitz
 #   999: 'MITCHC',        # Remove
@@ -815,17 +824,13 @@ member_dict = {
 #   999: 'PAMROSS',       # remove
 #   999: 'PATB',          # remove
 #   999: 'PATBR',         # remove
-#   999: 'PATDAV',        # Patricia Davis
-#   999: 'PATFAIV',       # Patrick Faivre
 #   999: 'PATLEM',        # remove
 #   999: 'PATTIM',        # Patti Malczewski
-#   999: 'PATWIL',        # Patty Wills
 #   999: 'PAULAND',       # Paula Anderson
 #   999: 'PAULANDER',     # Paul Andersen
 #   999: 'PAULLUS',       # Paul Luszcz
 #   999: 'PAULM',         # remove
 #   999: 'PEDROH',        # remove
-#   999: 'PERCAN',        # Perry Cance
 #   999: 'PERRYC',        # remove
 #   999: 'PETEHAM',       # Remove
 #   999: 'PETEO',         # Remove
@@ -864,13 +869,11 @@ member_dict = {
 #   999: 'SANDICAR',      # remove
 #   999: 'SANDYG',        # remove
 #   999: 'SANDYV',        # Remove
-#   999: 'SANKRAU',       # Sandra Krause
 #   999: 'SARGRE',        # Sarah Greene
 #   999: 'SCOTTIF',       # remove
 #   999: 'SCOTTVEA',      # remove
 #   999: 'SHARONABRA',    # remove
 #   999: 'SHAVONHAN',     # Shavon Hankins
-#   999: 'SHERCH',        # Sherli Chin
 #   999: 'SHERLAS',       # Shirley Laster
 #   999: 'SHIRLEET',      # remove
 #   999: 'SHIRLEYBALL',   # remove
@@ -897,7 +900,6 @@ member_dict = {
 #   999: 'SUSANPOL',      # remove
 #   999: 'TAIAKIN',       # Tai Akina
 #   999: 'TEDDY',         # Ted Dyer
-#   999: 'TEKASUM',       # Teka Summers
 #   999: 'TERESAF',       # remove
 #   999: 'TERIV',         # remove
 #   999: 'TERMATT',       # Terry Matter
@@ -909,10 +911,8 @@ member_dict = {
 #   999: 'TOMB',          # Remove
 #   999: 'TOMBURT',       # Tom Burt
 #   999: 'TOMK',          # Remove
-#   999: 'TOMPOST',       # Thomas Post
 #   999: 'TOMW',          # remove
 #   999: 'TONIE',         # Remove
-#   999: 'TONTOR',        # Tony Torres
 #   999: 'VELMAL',        # Remove
 #   999: 'VICKIEBAR',     # Vickie Baroch
 #   999: 'VICKIMUST',     # remove
