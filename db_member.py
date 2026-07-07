@@ -552,10 +552,51 @@ member_dict = {
     747: 'RANZHANG',      # Ran Zhang
     748: 'KATHDIS',       # Kathy Disabato
     749: 'DALEDIS',       # Dale Disabato
+    750: 'RICHVASQ',      # Richard Vasquez
+    751: 'SOFCAST',       # Sofia Castille
+    752: 'CORINGON',      # Corina Gonzalez
+    753: 'RAULGON',       # Raul Gonzalez
+    754: 'TEDDY',         # Ted Dyer
+    755: 'STEVMEH',       # Steve Mehling
+    756: 'GLOELM',        # Gloria Elmore
+    757: 'PAMCON',        # Pam Conboy
+    758: 'SUSANEME',      # Susan Emerson
+    759: 'JOETUNK',       # Joe Tunkel
+    760: 'ROYBERG',       # Roy Berger
+    761: 'JERRYFORD',     # Jerry Ford
+    763: 'LYNNWOLFE',     # Lynn Wolfe
+    764: 'JANROUT',       # Janice Routh
+    765: 'DAVGRAY',       # David Gray
+    766: 'MARYANNM',      # Mary Ann Massey
+    767: 'MARYBASHIST',   # Mary Bashist
+    769: 'SANCOL',        # Sandy Collette
+    770: 'TIMLETO',       # Tim Letouzel
+    771: 'JOHNHOW',       # John Howland
+    772: 'FRANFOS',       # Frank Fosco
+    773: 'EDDMAL',        # Eddie Maloney
+    774: 'JOSVAM',        # Joshua Vampan
+    775: 'MARKWE',        # Mark West
+    776: 'KIMJEN',        # Kim Jensen
+    777: 'DAVPHI',        # David Phillips
+    778: 'MARFRAN',       # Marcia Frank
+    779: 'MARYENG',       # Mary Engle
+    780: 'DAVIDPEL',      # David Peled
+    781: 'JOHNVO',        # John Vosicky
+    782: 'KATVOS',        # Kathi Vosicky
+    783: 'RANDYG',        # Randy Gast
+    784: 'PATTIM',        # Patti Malczewski
+    786: 'KEVHAW',        # Kevin Hawley
+    787: 'MAYTAH',        # May Tahmassebi
     789: 'JANFISC'        # Jan Fischer
 }
-#   999: 'LINDAENG',      # Linda Engebretson
+#   999: 'BARBDOR',       # Barbara Dorway
+#   999: 'DANIEL ARMAND', # Danielarm
 #   999: 'LINCOLE',       # Linda Coleman
+#   999: 'LINDAENG',      # Linda Engebretson
+#   999: 'LWOLFE',        # Lynn Wolfe
+#   999: 'WORTHLYNN',     # Lynn Worthington
+#   999: 'MARWES',        # Mark West
+#   999: 'MMASSEY',       # MaryAnn Massey
 
 #   999: 'AASEH',         # remove
 #   999: 'ALANS',         # Remove
@@ -581,7 +622,6 @@ member_dict = {
 #   999: 'BARBARAA',      # remove
 #   999: 'BARBARAM',      # Remove
 #   999: 'BARBARAT',      # remove
-#   999: 'BARBDOR',       # Barbara Dorway
 #   999: 'BARRJ',         # remove
 #   999: 'BARRL',         # remove
 #   999: 'BEATRICEP',     # Remove
@@ -627,23 +667,18 @@ member_dict = {
 #   999: 'CONNIED',       # remove
 #   999: 'CONNIESI',      # Connie Sieber
 #   999: 'CONTENDUCAJ',   # remove
-#   999: 'CORINGON',      # Corina Gonzalez
 #   999: 'CYNTHIAW',      # Remove
 #   999: 'DALER',         # remove
 #   999: 'DANB',          # remove
-#   999: 'DANIEL ARMAND', # Danielarm
 #   999: 'DANIELLEL',     # Remove
 #   999: 'DANS',          # remove
 #   999: 'DARRYLB',       # remove
 #   999: 'DAVEDOR',       # David Dorway
-#   999: 'DAVGRAY',       # David Gray
 #   999: 'DAVIDDOR',      # David Dorway
 #   999: 'DAVIDK',        # remove
-#   999: 'DAVIDPEL',      # David Peled
 #   999: 'DAVIDR',        # David Royer
 #   999: 'DAVIDSL',       # remove
 #   999: 'DAVIDSTI',      # remove
-#   999: 'DAVPHI',        # David Phillips
 #   999: 'DEEDEEKEM',     # DeeDee Kemper
 #   999: 'DENNISK',       # remove
 #   999: 'DENNISV',       # remove
@@ -658,7 +693,6 @@ member_dict = {
 #   999: 'DONNAR',        # remove
 #   999: 'DOROTHYH',      # remove
 #   999: 'DOTTYMAR',      # remove
-#   999: 'EDDMAL',        # Eddie Maloney
 #   999: 'EDG',           # Remove
 #   999: 'EDW',           # remove
 #   999: 'EDWINHEN',      # remove
@@ -676,7 +710,6 @@ member_dict = {
 #   999: 'FAINGOLDJ',     # remove
 #   999: 'FELIXF',        # remove
 #   999: 'FELLERK',       # remove
-#   999: 'FRANFOS',       # Frank Fosco
 #   999: 'FRANKC',        # remove
 #   999: 'FRANKCO',       # REMOVED
 #   999: 'FRANKE',        # remove
@@ -699,7 +732,6 @@ member_dict = {
 #   999: 'GLENCO',        # Remove
 #   999: 'GLENDAL',       # remove
 #   999: 'GLENNG',        # Glenn Goodale
-#   999: 'GLOELM',        # Gloria Elmore
 #   999: 'GLORIANIC',     # remove
 #   999: 'GUYC',          # REMOVE
 #   999: 'GWENS',         # Remove
@@ -720,13 +752,11 @@ member_dict = {
 #   999: 'JANEC',         # remove
 #   999: 'JANETM',        # Remove
 #   999: 'JANHOH',        # removed
-#   999: 'JANROUT',       # Janice Routh
 #   999: 'JEANB',         # Remove
 #   999: 'JEANNES',       # remove
 #   999: 'JEANW',         # remove
 #   999: 'JERREW',        # Remove
 #   999: 'JERRY NY',      # remove
-#   999: 'JERRYFORD',     # Jerry Ford
 #   999: 'JERRYJESOR',    # Remove
 #   999: 'JERRYK',        # Remove
 #   999: 'JERRYM',        # remove
@@ -747,21 +777,17 @@ member_dict = {
 #   999: 'JOED',          # Remove
 #   999: 'JOER',          # remove
 #   999: 'JOET',          # remove see joseph
-#   999: 'JOETUNK',       # Joe Tunkel
 #   999: 'JOHNCONT',      # remove
 #   999: 'JOHNCOOP',      # Remove
 #   999: 'JOHNEB',        # remove
-#   999: 'JOHNHOW',       # John Howland
 #   999: 'JOHNMAR',       # removed
 #   999: 'JOHNMC',        # Remove
 #   999: 'JOHNNICH',      # remove
 #   999: 'JOHNNOV',       # John Novicky
 #   999: 'JOHNP',         # remove
 #   999: 'JOHNR',         # remove
-#   999: 'JOHNVO',        # John Vosicky
 #   999: 'JOSEPHW',       # remove
 #   999: 'JOSETTEF',      # remove
-#   999: 'JOSVAM',        # Joshua Vampan
 #   999: 'JOYCEC',        # Remove
 #   999: 'JUDIEK',        # remove
 #   999: 'JUDITHR',       # remove
@@ -773,12 +799,9 @@ member_dict = {
 #   999: 'KASTROLLM',     # Remove
 #   999: 'KATHIM',        # remove
 #   999: 'KATHYLYONS',    # remove
-#   999: 'KATVOS',        # Kathi Vosicky
 #   999: 'KAYB',          # remove
 #   999: 'KENM',          # remove
 #   999: 'KENR',          # remove
-#   999: 'KEVHAW',        # Kevin Hawley
-#   999: 'KIMJEN',        # Kim Jensen
 #   999: 'LARRYBAU',      # Remove
 #   999: 'LARRYD',        # Remove
 #   999: 'LARRYK',        # remove
@@ -798,34 +821,24 @@ member_dict = {
 #   999: 'LOUISD',        # remove
 #   999: 'LOUISECARR',    # Remove
 #   999: 'LOUISPOL',      # remove
-#   999: 'LWOLFE',        # Lynn Wolfe
 #   999: 'LYNDACAR',      # remove
 #   999: 'LYNNEB',        # Remove
-#   999: 'LYNNWOLFE',     # Lynn Wolfe
 #   999: 'MALK',          # remove
 #   999: 'MANNYA',        # Remove
-#   999: 'MARFRAN',       # Marcia Frank
 #   999: 'MARGARETC',     # REMOVE
 #   999: 'MARGEBR',       # remove
 #   999: 'MARGIEA',       # Margie Abelson
 #   999: 'MARINELLB',     # Remove
-#   999: 'MARKWE',        # Mark West
 #   999: 'MARTHAG',       # Remove
 #   999: 'MARTINJ',       # Remove
 #   999: 'MARTINW',       # remove
-#   999: 'MARWES',        # Mark West
-#   999: 'MARYANNM',      # Mary Ann Massey
-#   999: 'MARYBASHIST',   # Mary Bashist
-#   999: 'MARYENG',       # Mary Engle
 #   999: 'MARYF',         # remove
 #   999: 'MAXR',          # remove
-#   999: 'MAYTAH',        # May Tahmassebi
 #   999: 'MICHAELT',      # remove
 #   999: 'MIKEC',         # remove
 #   999: 'MIKEFEFFER',    # remove
 #   999: 'MILESG',        # Remove
 #   999: 'MITCHC',        # Remove
-#   999: 'MMASSEY',       # MaryAnn Massey
 #   999: 'MORTO',         # remove
 #   999: 'MURRAYW',       # remove
 #   999: 'MYRONG',        # Remove
@@ -842,12 +855,10 @@ member_dict = {
 #   999: 'NORMR',         # remove
 #   999: 'NORMW',         # remove
 #   999: 'NYIRIJ',        # remove
-#   999: 'PAMCON',        # Pam Conboy
 #   999: 'PAMROSS',       # remove
 #   999: 'PATB',          # remove
 #   999: 'PATBR',         # remove
 #   999: 'PATLEM',        # remove
-#   999: 'PATTIM',        # Patti Malczewski
 #   999: 'PAULLUS',       # Paul Luszcz
 #   999: 'PAULM',         # remove
 #   999: 'PEDROH',        # remove
@@ -856,14 +867,11 @@ member_dict = {
 #   999: 'PRINE R',       # Remove
 #   999: 'QTANAKA',       # remove
 #   999: 'RALPHM',        # Remove
-#   999: 'RANDYG',        # Randy Gast
-#   999: 'RAULGON',       # Raul Gonzalez
 #   999: 'RAYC',          # remove
 #   999: 'REXD',          # remove
 #   999: 'RICHARDGILL',   # Remove
 #   999: 'RICHARDRAN',    # remove
 #   999: 'RICHARDWIL',    # Remove
-#   999: 'RICHVASQ',      # Richard Vasquez
 #   999: 'RITAM',         # remove
 #   999: 'ROBERTH',       # remove
 #   999: 'ROBERTR',       # Remove
@@ -875,9 +883,7 @@ member_dict = {
 #   999: 'RONA',          # Remove
 #   999: 'ROSEMARIEP',    # remove
 #   999: 'ROSSR',         # remove
-#   999: 'ROYBERG',       # Roy Berger
 #   999: 'RUSSELLW',      # Remove
-#   999: 'SANCOL',        # Sandy Collette
 #   999: 'SANDICAR',      # remove
 #   999: 'SANDYG',        # remove
 #   999: 'SANDYV',        # Remove
@@ -890,26 +896,21 @@ member_dict = {
 #   999: 'SHIRLEYDO',     # Remove
 #   999: 'SIDO',          # remove
 #   999: 'SIMONH',        # remove
-#   999: 'SOFCAST',       # Sofia Castille
 #   999: 'STANB',         # remove
 #   999: 'STANLEYR',      # remove
 #   999: 'STANLEYW',      # removed
 #   999: 'STEVEC',        # remove
-#   999: 'STEVMEH',       # Steve Mehling
 #   999: 'SUEEB',         # Remove
 #   999: 'SUEGEFF',       # Remove
 #   999: 'SUEP',          # remove
 #   999: 'SUESTEV',       # Remove
 #   999: 'SUSANB',        # remove
-#   999: 'SUSANEME',      # Susan Emerson
 #   999: 'SUSANPOL',      # remove
 #   999: 'TAIAKIN',       # Tai Akina
-#   999: 'TEDDY',         # Ted Dyer
 #   999: 'TERESAF',       # remove
 #   999: 'TERIV',         # remove
 #   999: 'TERRYMCM',      # remove
 #   999: 'TIMK',          # remove
-#   999: 'TIMLETO',       # Tim Letouzel
 #   999: 'TOMB',          # Remove
 #   999: 'TOMBURT',       # Tom Burt
 #   999: 'TOMK',          # Remove
@@ -925,7 +926,6 @@ member_dict = {
 #   999: 'VLASTAB',       # Remove
 #   999: 'WANDAK',        # remove
 #   999: 'WILLG',         # remove
-#   999: 'WORTHLYNN',     # Lynn Worthington
 
 
 def format_telephone_number(in_string):
