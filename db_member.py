@@ -18,6 +18,8 @@ member_dict = {
     1: 'BARBARADOR',    # Barbara Dorway
     2: 'BILLHEN',       # Bill Edwin Henriod
     3: 'BUDP',          # Bud Puckett
+    4: 'CONNIED',       # Connie Daugherty
+    5: 'DANIELLEL',     # Danielle Luthy
     6: 'DAVIDDOR',      # David Dorway
     7: 'DAVIDS',        # David Steinman
     8: 'ELLENB',        # Ellen Bachman
@@ -26,136 +28,240 @@ member_dict = {
     17: 'JUDYH',         # Judy Hunt
     21: 'JIMDUN',        # Jim Dunbar
     22: 'NANCYDUN',      # Nancy Dunbar
+    24: 'JIMGAUG',       # Jim Gaughan
+    25: 'ANNEG',         # Anne Green
+    26: 'ERNIEM',        # Ernie Montgomery
     27: 'JANETMOS',      # Janet Moseley
+    28: 'NANCYPOP',      # Nancy Popek
     29: 'MARYJOR',       # Mary Jo Richards
+    30: 'SUESTEV',       # Sue Stevens
     31: 'WALTL',         # Walter LaMay (duplicate of 137)
+    33: 'CAROLA',        # Carol Aker
+    34: 'DICKA',         # Dick Aker
     35: 'TOMA',          # Tom Amenta
+    36: 'HERBA',         # Herb Apfel
     37: 'BURTA',         # Burt Arnold
     38: 'JANEASHE',      # Jane Ashe
+    39: 'RONA',          # Ron Atchison
     40: 'RICHARDA',      # Richard Augulis
+    42: 'STANB',         # Stan Bachman
     43: 'LARRYB',        # Larry Bacon
+    44: 'JAMESB',        # James Barr
+    45: 'ROGERB',        # Roger Barrett
+    46: 'LARRYBAU',      # Larry Baudler
+    47: 'HELENBEAL',     # Helen Beal
+    48: 'DANB',          # Dan Beer
+    49: 'PATB',          # Pat Bemis
     50: 'MARYBIRD',      # Mary Bird
+    51: 'SUSANB',        # Susan Blaisdell
     52: 'JERRYB',        # Jerry Borowski
     53: 'MARYB',         # Mary Borowski
     54: 'JIMB',          # James Bower
+    55: 'KAYB',          # Kay Brannen
     56: 'JOHNB',         # John Breed
     57: 'CHARLESB',      # Charles Broskey
     58: 'HELENB',        # Helen Bubenheim
     59: 'SHIRLEYB',      # Shirley Bulava
-    65: 'KENC',          # Ken Caroccia
+    60: 'MIKEC',         # Mike Campbell
+    61: 'KENC',          # Ken Caroccia
+    62: 'LOUISECARR',    # Louise Carr
+    63: 'NADINEC',       # Nadine Carter
+    64: 'STEVEC',        # Steve Carter
+    65: 'SANDICAR',      # Sandi Carvalho
     66: 'ALLANC',        # Allan Clark
     67: 'BETHC',         # Beth Clark
     68: 'RICHARDC',      # Richard Clark
+    69: 'MITCHC',        # Mitch Cohen
     70: 'ADRIANC',       # Adrian Cole
     71: 'JIMC',          # Jim Collins
+    72: 'JOHNCONT',      # John Conteduca
+    73: 'ANASTASIAC',    # Anastasia Crutchfield
+    74: 'RAYC',          # Ray Cumba
     75: 'PEGGYC',        # Peggy Cushman
     76: 'NANCYDANS',     # Nancy Dans
     78: 'PATRICIAD',     # Patricia Dennis
+    80: 'LARRYD',        # Larry Donahue
     81: 'BOBD',          # Bob Donnelly
+    82: 'CECED',         # Cece Donnelly
     83: 'JANED',         # Jane Drake
     84: 'LARRYDR',       # Larry Dreyer
+    85: 'JOED',          # Joe Dubel
     86: 'JANE',          # Jan Edwards
     87: 'JIMED',         # Jim Edwards
     88: 'JIME',          # Jim Embree
     89: 'LINDAE',        # Linda Engebretson
     90: 'KASEYE',        # Kasey Englund
+    91: 'JIMEN',         # Jim Enlow
+    92: 'TONIE',         # Toni Ermini
+    93: 'SCOTTIF',       # Scotti Feeley
     94: 'BARRYF',        # Barry Feinblatt
     95: 'MIKEFEF',       # Mike Fefferman
     96: 'RAEFE',         # Rae Fernelius
     97: 'ECF',           # E C Forbes
     98: 'JOF',           # Jo Forbes
+    99: 'TERESAF',       # Teresa Frederickson
     100: 'SANDYLYONS',    # Sandy Lyons
     101: 'NANCYG',        # Nancy Geisinger
     102: 'ELAINEGER',     # Elaine German
     103: 'KENGER',        # Ken German
+    104: 'WILLG',         # Will Gildner
     105: 'PATG',          # Pat Glass
+    106: 'ELLENG',        # Ellen Greenspan
     107: 'LINDAH',        # Linda Habel
+    108: 'BOBH',          # Bob Hamilton
+    109: 'DIANEH',        # Diane Heath
     110: 'CAROLEH',       # Carole Heierle
     111: 'SHARONHEN',     # Sharon Henriod
+    112: 'LEONARDH',      # Leonard Herscovitch
     113: 'FREDH',         # Fred Hinshaw
     114: 'AUDREYH',       # Audrey Holman
+    115: 'AASEH',         # Aase Hopkins
+    116: 'ELLENH',        # Ellen Hordan
     117: 'CONNIEJ',       # Connie Jackson
+    118: 'JERRYJESOR',    # Jerry Jezorski
     119: 'KENJ',          # Ken Johnson
     120: 'CORNELIAK',     # Cornelia Kalender
+    121: 'HEINZK',        # Heinz Kalender
     122: 'FREDK',         # Fred Kaplan
+    123: 'ANNETTEK',      # Annette Kasson
     124: 'LEEK',          # Lee Kearney
     125: 'JOANK',         # Joan Keltner
     126: 'KATHYK',        # Kathy Kirby
+    127: 'JIMK',          # Jim Kindelan
     128: 'WARRENK',       # Warren Knight
+    129: 'BILLK',         # Bill Krane
+    130: 'JOANKRANE',     # Joan Krane
     131: 'DOUGK',         # Doug Krause
     132: 'NANCYK',        # Nancy Krause
     133: 'LAWRENCEK',     # Lawrence Krenzien
     134: 'THEOK',         # Theo Kurvers
+    135: 'LINDAL',        # Linda LaFleur
     136: 'SILVIAL',       # Silvia LaMay
     137: 'WALTL',         # Walter LaMay (duplicate of 31)
     138: 'FRANKL',        # Frank Laverty
+    139: 'HARVEYL',       # Harvey Lawrence
+    140: 'NORMAL',        # Norma Lawrence
     141: 'DONL',          # Don LeHeup
     142: 'BETHL',         # Beth LeHeup
     143: 'SAMMYL',        # Sammy Liguori
     144: 'RICHARDL',      # Richard Lloyd
     145: 'CATHYL',        # Cathy Lytle
     146: 'JOHNL',         # John Lytle
+    149: 'RITAM',         # Riota Maher
+    150: 'AUDREYMALE',    # Audrey Malé
     151: 'BETTYMAR',      # Betty Margolis
+    152: 'DOLLYM',        # Dolly Marslender
+    153: 'JOHNMAR',       # John Marslender
     154: 'BJMAR',         # BJ Martens
     155: 'RAYM',          # Ray Martens
     156: 'CHIYOKOM',      # Chiyoko Matsumoto
     157: 'TAKM',          # Tak Matsumoto
+    158: 'JANETM',        # Janet May
+    159: 'JOHNMC',        # John McBain
+    160: 'TERRYMCM',      # Terry McMullin
     161: 'BILLM',         # Bill Mellis
     162: 'SHARONM',       # Sharon Meyerkamp
     163: 'JEANMIZZI',     # remove
     164: 'HELENM',        # Helen Modrzejewski
     165: 'JEANM',         # Jean Mohler
+    166: 'CLIVEM',        # Clive Moniz
+    167: 'NANCYM',        # Nancy Montano
     168: 'LOUM',          # Lou Moseley
+    169: 'BARBARAM',      # Marbara Morris
     170: 'BILLMUENCH',    # Bill Muench
     171: 'LINDAMUEN',     # Linda Muench
+    172: 'CARMENM',       # Carmen Munoz
+    173: 'VICKIMUST',     # Vicki Mustard
     174: 'DENNISNIC',     # Dennis Nicpon
     175: 'PATO',          # Pat Oleson
     176: 'JEANO',         # Jean Olson
+    177: 'EVELYNO',       # Evelyn Ostis
+    178: 'SIDO',          # Sid Ostis
+    179: 'BEATRICEP',     # Bea Pagano
     180: 'JACKIEP',       # Jackie Page
+    181: 'SUEP',          # Sue Papilion
+    182: 'JUNEP',         # June Petrucci
     183: 'WENDELLP',      # Wendell Phillips
     184: 'ARTHURP',       # Arthur Plaggemeier
     185: 'ELKEP',         # Elke Plaggemeier
+    186: 'LOUISPOL',      # Lou Polizzotti
+    187: 'ROSEMARIEP',    # Rose Marie Princ
     188: 'LARRYQ',        # Larry Quan
+    189: 'NORMR',         # Norm Rasmussen
+    190: 'DALER',         # Dale Ann Reed
+    192: 'KARENRICH',     # Karen Richards
+    193: 'VINRICH',       # Vin Richards
+    195: 'DONNAR',        # Donna Roskens
     196: 'RUSSR',         # Russ Roskens
     197: 'LINDAR',        # Linda Rosner
     198: 'MURRAYR',       # Murray Rosner
+    199: 'GARYROSS',      # Gary Ross
     200: 'JIMROSS',       # Jim Ross
     201: 'PATROSS',       # Pat Ross
     202: 'EULICER',       # Eulice Row
     203: 'DAVIDR',        # David Royer
     204: 'CLEMR',         # Clem Rybacki
     205: 'THADDEUSS',     # Ted Salasavage
+    206: 'ALANS',         # Alan Sampsel
+    207: 'ANDYS',         # Andy Schizas
+    208: 'DIANESCH',      # Diane Schmidt
+    209: 'LINS',          # Lin Schmidt
     210: 'BILLS',         # Bill Schoening
+    211: 'BILLSE',        # Bill Secrist
     212: 'BOBS',          # Bob Segler
     213: 'MARYS',         # Mary Sgroi
     214: 'JOS',           # Jo Simon
+    215: 'NAOMIS',        # Naomi Simonelli
     216: 'REGINES',       # Reggie Skancke
+    217: 'GENES',         # Gene Sloboda
+    218: 'BILLSOLL',      # Bill Sollars
     219: 'LEAS',          # Lea Solomon
     220: 'OTHAS',         # Otha Spencer-Williams
     221: 'DAVIDST',       # David Stahlhut
     222: 'LINDAS',        # Linda Stahlhut
     223: 'GERIS',         # Geraldean Jeri Stephan
-    224: 'JANSTEW',       # Jane Stewart
+    224: 'ROGERS',        # Roger Stephenson
+    225: 'JANSTEW',       # Jane Stewart
     226: 'BOBSW',         # Bob Swanson
     227: 'LOTTIET',       # Lottie Tabor
+    228: 'MICHAELT',      # Michael Tanaka
     229: 'GENET',         # Gene Thomas
     230: 'DARLENEV',      # Darlene Vaturi
     231: 'SCOTTV',        # Scott Veaudry
+    232: 'DENNISV',       # Dennis Vetter
+    233: 'JERREW',        # Jerre Walterscheid
+    234: 'MARTINW',       # Martin Weiner
     236: 'SANDRAW',       # Sandra Weiser
+    237: 'BRIANW',        # Brian Wells
+    238: 'CYNTHIAW',      # Cynthia White
+    240: 'CAROLYNW',      # Carolyn Williams
+    241: 'JERRYWI',       # Jerry Willick
+    242: 'GEORGEW',       # George Winikoff
+    243: 'ILENEW',        # Ilene Wong
+    244: 'RUSSELLW',      # Russell Wong
     245: 'MIKEW',         # Mike Wuebker
     246: 'CHRISTOPHERZ',  # Christopher Zinn
     247: 'JOHNZUZICH',    # John Zuzich
+    248: 'SHIRLEYBALL',   # Shirley Ball
+    249: 'JOHNCOOP',      # John Cooper
     250: 'CAROLKAY',      # Carol Kay
     251: 'WILLIAML',      # William Leger
+    252: 'PETEO',         # Pete Oleson
+    253: 'GEORGEU',       # George Ulrich
+    254: 'GINNYU',        # Ginny Ulrich
     255: 'DOROTHYMAC',    # Dorothy Macchio
     257: 'JOECERVA',      # Joe Cerva
     258: 'JUDYCERVA',     # Judy Cerva
     260: 'DICKCOLWELL',   # Dick Colwell
     260: 'KATHRYNF',      # Kathryn Feller
+    261: 'SUEGEFF',       # Sue Geffen
     262: 'JEANHEATH',     # Jean Heatherly
     263: 'LASZLOH',       # Laszlo Heredy
     264: 'ROZIH',         # Rozi Heredy
+    265: 'MALK',          # Mal Kastroll
     267: 'SANDYL',        # Sandy Levine
+    268: 'KENM',          # Ken Mickelson
+    269: 'JOHNNICH',      # John Nicholas
     270: 'JOHNNOV',       # John Novicky
     271: 'RONPFEFF',      # Ron Pfeffer
     272: 'JOELLUG',       # Joel Lugavere
@@ -165,21 +271,47 @@ member_dict = {
     276: 'PATRICIAS',     # Patricia Steele
     277: 'CYNTHIAB',      # Cynthia Beck
     279: 'JIM SMITH',     # Jim Smith
+    280: 'JEANNES',       # Jeanne Swanson
+    282: 'JOER',          # Joe Roeder
     283: 'KRISS',         # Kris Steinwand
     284: 'GINGERZ',       # Ginger Zarobsky
+    285: 'PATLEM',        # Pat LeMay
+    286: 'CLETEM',        # Clete Meyer
     287: 'GREGS',         # Greg Schoo
     290: 'JUDYF',         # Judith Foy
+    291: 'NEILB',         # Neil Ballinger
+    292: 'MARINELLB',     # Marinell Barber
+    293: 'NANCYKO',       # Nancy Koppien
+    294: 'GLADYSL',       # Gladys London
     295: 'JOHNWEST',      # John West
     296: 'BRUCEP',        # Bruce Petrie
     297: 'LIZH',          # Elizabeth Harness
     298: 'SUES',          # Sue Strom
+    299: 'DIANES',        # Diane Spencer
+    300: 'JIMPA',         # Jim Parker
+    301: 'LINDAPA',       # Linda Parker
+    302: 'EMILYO',        # Emily O'Brien
     303: 'ANNEW',         # Anne Wilson
     304: 'JOSEPHT',       # Joseph Tao
     305: 'ROUSANAT',      # Rousana Tao
+    306: 'BRANDONR',      # Brandon Richards
+    307: 'BOBRIC',        # Bob Richards
+    308: 'PATBR',         # Pat Brunk
     309: 'BARBARAAIM',    # Barbarr Aimone
+    310: 'NORMD',         # Norm Derrin
+    311: 'LORETTAG',      # Loretta Gonzalez
+    312: 'CARLJA',        # Carl Jaumotte
     313: 'GABEC',         # Gabe Centenera
     314: 'DONRUT',        # Don Rutkowski
+    315: 'LAURIEHU',      # Laurie Hughes
+    316: 'BOBSTELL',      # Bob Stellabott
+    317: 'SHIRLEYDO',     # Shirley Domian
     318: 'JIMDOM',        # Jim Domian
+    319: 'ARTWI',         # Art Withington
+    320: 'ANNETTEWI',     # Annette Withington
+    321: 'JANHOH',        # Jan Hohn
+    323: 'RICHARDGILL',   # Richard Gillhoover
+    324: 'LAURALOU',      # Laura Loughran
     325: 'SUSANHUT',      # Susan Hutchins
     326: 'DONALDD',       # Donald Davidson
     327: 'RONCIN',        # Ron Cinelli
@@ -202,6 +334,7 @@ member_dict = {
     344: 'HELENBROWN',    # Helen Brown
     345: 'DOROTHYTOPF',   # Dorothy Topf
     346: 'JACKVINO',      # Jack Vino
+    347: 'JULIEF',        # Julie Feist
     348: 'LYNNARNN',      # Lynn Arnn
     349: 'JIMMCC',        # Jim McCall
     350: 'ESTHERWALLS',   # Eshther L. Walls
@@ -240,7 +373,9 @@ member_dict = {
     389: 'JIMWEL',        # Jim Wellman
     390: 'DARRELLHAR',    # Darrell Harness
     392: 'JOANNFERN',     # JoAnn fernstrum
+    394: 'GLENCO',        # Glencora Lannen
     395: 'JOHNBACH',      # John Bacher
+    396: 'ROBINK',        # Robin King
     397: 'CASEYT',        # Casey Toth
     398: 'DEBL',          # Deb Lamkin
     400: 'SUZANNES',      # Suzanne Sharp
@@ -601,192 +736,124 @@ member_dict = {
     789: 'JANFISC',       # Jan Fischer
     792: 'GLENNG'         # Glenn Goodale
 }
+#   328: 'ALLENT',        # Allen Thomas
+#   355: 'ANDREAM',       # Andrea Melville
+#   154: 'BJM',           # B. J. Martens
+#   154: 'BJMARTENS',     # B. J. Martens
+#   309: 'BARBARAA',      # Barbara Aimone
 #     1: 'BARBDOR',       # Barbara Dorway
+#   576: 'BOBE',          # Bob Engellenner
+#   569: 'BOBM',          # Bob Monk
+#   703: 'BOBY',          # Bobby Brauer
 #   622: 'CATHDUR',       # Cathy Durand
+#   695: 'DANS',          # Dan Simon
 #   702: 'DANIEL ARMAND', # Danielarm
 #     6: 'DAVEDOR',       # David Dorway
+#    68: 'DICKC',         # Dick Clark
+#   368: 'ELAINEE',       # Elaine Evenson
+#   102: 'ELAINEG',       # Elaine German
+#   772: 'FRANKF',        # Frank Fosco
+#   636: 'GEORGEP',       # George Perkins
+#   617: 'GUYC',          # Guy Chidiac
+#   759: 'JOET',          # Joe Tunkel
+#   133: 'LARRYK',        # Larry Kernzien
+#   315: 'LAURIEH',       # Laurie Hughes
 #   512: 'LINCOLE',       # Linda Coleman
 #    89: 'LINDAENG',      # Linda Engebretson
+#   171: 'LINDAM',        # Linda Muench
 #   763: 'LWOLFE',        # Lynn Wolfe
+#    95: 'MIKEFEFFER',    # Mike Fefferman
 #   711: 'WORTHLYNN',     # Lynn Worthington
 #   775: 'MARWES',        # Mark West
 #   766: 'MMASSEY',       # MaryAnn Massey
+#   621: 'PERRYC',        # Perry Cance
+#   231: 'SCOTTVEA',      # Scott Veaudry
 
-#   999: 'AASEH',         # remove
-#   999: 'ALANS',         # Remove
 #   999: 'ALETHAM',       # Angie Letham
 #   999: 'ALLANB',        # remove
-#   999: 'ALLENT',        # Remove
-#   999: 'ANASTASIAC',    # remove
-#   999: 'ANDREAM',       # Remove
-#   999: 'ANDYS',         # Remove
-#   999: 'ANNEG',         # remove
-#   999: 'ANNETTEK',      # remove
 #   999: 'ANNETTEL',      # remove
-#   999: 'ANNETTEWI',     # remove
 #   999: 'APFELH',        # remove
 #   999: 'ARLENEB',       # remove
 #   999: 'ARNOLDB',       # remove
 #   999: 'ARTL',          # remove
-#   999: 'ARTWI',         # remove
 #   999: 'ASHEJANE',      # remove
 #   999: 'ASHEJOE',       # remove
-#   999: 'AUDREYMALE',    # remove
 #   999: 'AUDREYS',       # remove
-#   999: 'BARBARAA',      # remove
-#   999: 'BARBARAM',      # Remove
 #   999: 'BARBARAT',      # remove
 #   999: 'BARRJ',         # remove
 #   999: 'BARRL',         # remove
-#   999: 'BEATRICEP',     # Remove
 #   999: 'BERNARDM',      # remove
 #   999: 'BETTYAL',       # Remove
 #   999: 'BETTYJ',        # remove
 #   999: 'BETTYL',        # remove
 #   999: 'BETTYP',        # remove
-#   999: 'BILLK',         # remove
-#   999: 'BILLSE',        # remove
-#   999: 'BILLSOLL',      # remove
 #   999: 'BILLVIC',       # remove
-#   999: 'BJM',           # remove
-#   999: 'BJMARTENS',     # remove
 #   999: 'BOBALTO',       # Remove
 #   999: 'BOBBIEF',       # Remove
-#   999: 'BOBE',          # remove
-#   999: 'BOBH',          # remove
-#   999: 'BOBM',          # remove
 #   999: 'BOBP',          # remove
-#   999: 'BOBRIC',        # remove
-#   999: 'BOBSTELL',      # Remove
-#   999: 'BOBY',          # remove
 #   999: 'BOROWSKIM',     # remove
-#   999: 'BRANDONR',      # remove
 #   999: 'BRENDAT',       # Remove
-#   999: 'BRIANW',        # remove
 #   999: 'BYRONK',        # Remove
-#   999: 'CARLJA',        # Remove
-#   999: 'CARMENM',       # Remove
-#   999: 'CAROLA',        # Remove
 #   999: 'CAROLEG',       # Remove
-#   999: 'CAROLYNW',      # remove
-#   999: 'CECED',         # remove
 #   999: 'CHARLESCO',     # remove
 #   999: 'CHARLESL',      # remove
 #   999: 'CHENL',         # remove
 #   999: 'CHUCKC',        # Remove
-#   999: 'CLETEM',        # Remove
-#   999: 'CLIVEM',        # remove
-#   999: 'CONNIED',       # remove
 #   999: 'CONTENDUCAJ',   # remove
-#   999: 'CYNTHIAW',      # Remove
-#   999: 'DALER',         # remove
-#   999: 'DANB',          # remove
-#   999: 'DANIELLEL',     # Remove
-#   999: 'DANS',          # remove
 #   999: 'DARRYLB',       # remove
 #   999: 'DAVIDK',        # remove
 #   999: 'DAVIDSL',       # remove
 #   999: 'DAVIDSTI',      # remove
 #   999: 'DENNISK',       # remove
-#   999: 'DENNISV',       # remove
-#   999: 'DIANEH',        # Remove
-#   999: 'DIANES',        # remove
-#   999: 'DIANESCH',      # Remove
-#   999: 'DICKA',         # Remove
-#   999: 'DICKC',         # remove
-#   999: 'DOLLYM',        # remove
 #   999: 'DONC',          # removed
-#   999: 'DONNAR',        # remove
 #   999: 'DOROTHYH',      # remove
 #   999: 'DOTTYMAR',      # remove
 #   999: 'EDG',           # Remove
 #   999: 'EDW',           # remove
 #   999: 'EDWINHEN',      # remove
 #   999: 'EDWINW',        # remove
-#   999: 'ELAINEE',       # Remove
-#   999: 'ELAINEG',       # remove
 #   999: 'ELENIK',        # remove
-#   999: 'ELLENG',        # Remove
-#   999: 'ELLENH',        # Remove
-#   999: 'EMILYO',        # remove
-#   999: 'ERNIEM',        # removc
 #   999: 'ESTELLEH',      # Remove
 #   999: 'ESTHERS',       # remove
-#   999: 'EVELYNO',       # remove
 #   999: 'FAINGOLDJ',     # remove
 #   999: 'FELIXF',        # remove
 #   999: 'FELLERK',       # remove
 #   999: 'FRANKC',        # remove
 #   999: 'FRANKCO',       # REMOVED
 #   999: 'FRANKE',        # remove
-#   999: 'FRANKF',        # remove
 #   999: 'FREDACRI',      # Fred Acri
 #   999: 'GARETTN',       # remove
 #   999: 'GARYABEL',      # Gary Abelson
-#   999: 'GARYROSS',      # remove
-#   999: 'GENES',         # remove
-#   999: 'GEORGEP',       # remove
-#   999: 'GEORGEU',       # remove
-#   999: 'GEORGEW',       # remove
 #   999: 'GERALDINEG',    # Remove
 #   999: 'GERALDP',       # REMOVE
 #   999: 'GERALDS',       # remove
 #   999: 'GERIMCE',       # Remove
-#   999: 'GINNYU',        # remove
-#   999: 'GLADYSL',       # remove
-#   999: 'GLENCO',        # Remove
 #   999: 'GLENDAL',       # remove
 #   999: 'GLORIANIC',     # remove
-#   999: 'GUYC',          # REMOVE
 #   999: 'GWENS',         # Remove
-#   999: 'HARVEYL',       # Remove
-#   999: 'HEINZK',        # remove
-#   999: 'HELENBEAL',     # Remove
 #   999: 'HENRYP',        # Removed
-#   999: 'HERBA',         # remove
 #   999: 'HIRAML',        # remove
 #   999: 'HOLMESS',       # remove
 #   999: 'HYL',           # remove
-#   999: 'ILENEW',        # remove
 #   999: 'IRENEW',        # remove
 #   999: 'IRISM',         # remove
-#   999: 'JAMESB',        # remove
 #   999: 'JAMESM',        # Remove
 #   999: 'JANB',          # Remove
 #   999: 'JANEC',         # remove
-#   999: 'JANETM',        # Remove
-#   999: 'JANHOH',        # removed
 #   999: 'JEANB',         # Remove
-#   999: 'JEANNES',       # remove
 #   999: 'JEANW',         # remove
-#   999: 'JERREW',        # Remove
 #   999: 'JERRY NY',      # remove
-#   999: 'JERRYJESOR',    # Remove
 #   999: 'JERRYK',        # Remove
 #   999: 'JERRYM',        # remove
 #   999: 'JERRYS',        # remove
 #   999: 'JERRYW',        # remove
-#   999: 'JERRYWI',       # Remove
-#   999: 'JIMEN',         # remove
-#   999: 'JIMGAUG',       # remove
-#   999: 'JIMK',          # remove
 #   999: 'JIMKUEHL',      # remove
-#   999: 'JIMPA',         # Remove
 #   999: 'JIMS',          # Remove
-#   999: 'JOANKRANE',     # remove
 #   999: 'JOANNER',       # Remove
 #   999: 'JOANP',         # remove
 #   999: 'JOEASHE',       # removed
 #   999: 'JOEC',          # Joe Connors
-#   999: 'JOED',          # Remove
-#   999: 'JOER',          # remove
-#   999: 'JOET',          # remove see joseph
-#   999: 'JOHNCONT',      # remove
-#   999: 'JOHNCOOP',      # Remove
 #   999: 'JOHNEB',        # remove
-#   999: 'JOHNMAR',       # removed
-#   999: 'JOHNMC',        # Remove
-#   999: 'JOHNNICH',      # remove
 #   999: 'JOHNP',         # remove
 #   999: 'JOHNR',         # remove
 #   999: 'JOSEPHW',       # remove
@@ -795,137 +862,70 @@ member_dict = {
 #   999: 'JUDIEK',        # remove
 #   999: 'JUDITHR',       # remove
 #   999: 'JUDYG',         # Remove
-#   999: 'JULIEF',        # Remove
-#   999: 'JUNEP',         # remove
 #   999: 'KARENPET',      # Remove
-#   999: 'KARENRICH',     # remove
 #   999: 'KASTROLLM',     # Remove
 #   999: 'KATHIM',        # remove
 #   999: 'KATHYLYONS',    # remove
-#   999: 'KAYB',          # remove
-#   999: 'KENM',          # remove
 #   999: 'KENR',          # remove
-#   999: 'LARRYBAU',      # Remove
-#   999: 'LARRYD',        # Remove
-#   999: 'LARRYK',        # remove
-#   999: 'LAURALOU',      # Remove
-#   999: 'LAURIEH',       # remove
-#   999: 'LAURIEHU',      # remove
 #   999: 'LEIGHG',        # Remove
-#   999: 'LEONARDH',      # removed
 #   999: 'LINDAF',        # remove
 #   999: 'LINDAFITZ',     # remove
-#   999: 'LINDAL',        # removed
-#   999: 'LINDAM',        # Remove
-#   999: 'LINDAPA',       # Remove
-#   999: 'LINS',          # Remove
-#   999: 'LORETTAG',      # remove
 #   999: 'LOUFORT',       # remove
 #   999: 'LOUISD',        # remove
-#   999: 'LOUISECARR',    # Remove
-#   999: 'LOUISPOL',      # remove
 #   999: 'LYNDACAR',      # remove
 #   999: 'LYNNEB',        # Remove
-#   999: 'MALK',          # remove
 #   999: 'MANNYA',        # Remove
 #   999: 'MARGARETC',     # REMOVE
 #   999: 'MARGEBR',       # remove
 #   999: 'MARGIEA',       # Margie Abelson
-#   999: 'MARINELLB',     # Remove
 #   999: 'MARTHAG',       # Remove
 #   999: 'MARTINJ',       # Remove
-#   999: 'MARTINW',       # remove
 #   999: 'MARYF',         # remove
 #   999: 'MAXR',          # remove
-#   999: 'MICHAELT',      # remove
-#   999: 'MIKEC',         # remove
-#   999: 'MIKEFEFFER',    # remove
 #   999: 'MILESG',        # Remove
-#   999: 'MITCHC',        # Remove
 #   999: 'MORTO',         # remove
 #   999: 'MURRAYW',       # remove
 #   999: 'MYRONG',        # Remove
-#   999: 'NADINEC',       # remove
-#   999: 'NANCYKO',       # remove
-#   999: 'NANCYM',        # remove
-#   999: 'NANCYPOP',      # remove
-#   999: 'NAOMIS',        # remove
-#   999: 'NEILB',         # remove
 #   999: 'NICKIR',        # remove
 #   999: 'NORLEYS',       # remove
-#   999: 'NORMAL',        # remove
-#   999: 'NORMD',         # remove
-#   999: 'NORMR',         # remove
 #   999: 'NORMW',         # remove
 #   999: 'NYIRIJ',        # remove
 #   999: 'PAMROSS',       # remove
-#   999: 'PATB',          # remove
-#   999: 'PATBR',         # remove
-#   999: 'PATLEM',        # remove
-#   999: 'PAULM',         # remove
+#   999: 'PAULM',         # 
 #   999: 'PEDROH',        # remove
-#   999: 'PERRYC',        # remove
-#   999: 'PETEO',         # Remove
 #   999: 'PRINE R',       # Remove
 #   999: 'QTANAKA',       # remove
 #   999: 'RALPHM',        # Remove
-#   999: 'RAYC',          # remove
 #   999: 'REXD',          # remove
-#   999: 'RICHARDGILL',   # Remove
 #   999: 'RICHARDRAN',    # remove
 #   999: 'RICHARDWIL',    # Remove
-#   999: 'RITAM',         # remove
 #   999: 'ROBERTH',       # remove
 #   999: 'ROBERTR',       # Remove
 #   999: 'ROBERTS',       # remove
-#   999: 'ROBINK',        # Remove
-#   999: 'ROGERB',        # Remove
-#   999: 'ROGERS',        # remove
 #   999: 'ROGERW',        # remove
-#   999: 'RONA',          # Remove
-#   999: 'ROSEMARIEP',    # remove
 #   999: 'ROSSR',         # remove
-#   999: 'RUSSELLW',      # Remove
-#   999: 'SANDICAR',      # remove
 #   999: 'SANDYG',        # remove
 #   999: 'SANDYV',        # Remove
-#   999: 'SCOTTIF',       # remove
-#   999: 'SCOTTVEA',      # remove
 #   999: 'SHARONABRA',    # remove
 #   999: 'SHIRLEET',      # remove
-#   999: 'SHIRLEYBALL',   # remove
-#   999: 'SHIRLEYDO',     # Remove
-#   999: 'SIDO',          # remove
 #   999: 'SIMONH',        # remove
-#   999: 'STANB',         # remove
 #   999: 'STANLEYR',      # remove
 #   999: 'STANLEYW',      # removed
-#   999: 'STEVEC',        # remove
 #   999: 'SUEEB',         # Remove
-#   999: 'SUEGEFF',       # Remove
-#   999: 'SUEP',          # remove
-#   999: 'SUESTEV',       # Remove
-#   999: 'SUSANB',        # remove
 #   999: 'SUSANPOL',      # remove
-#   999: 'TERESAF',       # remove
 #   999: 'TERIV',         # remove
-#   999: 'TERRYMCM',      # remove
 #   999: 'TIMK',          # remove
 #   999: 'TOMB',          # Remove
 #   999: 'TOMBURT',       # Tom Burt
 #   999: 'TOMK',          # Remove
 #   999: 'TOMW',          # remove
-#   999: 'TONIE',         # Remove
 #   999: 'VELMAL',        # Remove
-#   999: 'VICKIMUST',     # remove
 #   999: 'VINCENTM',      # remove
 #   999: 'VINCENTP',      # remove
 #   999: 'VINCES',        # remove
-#   999: 'VINRICH',       # remove
 #   999: 'VIRGILB',       # Remove
 #   999: 'VLASTAB',       # Remove
 #   999: 'WANDAK',        # remove
-#   999: 'WILLG',         # remove
 
 
 def format_telephone_number(in_string):
