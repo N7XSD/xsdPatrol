@@ -90,7 +90,7 @@ class Settings():
     def get_pathname_member_db(self):
         """Return full pathname for member DB"""
         default = r"/Users/josep/srv-Patrol" \
-            + r"/Patrol-Database/Member/SPMemberDB.accdb"
+            + r"/Patrol-Database/Member/SPMemberDB.2026-07-01.accdb"
         return self._get('data', 'member-db', default)
 
     def get_pathname_patrol_db(self):
