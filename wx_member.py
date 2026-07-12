@@ -43,6 +43,7 @@ class Import(commonwx.CommonFrame):
 
         field_headers = [
             "ID",
+            "Logging User_ID",
             "Last Name",
             "First Name",
             "PrefName",
@@ -73,44 +74,45 @@ class Import(commonwx.CommonFrame):
         for i in range(len(self.members)):
             member_grid.SetReadOnly(i, 0)
             member_grid.SetCellValue(i, 0, str(self.members[i].member_id))
-            member_grid.SetCellValue(i, 1, str(self.members[i].surname))
-            member_grid.SetCellValue(i, 2, str(self.members[i].given_name))
-            member_grid.SetCellValue(i, 3, str(self.members[i].nickname))
-            member_grid.SetCellValue(i, 4, "")
+            member_grid.SetCellValue(i, 1, str(self.members[i].user_name_logdb))
+            member_grid.SetCellValue(i, 2, str(self.members[i].surname))
+            member_grid.SetCellValue(i, 3, str(self.members[i].given_name))
+            member_grid.SetCellValue(i, 4, str(self.members[i].nickname))
+            member_grid.SetCellValue(i, 5, "")
             if self.members[i].email_address:
-                member_grid.SetCellValue(i, 4,
+                member_grid.SetCellValue(i, 5,
                     str(self.members[i].email_address[0].email_addr))
             for j in self.members[i].telephone_number:
                if j.phone_type == 2:	# Home phone
-                   member_grid.SetCellValue(i, 5, str(j.phone_number))
-               if j.phone_type == 1:	# Mobile phone
                    member_grid.SetCellValue(i, 6, str(j.phone_number))
+               if j.phone_type == 1:	# Mobile phone
+                   member_grid.SetCellValue(i, 7, str(j.phone_number))
             if self.members[i].physical_address:
-                member_grid.SetCellValue(i, 7,
+                member_grid.SetCellValue(i, 8,
                     f"{self.members[i].physical_address[0].street_number} "
                     f"{self.members[i].physical_address[0].street_name}")
-                member_grid.SetCellValue(i, 8,
-                    str(self.members[i].physical_address[0].city_name))
                 member_grid.SetCellValue(i, 9,
-                    str(self.members[i].physical_address[0].state_code))
+                    str(self.members[i].physical_address[0].city_name))
                 member_grid.SetCellValue(i, 10,
+                    str(self.members[i].physical_address[0].state_code))
+                member_grid.SetCellValue(i, 11,
                     str(self.members[i].physical_address[0].postal_code))
-                member_grid.SetCellValue(i, 13,
-                    str(self.members[i].physical_address[0].renter))
                 member_grid.SetCellValue(i, 14,
-                    str(self.members[i].physical_address[0].lease_expiry_date))
+                    str(self.members[i].physical_address[0].renter))
                 member_grid.SetCellValue(i, 15,
+                    str(self.members[i].physical_address[0].lease_expiry_date))
+                member_grid.SetCellValue(i, 16,
                     str(self.members[i].physical_address[0].scscai_number))
             if self.members[i].member_notes:
-                member_grid.SetCellValue(i, 11,
+                member_grid.SetCellValue(i, 12,
                     str(self.members[i].member_notes[0].member_note))
-            member_grid.SetCellValue(i, 12, str(self.members[i].birthdate))
-            member_grid.SetCellValue(i, 16, str(self.members[i].dl_number))
-            member_grid.SetCellValue(i, 17, str(self.members[i].dl_expiry_date))
-            member_grid.SetCellValue(i, 18, str(self.members[i].dl_state_code))
-            member_grid.SetCellValue(i, 19, str(self.members[i].deceased))
+            member_grid.SetCellValue(i, 13, str(self.members[i].birthdate))
+            member_grid.SetCellValue(i, 17, str(self.members[i].dl_number))
+            member_grid.SetCellValue(i, 18, str(self.members[i].dl_expiry_date))
+            member_grid.SetCellValue(i, 19, str(self.members[i].dl_state_code))
+            member_grid.SetCellValue(i, 20, str(self.members[i].deceased))
             if self.members[i].dl_history:
-                member_grid.SetCellValue(i, 20,
+                member_grid.SetCellValue(i, 21,
                     str(self.members[i].dl_history[0].dl_history_date))
 #       member_grid.AutoSize()
 

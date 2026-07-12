@@ -1100,12 +1100,16 @@ if __name__ == '__main__':
     cmn = common.Common()
     d = MemberDB(cmn)
 
-    d.open_member_db()
-    print()
-    print('Member DB')
-    print('### Tables:')
-    for i in d.curs_member.tables(tableType='TABLE'):
-        print(i.table_name)
-    print('### Views:')
-    for i in d.curs_member.tables(tableType='VIEW'):
-        print(i.table_name)
+    rc = d.open_member_db()
+    if rc:
+        print(rc)
+        print()
+        print('Member DB')
+        print('### Tables:')
+        for i in d.curs_member.tables(tableType='TABLE'):
+            print(i.table_name)
+        print('### Views:')
+        for i in d.curs_member.tables(tableType='VIEW'):
+            print(i.table_name)
+    else:
+        print("MemberDB error")
