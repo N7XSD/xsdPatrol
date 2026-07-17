@@ -39,7 +39,7 @@ class PatrolDB():
             self.db_database = sect["database"]
 
         try:
-            print(f"Attempting connection to {self.db_database}")
+            log.info(f"Attempting connection to {self.db_database}")
             # Instantiate Connection
             conn = mariadb.connect(
                 host=self.db_host,
@@ -48,9 +48,8 @@ class PatrolDB():
                 user=self.db_user,
                 passwd=self.db_user_passwd,
                 db=self.db_database)
-            print("Connected")
+            log.info("Connected")
         except mariadb.Error as e:
-            print(f"Error connecting to the database: {e}")
             logging.info(f"Error connecting to the database: {e}")
             conn = None
         return conn
@@ -60,11 +59,9 @@ class PatrolDB():
             try:
                 curs = conn.cursor(named_tuple=True)
             except mariadb.Error as e:
-                print(f"MariaDB Error creating database curesor: {e}")
                 logging.info(f"MariaDB Error creating database curesor: {e}")
                 curs = None
             except:
-                print(f"Error creating database curesor: {e}")
                 logging.info(f"Error creating database curesor: {e}")
                 curs = None
         return curs
