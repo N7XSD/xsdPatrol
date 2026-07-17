@@ -39,7 +39,7 @@ class PatrolDB():
             self.db_database = sect["database"]
 
         try:
-            log.info(f"Attempting connection to {self.db_database}")
+            logging.info(f"Attempting connection to {self.db_database}")
             # Instantiate Connection
             conn = mariadb.connect(
                 host=self.db_host,
@@ -48,7 +48,7 @@ class PatrolDB():
                 user=self.db_user,
                 passwd=self.db_user_passwd,
                 db=self.db_database)
-            log.info("Connected")
+            logging.info("Connected")
         except mariadb.Error as e:
             logging.info(f"Error connecting to the database: {e}")
             conn = None
