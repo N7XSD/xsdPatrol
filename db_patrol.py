@@ -2,14 +2,13 @@
 Access PatrolDB.
 """
 
+import configparser
 import datetime
 import logging
+import mariadb
 import sys
 
 import common
-
-# To be imported later
-mariadb = None
 
 
 class PatrolDB():
@@ -27,22 +26,29 @@ class PatrolDB():
     def db_connect(self):
         """Connect to the Patrol database"""
 
-        db_host = "serverless-northeurope.sysp0000.db3.skysql.com"
-        db_port = 4007
-        db_user = "dbpbf14211271"
-        db_user_pass = "ws1c6y7F:4FgGJq90qeKkl3" # FIXME
-        db_database = "patrol"
+        # This is just a stub for reading the configuation.  It's safer
+        # than hard coding password, etc.
+        config = configparser.ConfigParser()
+        config.read("my.ini")
+        if "client-server" in config:
+            sect = config["client-server"]
+            self.db_host = sect["host"]
+            self.db_port = int(sect["port"])
+            self.db_user = sect["user"]
+            self.db_user_passwd = sect["password"]
+            self.db_database = sect["database"]
+
         try:
-            import mariadb
+            print(f"Attempting connection to {self.db_database}")
             # Instantiate Connection
             conn = mariadb.connect(
-                host=db_host,
-                port=db_port,
+                host=self.db_host,
+                port=self.db_port,
                 ssl_verify_cert=True, # FIXME
-                user=db_user,
-                passwd=db_user_pass,
-                db=db_database)
-#           logging.info("    connected to %s", conn_str)
+                user=self.db_user,
+                passwd=self.db_user_passwd,
+                db=self.db_database)
+            print("Connected")
         except mariadb.Error as e:
             print(f"Error connecting to the database: {e}")
             logging.info(f"Error connecting to the database: {e}")
@@ -70,7 +76,7 @@ if __name__ == '__main__':
     if conn:
         curs = pdb.db_cursor(conn)
         if curs:
-            print('PatrolDB Tables:')
+            print(f"### Tables:")
             curs.execute("SHOW TABLES")
             for i in curs:
                 print(f"    {i[0]}")
