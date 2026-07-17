@@ -1,6 +1,6 @@
-CREATE DATABASE patroldb;
+/* CREATE DATABASE patrol; */
 
-USE patroldb;
+USE patrol;
 
 /* These tables contain public data maintained by the administrator */
 
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS groups (
     in_personel BOOLEAN,
     in_timekeeping BOOLEAN,
     in_training BOOLEAN
-)
+);
 
 /*
 These tables a populated form the SPMemberDB Members table.  SPMemberDB
@@ -21,7 +21,7 @@ will have to be checked regularly to keep these tables up to date.
 /* These tables contain public data maintained by persanel */
 
 CREATE TABLE IF NOT EXISTS members (
-    KEY member_id INT AUTO_INCREMENT NOT NULL UIQUE,
+    member_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_name_logdb CHAR(20)
         COMMENT 'Matches securitylog.mdb',
     surname CHAR(50),
@@ -34,23 +34,24 @@ CREATE TABLE IF NOT EXISTS members (
         COMMENT 'State/Province/Teritory code use by USPS or Canada Post',
     dl_expiry_date DATE,
     dl_report_date DATETIME
-        COMMENT 'Date of most recent driver record report'
+        COMMENT 'Date of most recent driver record report',
+    PRIMARY KEY (member_id)
 );
 
 CREATE TABLE IF NOT EXISTS telephone_number (
     member_id INT NOT NULL,
-    active BOOLEAN
+    active BOOLEAN,
     phone_type INT
-        COMMENT '1 - Mobile/Cell, 2 - Home',
+        COMMENT "1 - Mobile/Cell, 2 - Home",
     phone_country_code INT
-        COMMENT 'Telco contry code, 1 for NADA (US, Canada, etc.)',
+        COMMENT "Telco contry code, 1 for NADA (US, Canada, etc.)",
     phone_number VARCHAR(255),
     phone_ext INT
 );
 
 CREATE TABLE IF NOT EXISTS email_address (
     member_id INT NOT NULL,
-    active BOOLEAN
+    active BOOLEAN,
     email_type INT
         COMMENT '2 - Home',
     email_addr VARCHAR(255)
