@@ -23,6 +23,50 @@ class PatrolDB():
         logging.debug("Init db_patrol.PatrolDB")
         self.cmn = cmn
 
+    def add_member(self, member_list):
+        """Take a list of Member objects and add them to the database"""
+
+        sql_statement = """
+            INSERT INTO members (member_id, user_name_logdb, surname,
+                given_name, nickname, birthday, deceased, dl_number,
+                dl_state_code, dl_expiry_date, dl_report_date)
+            VALUES"""
+        for i in range(len(member_list)):
+            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
+        sql_statement = sql_statement[:-1] + ";"
+#       print(sql_statement)
+#       print()
+
+        sql_values = []
+        for member in member_list:
+            sql_values += member.values()[:-4]
+            dname = common.display_name(member.surname,
+                member.given_name, member.nickname)
+#           print(member.values()[:-4])
+#           for i in member:
+#               print(i)
+#       print(len(sql_values))
+#       print(sql_values)
+        conn = None
+        curs = None
+        try:
+            conn = self.db_connect()
+            conn.begin()
+            curs = self.db_cursor(conn)
+            curs.execute(sql_statement, sql_values)
+            conn.commit()
+            curs.close()
+            curs = None
+            conn.close()
+            conn = None
+        except Exception as e:
+            print(type(e), e)
+        if curs is not None:
+            curs.close()
+        if conn is not None:
+            conn.close()
+        ## raise something or other
+
     def db_connect(self):
         """Connect to the Patrol database"""
 
@@ -83,4 +127,3 @@ if __name__ == '__main__':
             print("PatrolDB error: Cursor not defined")
     else:
         print("PatrolDB error: Connection not defined")
-

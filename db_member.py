@@ -990,12 +990,13 @@ class MemberDB():
 
         sql_statement = """
             SELECT MemberID, LastName, FirstName, PrefName, Birthday,
-                `Deceased?`, DrLicenseNo, DLState, DrExpiryDate, CellPhone,
-                HomePhone, `E-Mail`, MAddress, City, State, ZIP, AssociationNo,
-                `Renter?`, LeaseExpDate, Notes, DHRdate
+                `Deceased?`, DrLicenseNo, DLState, DrExpiryDate,
+                CellPhone, HomePhone, `E-Mail`, MAddress, City, State,
+                ZIP, AssociationNo, `Renter?`, LeaseExpDate, Notes, DHRdate
             FROM Members"""
 #       print(sql_statement)
 #       print()
+
         self.curs_member.execute(sql_statement)
         members = []
         rows = self.curs_member.fetchall()

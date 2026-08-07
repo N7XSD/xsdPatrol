@@ -20,7 +20,7 @@ will have to be checked regularly to keep these tables up to date.
 
 /* These tables contain public data maintained by persanel */
 
-CREATE TABLE IF NOT EXISTS members (
+CREATE TABLE IF NOT EXISTS member (
     member_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_name_logdb CHAR(20)
         COMMENT 'Matches securitylog.mdb',

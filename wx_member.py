@@ -8,6 +8,7 @@ import wx.grid
 
 import common
 import commonwx
+import db_patrol
 
 class Import(commonwx.CommonFrame):
     """
@@ -19,6 +20,8 @@ class Import(commonwx.CommonFrame):
         wx.Frame.__init__(self, parent)
         self.pnl = wx.Panel(self)
         logging.debug("Init wx_member.Import")
+
+        self.pdb = db_patrol.PatrolDB(self.cmn)
 
 #      Checks that may need human attention
 #          dl_stat_code is a valide US state or Canadian Province/Territory
@@ -37,6 +40,31 @@ class Import(commonwx.CommonFrame):
         self.SetTitle("Import from MemberDB")
         self.SetMinSize(wx.Size(256, 256))
         self.Show()
+
+    def create_sizer_bottom_buttons(self):
+        """Create a sizer to hold the buttons"""
+
+        # Static text
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        self.save_all_button = wx.Button(self.pnl, wx.ID_SAVE, "Save All")
+        cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
+        exit_button = wx.Button(self.pnl, wx.ID_EXIT)
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_save_all, self.save_all_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
+
+        this_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        this_sizer.Add(self.save_all_button, 0)
+
+        this_sizer.AddStretchSpacer()
+        this_sizer.Add(cancel_button, 0)
+        this_sizer.Add(exit_button, 0)
+
+        return this_sizer
 
     def create_sizer_grid(self):
         """The grid displays our imported data"""
@@ -155,6 +183,20 @@ class Import(commonwx.CommonFrame):
             border=self.cmn.stns.get_widget_border_size())
 
         return sizer_main
+
+    def on_cancel(self, _event):
+        """Cancel"""
+        self.Destroy()  # Close the frame
+
+    def on_exit(self, _event):
+        """Exit"""
+        self.Close()  # Close the frame
+
+    def on_save_all(self, _event):
+        """Save All"""
+
+        self.pdb.add_member(self.members)
+        self.save_all_button.Disable()
 
 
 #       active_members = self.cmn.member_db.get_active_members()

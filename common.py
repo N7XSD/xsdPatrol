@@ -67,6 +67,11 @@ def display_name(surname, first_name, pref_name):
         name = f"{first_name} {surname}"
     else:
         name = f'{first_name} "{pref_name}" {surname}'
+    name = name.replace("\n", "\\n")
+    name = name.replace("\r", "\\r")
+    name = name.replace("\t", "\\t")
+    name = name.replace("\b", "\\b")
+    name = name.replace("\f", "\\f")
     return name
 
 
@@ -238,10 +243,23 @@ class Member():
     dl_number = ""
     dl_state_code = ""
     dl_expiry_date = None
+    dl_report_date = None
     telephone_number = []
     email_address = []
     physical_address = []
     member_notes = []
+
+    def __str__(self):
+        dname = display_name(self.surname, self.given_name, self.nickname)
+        return f"{self.member_id}, {dname}"
+
+    def values(self):
+        return [self.member_id, self.user_name_logdb, self.surname,
+            self.given_name, self.nickname, self.birthday,
+            self.deceased, self.dl_number, self.dl_state_code,
+            self.dl_expiry_date, self.dl_report_date,
+            self.telephone_number, self.email_address,
+            self.physical_address, self.member_notes]
 
 
 class MemberNotes():
