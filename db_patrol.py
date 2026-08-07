@@ -23,11 +23,15 @@ class PatrolDB():
         logging.debug("Init db_patrol.PatrolDB")
         self.cmn = cmn
 
-    def add_member(self, member_list):
+    def add_member(self, member_list, replace=False):
         """Take a list of Member objects and add them to the database"""
 
-        sql_statement = """
-            INSERT INTO members (member_id, user_name_logdb, surname,
+        if replace:
+            sql_statement = "REPLACE "
+        else:
+            sql_statement = "INSERT "
+        sql_statement += """
+            INTO members (member_id, user_name_logdb, surname,
                 given_name, nickname, birthday, deceased, dl_number,
                 dl_state_code, dl_expiry_date, dl_report_date)
             VALUES"""

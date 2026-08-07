@@ -195,7 +195,7 @@ class Import(commonwx.CommonFrame):
     def on_save_all(self, _event):
         """Save All"""
 
-        self.pdb.add_member(self.members)
+        self.pdb.add_member(self.members, replace=True)
         self.save_all_button.Disable()
 
 
