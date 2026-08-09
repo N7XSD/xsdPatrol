@@ -238,7 +238,7 @@ class Member():
     surname = ""
     given_name = ""
     nickname = ""
-    birthday = None
+    birthdate = None
     deceased = False
     dl_number = ""
     dl_state_code = ""
@@ -255,7 +255,7 @@ class Member():
 
     def values(self):
         return [self.member_id, self.user_name_logdb, self.surname,
-            self.given_name, self.nickname, self.birthday,
+            self.given_name, self.nickname, self.birthdate,
             self.deceased, self.dl_number, self.dl_state_code,
             self.dl_expiry_date, self.dl_report_date,
             self.telephone_number, self.email_address,

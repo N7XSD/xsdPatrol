@@ -27,14 +27,12 @@ CREATE TABLE IF NOT EXISTS member (
     surname CHAR(50),
     given_name CHAR(50),
     nickname CHAR(50),
-    birthday DATE,
+    birthdate DATE,
     deceased BOOLEAN,
     dl_number VARCHAR(255),
     dl_state_code CHAR(3)
         COMMENT 'State/Province/Teritory code use by USPS or Canada Post',
     dl_expiry_date DATE,
-    dl_report_date DATETIME
-        COMMENT 'Date of most recent driver record report',
     PRIMARY KEY (member_id)
 );
 
@@ -84,7 +82,7 @@ CREATE TABLE IF NOT EXISTS member_notes (
 
 CREATE TABLE IF NOT EXISTS dl_report (
     member_id INT NOT NULL,
-    dl_report_time DATETIME,
+    dl_report_date DATETIME,
     dl_report_note VARCHAR(255)
 );
 

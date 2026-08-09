@@ -31,26 +31,19 @@ class PatrolDB():
         else:
             sql_statement = "INSERT "
         sql_statement += """
-            INTO members (member_id, user_name_logdb, surname,
-                given_name, nickname, birthday, deceased, dl_number,
-                dl_state_code, dl_expiry_date, dl_report_date)
+            INTO member (member_id, user_name_logdb, surname,
+                given_name, nickname, birthdate, deceased, dl_number,
+                dl_state_code, dl_expiry_date)
             VALUES"""
         for i in range(len(member_list)):
-            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
+            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
 #       print(sql_statement)
 #       print()
 
         sql_values = []
         for member in member_list:
-            sql_values += member.values()[:-4]
-            dname = common.display_name(member.surname,
-                member.given_name, member.nickname)
-#           print(member.values()[:-4])
-#           for i in member:
-#               print(i)
-#       print(len(sql_values))
-#       print(sql_values)
+            sql_values += member.values()[:-5]
         conn = None
         curs = None
         try:

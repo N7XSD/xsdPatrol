@@ -1015,9 +1015,6 @@ class MemberDB():
             m.dl_number = i.DrLicenseNo
             m.dl_state_code = i.DLState
             m.dl_expiry_date = i.DrExpiryDate
-#           if not isinstance(m.birthday, datetime.datetime):
-#           if m.member_id > 780 or m.surname == "Scanlan":
-#               print(f"{m.member_id}:  {m.surname}, {m.given_name}")
             m.telephone_number = []
             # Telephone numberes in the source data need a little
             # cleaning up:
@@ -1026,7 +1023,6 @@ class MemberDB():
             #     * format strings as "999-999-9999".
             cell = None
             if i.CellPhone:
-#               print(m.member_id, i.CellPhone)
                 cell = common.TelephoneNumber()
                 cell.phone_type = 1 # Mobile/Cell
                 cell.phone_number = format_telephone_number(i.CellPhone)
