@@ -42,8 +42,17 @@ class PatrolDB():
 #       print()
 
         sql_values = []
+        email_lists = []
         for member in member_list:
+            # Drop lists that are at the end of our list
             sql_values += member.values()[:-5]
+
+            # Add the member_id to each list we dropped earlier and add
+            # each of those lists to lists we'll use later
+            for i in member.email_address:
+                vl = i.values()
+                vl.insert(0, member.member_id)
+                email_lists.append(vl)
         conn = None
         curs = None
         try:
@@ -51,24 +60,21 @@ class PatrolDB():
             conn.begin()
             curs = self.db_cursor(conn)
             curs.execute(sql_statement, sql_values)
-            for member in member_list:
-                self.add_member_email(member.member_id,
-                    member.email_address, replace=True, db_cursor=curs)
+            self.add_member_email(email_lists, replace=True, db_cursor=curs)
             conn.commit()
             curs.close()
             curs = None
             conn.close()
             conn = None
-        except Exception as e:
+        except mariadb.Error as e:
             print(type(e), e)
+            ## FIXME: raise something or other
         if curs is not None:
             curs.close()
         if conn is not None:
             conn.close()
-        ## raise something or other
 
-    def add_member_email(self, member_id, item_list, replace=False,
-            db_cursor=None):
+    def add_member_email(self, list_list, replace=False, db_cursor=None):
         """Take a list of EmailAddress objects for a member and add them
            to the database"""
         curs = db_cursor
@@ -80,23 +86,22 @@ class PatrolDB():
         sql_statement += """
             INTO email_address (member_id, active, email_type, email_addr)
             VALUES"""
-        for i in range(len(item_list)):
+        for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
 #       print(sql_statement)
 #       print()
 
         sql_values = []
-        for item in item_list:
-            sql_values.append(member_id)
-            sql_values += item.values()
+        for item_list in list_list:
+            sql_values += item_list
 #       print(sql_values)
 #       print()
         try:
             curs.execute(sql_statement, sql_values)
-        except Exception as e:
+        except mairadb.Error as e:
             print(type(e), e)
-            ## raise something or other
+            ## FIXME: raise something or other
 
     def db_connect(self):
         """Connect to the Patrol database"""
