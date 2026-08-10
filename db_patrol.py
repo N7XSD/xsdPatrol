@@ -51,6 +51,9 @@ class PatrolDB():
             conn.begin()
             curs = self.db_cursor(conn)
             curs.execute(sql_statement, sql_values)
+            for member in member_list:
+                self.add_member_email(member.member_id,
+                    member.email_address, replace=True, db_cursor=curs)
             conn.commit()
             curs.close()
             curs = None
@@ -63,6 +66,37 @@ class PatrolDB():
         if conn is not None:
             conn.close()
         ## raise something or other
+
+    def add_member_email(self, member_id, item_list, replace=False,
+            db_cursor=None):
+        """Take a list of EmailAddress objects for a member and add them
+           to the database"""
+        curs = db_cursor
+
+        if replace:
+            sql_statement = "REPLACE "
+        else:
+            sql_statement = "INSERT "
+        sql_statement += """
+            INTO email_address (member_id, active, email_type, email_addr)
+            VALUES"""
+        for i in range(len(item_list)):
+            sql_statement += "\n(?, ?, ?, ?),"
+        sql_statement = sql_statement[:-1] + ";"
+#       print(sql_statement)
+#       print()
+
+        sql_values = []
+        for item in item_list:
+            sql_values.append(member_id)
+            sql_values += item.values()
+#       print(sql_values)
+#       print()
+        try:
+            curs.execute(sql_statement, sql_values)
+        except Exception as e:
+            print(type(e), e)
+            ## raise something or other
 
     def db_connect(self):
         """Connect to the Patrol database"""

@@ -226,6 +226,9 @@ class EmailAddress():
     email_type = None
     email_addr = None
 
+    def values(self):
+        return [self.active, self.email_type, self.email_addr]
+
 
 class DLHistory():
     dl_history_date = None
