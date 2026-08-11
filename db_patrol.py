@@ -43,6 +43,7 @@ class PatrolDB():
 
         sql_values = []
         email_lists = []
+        phys_addr_lists = []
         note_lists = []
         for member in member_list:
             # Drop lists that are at the end of our list
@@ -54,6 +55,10 @@ class PatrolDB():
                 vl = i.values()
                 vl.insert(0, member.member_id)
                 email_lists.append(vl)
+            for i in member.physical_address:
+                vl = i.values()
+                vl.insert(0, member.member_id)
+                phys_addr_lists.append(vl)
             for i in member.member_note:
                 vl = i.values()
                 vl.insert(0, member.member_id)
@@ -64,9 +69,10 @@ class PatrolDB():
             conn = self.db_connect()
             conn.begin()
             curs = self.db_cursor(conn)
-            curs.execute(sql_statement, sql_values)
+#           curs.execute(sql_statement, sql_values)
 #           self.add_member_email(email_lists, db_cursor=curs)
-            self.add_member_note(note_lists, db_cursor=curs)
+            self.add_member_phys_addr(phys_addr_lists, db_cursor=curs)
+#           self.add_member_note(note_lists, db_cursor=curs)
             conn.commit()
             curs.close()
             curs = None
@@ -123,8 +129,37 @@ class PatrolDB():
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-        print(sql_values)
-        print()
+#       print(sql_values)
+#       print()
+        try:
+            curs.execute(sql_statement, sql_values)
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+
+    def add_member_phys_addr(self, list_list, db_cursor=None):
+        """Take a list of PhysicalAddress objects for a member and add
+           them to the database"""
+
+        curs = db_cursor
+        sql_statement = """
+            INSERT INTO physical_address (member_id, active,
+                phys_addr_date, phys_addr_type, country_code,
+                postal_code, state_code, city_name, unit_number,
+                street_number, street_name, street_direction,
+                scscai_number, renter, lease_exp_date)
+            VALUES"""
+        for i in range(len(list_list)):
+            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
+        sql_statement = sql_statement[:-1] + ";"
+#       print(sql_statement)
+#       print()
+
+        sql_values = []
+        for item_list in list_list:
+            sql_values += item_list
+#       print(sql_values)
+#       print()
         try:
             curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:

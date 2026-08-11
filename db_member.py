@@ -1057,7 +1057,10 @@ class MemberDB():
                     else:
                         home.street_number = None
                         home.street_name = i.MAddress
-                home.scscai_number = i.AssociationNo
+                try:
+                    home.scscai_number = int(i.AssociationNo)
+                except:
+                    home.scscai_number = None
                 home.renter = i[17] # Renter?
                 home.lease_expiry_date = i.LeaseExpDate
                 m.physical_address.append(home)

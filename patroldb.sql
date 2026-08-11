@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS email_address (
 
 CREATE TABLE IF NOT EXISTS physical_address (
     member_id INT NOT NULL,
+    active BOOLEAN,
+    phys_addr_date DATETIME,
     phys_addr_type INT
         COMMENT '1 - SCSCAI, 2 - Home (if not SCSCAI)',
     country_code CHAR(3)

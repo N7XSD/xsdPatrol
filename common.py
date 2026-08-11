@@ -276,6 +276,7 @@ class MemberNote():
 
 class PhysicalAddress():
     active = True
+    phys_addr_date = None
     phys_addr_type = None
     country_code = None
     postal_code = None
@@ -288,6 +289,13 @@ class PhysicalAddress():
     scscai_number = None
     renter = None
     lease_exp_date = None
+
+    def values(self):
+        return [self.active, self.phys_addr_date, self.phys_addr_type,
+            self.country_code, self.postal_code, self.state_code,
+            self.city_name, self.unit_number, self.street_number,
+            self.street_name, self.street_direction, self.scscai_number,
+            self.renter, self.lease_exp_date]
 
 
 class Responder():
