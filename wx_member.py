@@ -131,9 +131,9 @@ class Import(commonwx.CommonFrame):
                     str(self.members[i].physical_address[0].lease_expiry_date))
                 member_grid.SetCellValue(i, 16,
                     str(self.members[i].physical_address[0].scscai_number))
-            if self.members[i].member_notes:
+            if self.members[i].member_note:
                 member_grid.SetCellValue(i, 12,
-                    str(self.members[i].member_notes[0].member_note))
+                    str(self.members[i].member_note[0].member_note))
             member_grid.SetCellValue(i, 13, str(self.members[i].birthdate))
             member_grid.SetCellValue(i, 17, str(self.members[i].dl_number))
             member_grid.SetCellValue(i, 18, str(self.members[i].dl_expiry_date))

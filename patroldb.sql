@@ -73,17 +73,18 @@ CREATE TABLE IF NOT EXISTS physical_address (
     lease_exp_date DATE
 );
 
-CREATE TABLE IF NOT EXISTS member_notes (
+CREATE TABLE IF NOT EXISTS member_note (
 /* Publicly readable personel notes about a member */
     member_id INT NOT NULL,
+    active BOOLEAN,
     note_time DATETIME,
-    member_note VARCHAR(255)
+    member_note VARCHAR(1024)
 );
 
 CREATE TABLE IF NOT EXISTS dl_report (
     member_id INT NOT NULL,
     dl_report_date DATETIME,
-    dl_report_note VARCHAR(255)
+    dl_report_note VARCHAR(1024)
 );
 
 /*

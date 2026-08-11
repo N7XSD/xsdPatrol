@@ -250,7 +250,7 @@ class Member():
     telephone_number = []
     email_address = []
     physical_address = []
-    member_notes = []
+    member_note = []
 
     def __str__(self):
         dname = display_name(self.surname, self.given_name, self.nickname)
@@ -262,13 +262,16 @@ class Member():
             self.deceased, self.dl_number, self.dl_state_code,
             self.dl_expiry_date, self.dl_report_date,
             self.telephone_number, self.email_address,
-            self.physical_address, self.member_notes]
+            self.physical_address, self.member_note]
 
 
-class MemberNotes():
+class MemberNote():
     active = True
     note_time = None
     member_note = ""
+
+    def values(self):
+        return [self.active, self.note_time, self.member_note]
 
 
 class PhysicalAddress():

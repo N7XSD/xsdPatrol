@@ -1061,13 +1061,13 @@ class MemberDB():
                 home.renter = i[17] # Renter?
                 home.lease_expiry_date = i.LeaseExpDate
                 m.physical_address.append(home)
-            m.member_notes = []
+            m.member_note = []
             if i.Notes:
-                n = common.MemberNotes()
+                n = common.MemberNote()
                 f = HTMLFilter()
                 f.feed(i.Notes)
                 n.member_note = f.text.strip()
-                m.member_notes.append(n)
+                m.member_note.append(n)
             m.dl_history = []
             if i.DHRdate:
                 n = common.DLHistory()
@@ -1093,6 +1093,21 @@ class MemberDB():
         except:
             return None
 
+    def print_notes(self):
+#      self.open_member_db()
+       members = self.get_members()
+       max_note_len = 0
+       for m in members:
+           if m.member_note:
+               note_len = len(m.member_note[0].member_note)
+               print(f"{m.member_id:4} {m.surname}, {m.given_name}")
+               print(f"\t{m.member_note[0].member_note} [len={note_len}]")
+               print()
+               if note_len > max_note_len:
+                   max_note_len = note_len
+       print(f"[max_len={max_note_len}]")
+       print()
+
 if __name__ == '__main__':
     cmn = common.Common()
     d = MemberDB(cmn)
@@ -1101,12 +1116,13 @@ if __name__ == '__main__':
     if rc:
         print(rc)
         print()
-        print('Member DB')
-        print('### Tables:')
-        for i in d.curs_member.tables(tableType='TABLE'):
-            print(i.table_name)
-        print('### Views:')
-        for i in d.curs_member.tables(tableType='VIEW'):
-            print(i.table_name)
+        d.print_notes()
+#       print('Member DB')
+#       print('### Tables:')
+#       for i in d.curs_member.tables(tableType='TABLE'):
+#           print(i.table_name)
+#       print('### Views:')
+#       for i in d.curs_member.tables(tableType='VIEW'):
+#           print(i.table_name)
     else:
         print("MemberDB error")

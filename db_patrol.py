@@ -43,6 +43,7 @@ class PatrolDB():
 
         sql_values = []
         email_lists = []
+        note_lists = []
         for member in member_list:
             # Drop lists that are at the end of our list
             sql_values += member.values()[:-5]
@@ -53,6 +54,10 @@ class PatrolDB():
                 vl = i.values()
                 vl.insert(0, member.member_id)
                 email_lists.append(vl)
+            for i in member.member_note:
+                vl = i.values()
+                vl.insert(0, member.member_id)
+                note_lists.append(vl)
         conn = None
         curs = None
         try:
@@ -60,7 +65,8 @@ class PatrolDB():
             conn.begin()
             curs = self.db_cursor(conn)
             curs.execute(sql_statement, sql_values)
-            self.add_member_email(email_lists, replace=True, db_cursor=curs)
+#           self.add_member_email(email_lists, db_cursor=curs)
+            self.add_member_note(note_lists, db_cursor=curs)
             conn.commit()
             curs.close()
             curs = None
@@ -74,17 +80,13 @@ class PatrolDB():
         if conn is not None:
             conn.close()
 
-    def add_member_email(self, list_list, replace=False, db_cursor=None):
+    def add_member_email(self, list_list, db_cursor=None):
         """Take a list of EmailAddress objects for a member and add them
            to the database"""
-        curs = db_cursor
 
-        if replace:
-            sql_statement = "REPLACE "
-        else:
-            sql_statement = "INSERT "
-        sql_statement += """
-            INTO email_address (member_id, active, email_type, email_addr)
+        curs = db_cursor
+        sql_statement = """
+            INSERT INTO email_address (member_id, active, email_type, email_addr)
             VALUES"""
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?),"
@@ -99,7 +101,33 @@ class PatrolDB():
 #       print()
         try:
             curs.execute(sql_statement, sql_values)
-        except mairadb.Error as e:
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+
+    def add_member_note(self, list_list, db_cursor=None):
+        """Take a list of MemberNote objects for a member and add them
+           to the database"""
+
+        curs = db_cursor
+        sql_statement = """
+            INSERT INTO member_note (member_id, active, note_time,
+                member_note)
+            VALUES"""
+        for i in range(len(list_list)):
+            sql_statement += "\n(?, ?, ?, ?),"
+        sql_statement = sql_statement[:-1] + ";"
+#       print(sql_statement)
+#       print()
+
+        sql_values = []
+        for item_list in list_list:
+            sql_values += item_list
+        print(sql_values)
+        print()
+        try:
+            curs.execute(sql_statement, sql_values)
+        except mariadb.Error as e:
             print(type(e), e)
             ## FIXME: raise something or other
 
