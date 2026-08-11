@@ -42,6 +42,7 @@ class PatrolDB():
 #       print()
 
         sql_values = []
+        telephone_lists = []
         email_lists = []
         phys_addr_lists = []
         note_lists = []
@@ -51,6 +52,10 @@ class PatrolDB():
 
             # Add the member_id to each list we dropped earlier and add
             # each of those lists to lists we'll use later
+            for i in member.telephone_number:
+                vl = i.values()
+                vl.insert(0, member.member_id)
+                telephone_lists.append(vl)
             for i in member.email_address:
                 vl = i.values()
                 vl.insert(0, member.member_id)
@@ -69,9 +74,11 @@ class PatrolDB():
             conn = self.db_connect()
             conn.begin()
             curs = self.db_cursor(conn)
+# The following lines are tested but commented out for development
 #           curs.execute(sql_statement, sql_values)
+#           self.add_member_telephone(telephone_lists, db_cursor=curs)
 #           self.add_member_email(email_lists, db_cursor=curs)
-            self.add_member_phys_addr(phys_addr_lists, db_cursor=curs)
+#           self.add_member_phys_addr(phys_addr_lists, db_cursor=curs)
 #           self.add_member_note(note_lists, db_cursor=curs)
             conn.commit()
             curs.close()
@@ -92,10 +99,11 @@ class PatrolDB():
 
         curs = db_cursor
         sql_statement = """
-            INSERT INTO email_address (member_id, active, email_type, email_addr)
+            INSERT INTO email_address (member_id, active, email_date,
+                email_type, email_addr)
             VALUES"""
         for i in range(len(list_list)):
-            sql_statement += "\n(?, ?, ?, ?),"
+            sql_statement += "\n(?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
 #       print(sql_statement)
 #       print()
@@ -151,6 +159,32 @@ class PatrolDB():
             VALUES"""
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
+        sql_statement = sql_statement[:-1] + ";"
+#       print(sql_statement)
+#       print()
+
+        sql_values = []
+        for item_list in list_list:
+            sql_values += item_list
+#       print(sql_values)
+#       print()
+        try:
+            curs.execute(sql_statement, sql_values)
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+
+    def add_member_telephone(self, list_list, db_cursor=None):
+        """Take a list of TelephoneNumber objects for a member and add
+           them to the database"""
+
+        curs = db_cursor
+        sql_statement = """
+            INSERT INTO telephone_number (member_id, active, phone_date,
+                phone_type, phone_country_code, phone_number, phone_ext)
+            VALUES"""
+        for i in range(len(list_list)):
+            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
 #       print(sql_statement)
 #       print()

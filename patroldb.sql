@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS member (
 CREATE TABLE IF NOT EXISTS telephone_number (
     member_id INT NOT NULL,
     active BOOLEAN,
+    phone_date DATETIME,
     phone_type INT
         COMMENT "1 - Mobile/Cell, 2 - Home",
     phone_country_code INT
@@ -50,6 +51,7 @@ CREATE TABLE IF NOT EXISTS telephone_number (
 CREATE TABLE IF NOT EXISTS email_address (
     member_id INT NOT NULL,
     active BOOLEAN,
+    email_date DATETIME,
     email_type INT
         COMMENT '2 - Home',
     email_addr VARCHAR(255)

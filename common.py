@@ -223,11 +223,13 @@ class Event():
 
 class EmailAddress():
     active = True
+    email_date = None
     email_type = None
     email_addr = None
 
     def values(self):
-        return [self.active, self.email_type, self.email_addr]
+        return [self.active, self.email_date, self.email_type,
+            self.email_addr]
 
 
 class DLHistory():
@@ -307,10 +309,14 @@ class Responder():
 
 class TelephoneNumber():
     active = True
+    phone_date = None
     phone_type = None
     phone_country_code = 1	# North American Dailing Area
     phone_number = None
     phone_ext = None
+
+    def values(self):
+        return [self.active, self.phone_date, self.phone_type, self.phone_country_code, self.phone_number, self.phone_ext]
 
 
 class Ticket():
