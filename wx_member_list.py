@@ -73,7 +73,7 @@ class MemberList(commonwx.CommonFrame):
         member_grid.AutoSize()
 
         this_sizer = wx.BoxSizer(wx.VERTICAL)
-        this_sizer.Add(member_grid, 0)
+        this_sizer.Add(member_grid, 0, wx.EXPAND)
 
         return this_sizer
 
