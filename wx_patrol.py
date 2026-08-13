@@ -10,6 +10,7 @@ import wx
 import common
 import commonwx
 import wx_member
+import wx_member_list
 
 class PatrolDBMain(commonwx.CommonFrame):
     """
@@ -25,12 +26,33 @@ class PatrolDBMain(commonwx.CommonFrame):
         self.SetTitle("xsdPatrol")
         self.Show()
 
+    def create_sizer_common_buttons(self):
+        """Create a size for Common task buttons"""
+
+        # Static text
+        label_common = wx.StaticText(self.pnl,
+            label="Common Tasks")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        member_list_button = wx.Button(self.pnl, wx.ID_ANY,
+            "Member List")
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_member_list,
+            member_list_button)
+
+        this_sizer = wx.BoxSizer(wx.VERTICAL)
+        this_sizer.Add(label_common, 0)
+        this_sizer.Add(member_list_button, 0)
+        return this_sizer
+
     def create_sizer_admin_buttons(self):
         """Create a size for Admin task buttons"""
 
         # Static text
         label_admin = wx.StaticText(self.pnl,
-            label="Administration")
+            label="Admin Tasks")
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
@@ -76,6 +98,9 @@ class PatrolDBMain(commonwx.CommonFrame):
 
         # Use a vertical sizer to stack our window
         sizer_main = wx.BoxSizer(wx.VERTICAL)
+        sizer_main.Add(self.create_sizer_common_buttons(),
+            1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(self.create_sizer_admin_buttons(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
@@ -88,9 +113,12 @@ class PatrolDBMain(commonwx.CommonFrame):
 
         return sizer_main
 
+    def on_member_list(self, _event):
+        """Import data from MemberDB"""
+        ml = wx_member_list.MemberList(self, self.cmn)
+
     def on_import(self, _event):
         """Import data from MemberDB"""
-
         import_frame = wx_member.Import(self, self.cmn)
 
 if __name__ == '__main__':

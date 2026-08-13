@@ -255,6 +255,35 @@ class PatrolDB():
         self.conn = None
         return items
 
+    def get_members(self):
+        """Return a list of member objects pulled from the database"""
+
+        sql_statement = """
+            SELECT member_id, user_name_logdb, surname, given_name,
+                nickname, birthdate, deceased, dl_number, dl_state_code,
+                dl_expiry_date
+            FROM member"""
+#       print(sql_statement)
+#       print()
+
+        members = []
+        try:
+            self.db_connect()
+            self.conn.begin()
+            self.db_cursor()
+            self.curs.execute(sql_statement)
+            rows = self.curs.fetchall()
+            for i in rows:
+                members.append(i)
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+        return members
+
 if __name__ == '__main__':
     cmn = common.Common()
     pdb = PatrolDB(cmn)
