@@ -41,6 +41,10 @@ class MemberList(commonwx.CommonFrame):
     def create_sizer_grid(self):
         """The grid displays our imported data"""
 
+        fi = wx.FontInfo()
+        fi.Family(wx.FONTFAMILY_TELETYPE)
+        def_cell_font = wx.Font(fi)
+
         field_headers = [
             "Member ID",
             "Logging ID",
@@ -50,24 +54,24 @@ class MemberList(commonwx.CommonFrame):
 
         member_grid = wx.grid.Grid(self.pnl, -1)
         member_grid.CreateGrid(len(self.members), len(field_headers))
+        member_grid.EnableEditing(False)
         member_grid.HideRowLabels()
+        member_grid.SetDefaultCellFont(def_cell_font)
+        member_grid.SetSelectionMode(wx.grid.Grid.GridSelectRows)
+        member_grid.SetUseNativeColLabels()
+#       member_grid.UseNativeColHeader()
         member_grid.SetColFormatNumber(0)
         for i in range(len(field_headers)):
             member_grid.SetColLabelValue(i, field_headers[i])
         for i in range(len(self.members)):
-            member_grid.SetReadOnly(i, 0)
             member_grid.SetCellValue(i, 0,
                 str(self.members[i].member_id))
-            member_grid.SetReadOnly(i, 1)
             member_grid.SetCellValue(i, 1,
                 str(self.members[i].user_name_logdb))
-            member_grid.SetReadOnly(i, 2)
             member_grid.SetCellValue(i, 2,
                 str(self.members[i].surname))
-            member_grid.SetReadOnly(i, 3)
             member_grid.SetCellValue(i, 3,
                 str(self.members[i].given_name))
-            member_grid.SetReadOnly(i, 4)
             member_grid.SetCellValue(i, 4,
                 str(self.members[i].nickname))
         member_grid.AutoSize()
