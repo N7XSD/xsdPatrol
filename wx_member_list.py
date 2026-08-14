@@ -9,6 +9,7 @@ import wx.grid
 import common
 import commonwx
 import db_patrol
+import wx_member_edit
 
 class MemberList(commonwx.CommonFrame):
     """
@@ -52,36 +53,36 @@ class MemberList(commonwx.CommonFrame):
             "First Name",
             "Nickname"]
 
-        member_grid = wx.grid.Grid(self.pnl, -1)
-        member_grid.CreateGrid(len(self.members), len(field_headers))
-        member_grid.EnableEditing(False)
-        member_grid.HideRowLabels()
-        member_grid.SetDefaultCellFont(def_cell_font)
-        member_grid.SetSelectionMode(wx.grid.Grid.GridSelectRows)
-        member_grid.SetUseNativeColLabels()
-#       member_grid.UseNativeColHeader()
-        member_grid.SetColFormatNumber(0)
+        self.member_grid = wx.grid.Grid(self.pnl, -1)
+        self.member_grid.CreateGrid(len(self.members), len(field_headers))
+        self.member_grid.EnableEditing(False)
+        self.member_grid.HideRowLabels()
+        self.member_grid.SetDefaultCellFont(def_cell_font)
+        self.member_grid.SetSelectionMode(wx.grid.Grid.GridSelectRows)
+        self.member_grid.SetUseNativeColLabels()
+#       self.member_grid.UseNativeColHeader()
+        self.member_grid.SetColFormatNumber(0)
         for i in range(len(field_headers)):
-            member_grid.SetColLabelValue(i, field_headers[i])
+            self.member_grid.SetColLabelValue(i, field_headers[i])
         for i in range(len(self.members)):
-            member_grid.SetCellValue(i, 0,
+            self.member_grid.SetCellValue(i, 0,
                 str(self.members[i].member_id))
-            member_grid.SetCellValue(i, 1,
+            self.member_grid.SetCellValue(i, 1,
                 str(self.members[i].user_name_logdb))
-            member_grid.SetCellValue(i, 2,
+            self.member_grid.SetCellValue(i, 2,
                 str(self.members[i].surname))
-            member_grid.SetCellValue(i, 3,
+            self.member_grid.SetCellValue(i, 3,
                 str(self.members[i].given_name))
-            member_grid.SetCellValue(i, 4,
+            self.member_grid.SetCellValue(i, 4,
                 str(self.members[i].nickname))
-        member_grid.AutoSize()
+        self.member_grid.AutoSize()
 
         # Bind widgets to methods
         self.pnl.Bind(wx.grid.EVT_GRID_CELL_LEFT_DCLICK,
-            self.on_select_member, member_grid)
+            self.on_select_member, self.member_grid)
 
         this_sizer = wx.BoxSizer(wx.VERTICAL)
-        this_sizer.Add(member_grid, 0, wx.EXPAND)
+        this_sizer.Add(self.member_grid, 0, wx.EXPAND)
 
         return this_sizer
 
@@ -144,5 +145,8 @@ class MemberList(commonwx.CommonFrame):
 
     def on_select_member(self, _event):
         """Edit the member we've selected"""
-        print("Shurly you can do more than this")
-        print(type(_event), _event)
+        table_row = _event.GetRow()
+        member_id = self.member_grid.GetCellValue(_event.GetRow(), 0)
+        for m in self.members:
+            if int(m.member_id) == int(member_id):
+                wx_member_edit.MemberEdit(self, self.cmn, m)
