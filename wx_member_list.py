@@ -76,8 +76,30 @@ class MemberList(commonwx.CommonFrame):
                 str(self.members[i].nickname))
         member_grid.AutoSize()
 
+        # Bind widgets to methods
+        self.pnl.Bind(wx.grid.EVT_GRID_CELL_LEFT_DCLICK,
+            self.on_select_member, member_grid)
+
         this_sizer = wx.BoxSizer(wx.VERTICAL)
         this_sizer.Add(member_grid, 0, wx.EXPAND)
+
+        return this_sizer
+
+    def create_sizer_bottom_buttons(self):
+        """Create a sizer to hold the buttons"""
+
+        # Static text
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        exit_button = wx.Button(self.pnl, wx.ID_EXIT)
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
+
+        this_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        this_sizer.AddStretchSpacer()
+        this_sizer.Add(exit_button, 0)
 
         return this_sizer
 
@@ -116,10 +138,11 @@ class MemberList(commonwx.CommonFrame):
 
         return sizer_main
 
-    def on_cancel(self, _event):
-        """Cancel"""
-        self.Destroy()  # Close the frame
-
     def on_exit(self, _event):
         """Exit"""
-        self.Close()  # Close the frame
+        self.Close(True)  # Close the frame
+
+    def on_select_member(self, _event):
+        """Edit the member we've selected"""
+        print("Shurly you can do more than this")
+        print(type(_event), _event)
