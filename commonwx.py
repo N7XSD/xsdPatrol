@@ -32,22 +32,23 @@ class CommonFrame(wx.Frame):
 
     def __init__(self, parent, cmn):
         self.cmn = cmn
-        wx.Frame.__init__(self, parent)
-        self.pnl = wx.Panel(self)
+        super().__init__(parent)
+#       self.pnl = wx.Panel(self)
 
-        # Create the menubar
-        menu_bar = self.create_menu_bar()
-        self.SetMenuBar(menu_bar)
+#       # Create the menubar
+#       menu_bar = self.create_menu_bar()
+#       self.SetMenuBar(menu_bar)
 
-        # Layout sizers
-        sizer_main = self.create_sizer_main()
-        self.pnl.SetSizer(sizer_main)
-        self.pnl.SetAutoLayout(1)
-        sizer_main.Fit(self)
+#       # Layout sizers
+#       sizer_main = self.create_sizer_main()
+#       self.pnl.SetSizer(sizer_main)
+#       self.pnl.SetAutoLayout(1)
+#       sizer_main.Fit(self)
 
-        self.SetTitle("Your Message Here")
-        self.SetMinSize(wx.Size(256, 256))
-        self.Show()
+#       self.SetTitle("Your Message Here")
+#       self.SetMinSize(wx.Size(256, 256))
+
+#       self.Show()
 
     def create_file_menu(self):
         """Create the File menu"""

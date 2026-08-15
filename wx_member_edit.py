@@ -15,17 +15,32 @@ class MemberEdit(commonwx.CommonFrame):
     Patrol data editor
     """
 
-    member_id = -99
-    user_name_logdb = ""
-    surname = ""
-    given_name = ""
-    nickname = ""
-
     def __init__(self, parent, cmn, item):
+        super().__init__(parent, cmn)
+        self.pnl = wx.Panel(self)
+        logging.debug("Init wx_member_edit.MemberEdit")
+
         self.cmn = cmn
         self.item = item
-        wx.Frame.__init__(self, parent)
-        self.pnl = wx.Panel(self)
+        self.member_id = -99
+        self.user_name_logdb = ""
+        self.surname = ""
+        self.given_name = ""
+        self.nickname = ""
+        self.SetTitle("Basic Member Data")
+
+        try:
+            self.member_id = item.member_id
+            self.user_name_logdb = item.user_name_logdb
+            self.surname = item.surname
+            self.given_name = item.given_name
+            self.nickname = item.nickname
+            self.SetTitle(f"Member ID: {self.member_id}")
+        except Exception as e:
+            print(e)
+            # FIXME: Raise something,
+            # without a data we can't get any farther
+
 
         # Create the menubar
         menu_bar = self.create_menu_bar()
@@ -37,17 +52,6 @@ class MemberEdit(commonwx.CommonFrame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
-        try:
-            self.member_id = item.member_id
-            self.user_name_logdb = item.user_name_logdb
-            self.surname = item.surname
-            self.given_name = item.given_name
-            self.nickname = item.nickname
-            self.SetTitle(f"Member ID: {self.member_id}")
-        except:
-            pass
-            # FIXME: Raise something,
-            # without a data we can't get any farther
         self.SetMinSize(wx.Size(256, 256))
         self.Show()
 
@@ -76,7 +80,6 @@ class MemberEdit(commonwx.CommonFrame):
         """Create a sizer to hold some text at the top of our frame"""
 
         # Static text
-        member_id = self.item.member_id
         label_heading = wx.StaticText(self.pnl,
             label="Basic Member Data")
 
@@ -113,13 +116,13 @@ class MemberEdit(commonwx.CommonFrame):
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         member_id_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
-            str(self.member_id))
+            str(self.member_id), style=wx.TE_READONLY)
         given_name_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
             str(self.given_name))
         nickname_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
             str(self.nickname))
         surname_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
-            str(self.nickname))
+            str(self.surname))
 
         # Bind widgets to methods
 

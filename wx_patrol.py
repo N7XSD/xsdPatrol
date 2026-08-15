@@ -18,11 +18,24 @@ class PatrolDBMain(commonwx.CommonFrame):
     """
 
     def __init__(self, parent, cmn):
-        commonwx.CommonFrame.__init__(self, parent, cmn)
+        super().__init__(parent, cmn)
         logging.debug("Init wx_patrol.PatrolBMain")
 ##      self.reports = common.DispatchDbReports()
 ##      self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
 
+        self.pnl = wx.Panel(self)
+
+        # Create the menubar
+        menu_bar = self.create_menu_bar()
+        self.SetMenuBar(menu_bar)
+
+        # Layout sizers
+        sizer_main = self.create_sizer_main()
+        self.pnl.SetSizer(sizer_main)
+        self.pnl.SetAutoLayout(1)
+        sizer_main.Fit(self)
+
+        self.SetMinSize(wx.Size(256, 256))
         self.SetTitle("xsdPatrol")
         self.Show()
 
@@ -115,11 +128,11 @@ class PatrolDBMain(commonwx.CommonFrame):
 
     def on_member_list(self, _event):
         """Import data from MemberDB"""
-        ml = wx_member_list.MemberList(self, self.cmn)
+        wx_member_list.MemberList(self, self.cmn)
 
     def on_import(self, _event):
         """Import data from MemberDB"""
-        import_frame = wx_member.Import(self, self.cmn)
+        wx_member.Import(self, self.cmn)
 
 if __name__ == '__main__':
     common.init_logging()
