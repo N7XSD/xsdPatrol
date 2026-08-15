@@ -22,6 +22,9 @@ class MemberEdit(commonwx.CommonFrame):
 
         self.cmn = cmn
         self.item = item
+        self.title_font = wx.Font(wx.FontInfo(16).Bold())
+        self.data_font = wx.Font(
+            wx.FontInfo().Family(wx.FONTFAMILY_TELETYPE))
         self.member_id = -99
         self.user_name_logdb = ""
         self.surname = ""
@@ -39,7 +42,7 @@ class MemberEdit(commonwx.CommonFrame):
         except Exception as e:
             print(e)
             # FIXME: Raise something,
-            # without a data we can't get any farther
+            # without data we can't get any farther
 
         # Create the menubar
         menu_bar = self.create_menu_bar()
@@ -67,7 +70,6 @@ class MemberEdit(commonwx.CommonFrame):
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
         self.pnl.Bind(wx.EVT_BUTTON, self.on_exit, exit_button)
-
         this_sizer = wx.BoxSizer(wx.HORIZONTAL)
         this_sizer.AddStretchSpacer()
         this_sizer.Add(cancel_button, 0)
@@ -81,14 +83,20 @@ class MemberEdit(commonwx.CommonFrame):
         # Static text
         label_heading = wx.StaticText(self.pnl,
             label="Basic Member Data")
+        label_heading.SetFont(self.title_font)
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
 
         # Bind widgets to methods
 
+        sub_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sub_sizer.AddStretchSpacer()
+        sub_sizer.Add(label_heading, 0, wx.EXPAND | wx.ALL)
+        sub_sizer.AddStretchSpacer()
+
         this_sizer = wx.BoxSizer(wx.VERTICAL)
-        this_sizer.Add(label_heading, 0)
+        this_sizer.Add(sub_sizer, 0, wx.EXPAND | wx.ALL)
 
         return this_sizer
 
@@ -116,12 +124,16 @@ class MemberEdit(commonwx.CommonFrame):
         # in tab traversal order.
         member_id_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
             str(self.member_id), style=wx.TE_READONLY)
+        member_id_ctrl.SetFont(self.data_font)
         given_name_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
             str(self.given_name))
+        given_name_ctrl.SetFont(self.data_font)
         nickname_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
             str(self.nickname))
+        nickname_ctrl.SetFont(self.data_font)
         surname_ctrl = wx.TextCtrl(self.pnl, wx.ID_ANY,
             str(self.surname))
+        surname_ctrl.SetFont(self.data_font)
 
         # Bind widgets to methods
 

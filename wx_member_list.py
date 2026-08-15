@@ -23,6 +23,9 @@ class MemberList(commonwx.CommonFrame):
 
         self.cmn = cmn
         self.pdb = db_patrol.PatrolDB(self.cmn)
+        self.title_font = wx.Font(wx.FontInfo(16).Bold())
+        self.data_font = wx.Font(
+            wx.FontInfo().Family(wx.FONTFAMILY_TELETYPE))
         self.members = self.pdb.get_members()
         self.SetTitle("Members")
 
@@ -42,10 +45,6 @@ class MemberList(commonwx.CommonFrame):
     def create_sizer_grid(self):
         """The grid displays our imported data"""
 
-        fi = wx.FontInfo()
-        fi.Family(wx.FONTFAMILY_TELETYPE)
-        def_cell_font = wx.Font(fi)
-
         field_headers = [
             "Member ID",
             "Logging ID",
@@ -57,7 +56,7 @@ class MemberList(commonwx.CommonFrame):
         self.member_grid.CreateGrid(len(self.members), len(field_headers))
         self.member_grid.EnableEditing(False)
         self.member_grid.HideRowLabels()
-        self.member_grid.SetDefaultCellFont(def_cell_font)
+        self.member_grid.SetDefaultCellFont(self.data_font)
         self.member_grid.SetSelectionMode(wx.grid.Grid.GridSelectRows)
         self.member_grid.SetUseNativeColLabels()
 #       self.member_grid.UseNativeColHeader()
