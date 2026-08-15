@@ -17,13 +17,14 @@ class MemberList(commonwx.CommonFrame):
     """
 
     def __init__(self, parent, cmn):
-        self.cmn = cmn
-        wx.Frame.__init__(self, parent)
+        super().__init__(parent, cmn)
         self.pnl = wx.Panel(self)
         logging.debug("Init wx_member_list.MemberList")
 
+        self.cmn = cmn
         self.pdb = db_patrol.PatrolDB(self.cmn)
         self.members = self.pdb.get_members()
+        self.SetTitle("Members")
 
         # Create the menubar
         menu_bar = self.create_menu_bar()
@@ -35,7 +36,6 @@ class MemberList(commonwx.CommonFrame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
-        self.SetTitle("Members")
         self.SetMinSize(wx.Size(256, 256))
         self.Show()
 

@@ -41,7 +41,6 @@ class MemberEdit(commonwx.CommonFrame):
             # FIXME: Raise something,
             # without a data we can't get any farther
 
-
         # Create the menubar
         menu_bar = self.create_menu_bar()
         self.SetMenuBar(menu_bar)

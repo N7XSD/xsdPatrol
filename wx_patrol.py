@@ -19,11 +19,12 @@ class PatrolDBMain(commonwx.CommonFrame):
 
     def __init__(self, parent, cmn):
         super().__init__(parent, cmn)
+        self.pnl = wx.Panel(self)
         logging.debug("Init wx_patrol.PatrolBMain")
 ##      self.reports = common.DispatchDbReports()
 ##      self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
 
-        self.pnl = wx.Panel(self)
+        self.SetTitle("xsdPatrol")
 
         # Create the menubar
         menu_bar = self.create_menu_bar()
@@ -36,7 +37,6 @@ class PatrolDBMain(commonwx.CommonFrame):
         sizer_main.Fit(self)
 
         self.SetMinSize(wx.Size(256, 256))
-        self.SetTitle("xsdPatrol")
         self.Show()
 
     def create_sizer_common_buttons(self):

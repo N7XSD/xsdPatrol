@@ -16,12 +16,13 @@ class Import(commonwx.CommonFrame):
     """
 
     def __init__(self, parent, cmn):
-        self.cmn = cmn
-        wx.Frame.__init__(self, parent)
+        super().__init__(parent, cmn)
         self.pnl = wx.Panel(self)
         logging.debug("Init wx_member.Import")
 
+        self.cmn = cmn
         self.pdb = db_patrol.PatrolDB(self.cmn)
+        self.SetTitle("Import from MemberDB")
 
 #      Checks that may need human attention
 #          dl_stat_code is a valide US state or Canadian Province/Territory
@@ -37,7 +38,6 @@ class Import(commonwx.CommonFrame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
-        self.SetTitle("Import from MemberDB")
         self.SetMinSize(wx.Size(256, 256))
         self.Show()
 
