@@ -284,6 +284,35 @@ class PatrolDB():
             ## FIXME: raise something or other
         return members
 
+    def get_member_address(self, member_id):
+        """Return a list of address rows for member_id"""
+
+        sql_statement = """
+            SELECT member_id, active, phys_addr_type, country_code, postal_code, state_code, city_name, unit_number, street_number, street_name, street_direction, scscai_number, renter, lease_exp_date
+            FROM physical_address
+            WHERE active and (member_id=?)
+            ORDER BY phys_addr_type"""
+#       print(sql_statement)
+#       print()
+
+        items = []
+        try:
+            self.db_connect()
+            self.conn.begin()
+            self.db_cursor()
+            self.curs.execute(sql_statement, [member_id])
+            rows = self.curs.fetchall()
+            for i in rows:
+                items.append(i)
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+        return items
+
     def get_member_email(self, member_id):
         """Return a list of email rows for member_id"""
 

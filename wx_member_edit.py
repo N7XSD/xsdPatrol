@@ -23,11 +23,18 @@ class MemberEdit(commonwx.CommonFrame):
         self.cmn = cmn
         self.item = item
 
+        # FIXME: These should come from the config file
         self.title_font = wx.Font(wx.FontInfo(16).Bold())
         self.data_font = wx.Font(
             wx.FontInfo().Family(wx.FONTFAMILY_TELETYPE))
         self.label_size = wx.Size(96, 16)
         self.line_gap = 8
+        self.window_size = wx.Size(960, 600)
+
+        # FIXME: These should come from the database
+        self.address_choices = ["Other", "SCS Home", "Other Home", "Work"]
+        self.email_choices = ["Other", "SCSCAI", "Home", "Work"]
+        self.telephone_choices = ["Other", "Cell", "Home"]
 
         self.member_id = -99
         self.user_name_logdb = ""
@@ -36,6 +43,7 @@ class MemberEdit(commonwx.CommonFrame):
         self.nickname = ""
         self.telephone_number = []
         self.email_address = []
+        self.physical_address = []
         self.SetTitle("Basic Member Data")
 
         try:
@@ -46,6 +54,7 @@ class MemberEdit(commonwx.CommonFrame):
             self.nickname = item.nickname
             self.telephone_number = db.get_member_telephone(self.member_id)
             self.email_address = db.get_member_email(self.member_id)
+            self.physical_address = db.get_member_address(self.member_id)
             self.SetTitle(f"Member ID: {self.member_id}")
         except Exception as e:
             print(e)
@@ -62,8 +71,98 @@ class MemberEdit(commonwx.CommonFrame):
         self.pnl.SetAutoLayout(1)
         sizer_main.Fit(self)
 
-        self.SetMinSize(wx.Size(256, 256))
+#       self.SetMinSize(wx.Size(256, 256))
+        self.SetSize(wx.Size(self.window_size))
         self.Show()
+
+    def create_sizer_address(self):
+        """This sizer holds a table of physical addresses"""
+
+        # Static text
+        label_email = wx.StaticText(self.pnl, label="Address:  ",
+            style=wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
+            size=self.label_size)
+
+        field_headers = [
+            " ",
+            "Number",
+            " ",
+            "Street",
+            "Unit",
+            "City",
+            "State",
+            "ZIP",
+            "Country",
+            "SCSCAI No",
+            "Renter",
+            "Lease Expiration"]
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        display_rows = max(1, len(self.physical_address))
+        self.address_grid = wx.grid.Grid(self.pnl)
+        self.address_grid.CreateGrid(display_rows, len(field_headers))
+        self.address_grid.HideRowLabels()
+        self.address_grid.SetDefaultCellFont(self.data_font)
+        self.address_grid.SetUseNativeColLabels()
+#       self.address_grid.UseNativeColHeader()
+        self.address_grid.SetColFormatNumber(0)
+        for i in range(len(field_headers)):
+            self.address_grid.SetColLabelValue(i, field_headers[i])
+        for i in range(len(self.physical_address)):
+            self.address_grid.SetCellEditor(i, 0,
+                wx.grid.GridCellChoiceEditor(
+                self.address_choices))
+            self.address_grid.SetCellAlignment(i, 1,
+                wx.ALIGN_RIGHT, wx.ALIGN_TOP)
+
+            self.address_grid.SetCellValue(i, 0,
+                self.address_choices[
+                self.physical_address[i].phys_addr_type])
+            self.address_grid.SetCellValue(i, 1,
+                str(self.physical_address[i].street_number))
+            if self.physical_address[i].street_direction:
+                field_val = str(self.physical_address[i].street_direction)
+            else:
+                field_val = " "
+            self.address_grid.SetCellValue(i, 2, field_val)
+            self.address_grid.SetCellValue(i, 3,
+                str(self.physical_address[i].street_name))
+            if self.physical_address[i].unit_number:
+                field_val = str(self.physical_address[i].unit_number)
+            else:
+                field_val = " "
+            self.address_grid.SetCellValue(i, 4, field_val)
+            self.address_grid.SetCellValue(i, 5,
+                str(self.physical_address[i].city_name))
+            self.address_grid.SetCellValue(i, 6,
+                str(self.physical_address[i].state_code))
+            self.address_grid.SetCellValue(i, 7,
+                str(self.physical_address[i].postal_code))
+            self.address_grid.SetCellValue(i, 8,
+                str(self.physical_address[i].country_code))
+            self.address_grid.SetCellValue(i, 9,
+                str(self.physical_address[i].scscai_number))
+            if self.physical_address[i].renter:
+                field_val = "Yes"
+            else:
+                field_val = ""
+            self.address_grid.SetCellValue(i, 10, field_val)
+            if self.physical_address[i].lease_exp_date:
+                field_val = str(self.physical_address[i].lease_exp_date)
+            else:
+                field_val = ""
+            self.address_grid.SetCellValue(i, 11,field_val)
+        self.address_grid.AutoSize()
+
+        sub_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sub_sizer.Add(label_email, 0, wx.EXPAND | wx.ALL)
+        sub_sizer.Add(self.address_grid, 1, wx.EXPAND | wx.ALL)
+
+        this_sizer = wx.BoxSizer(wx.VERTICAL)
+        this_sizer.Add(sub_sizer, 0, wx.EXPAND)
+
+        return this_sizer
 
     def create_sizer_bottom_buttons(self):
         """Create a sizer to hold the buttons"""
@@ -74,6 +173,9 @@ class MemberEdit(commonwx.CommonFrame):
         # in tab traversal order.
         cancel_button = wx.Button(self.pnl, wx.ID_CANCEL)
         exit_button = wx.Button(self.pnl, wx.ID_EXIT)
+
+        # Disable the Exit button until the class can save data
+        exit_button.Disable()
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_cancel, cancel_button)
@@ -94,13 +196,13 @@ class MemberEdit(commonwx.CommonFrame):
             size=self.label_size)
 
         field_headers = [
-            "Type",
+            "",
             "Email Address"]
 
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         display_rows = max(1, len(self.email_address))
-        self.email_grid = wx.grid.Grid(self.pnl, -1)
+        self.email_grid = wx.grid.Grid(self.pnl)
         self.email_grid.CreateGrid(display_rows, len(field_headers))
         self.email_grid.HideRowLabels()
         self.email_grid.SetDefaultCellFont(self.data_font)
@@ -110,8 +212,13 @@ class MemberEdit(commonwx.CommonFrame):
         for i in range(len(field_headers)):
             self.email_grid.SetColLabelValue(i, field_headers[i])
         for i in range(len(self.email_address)):
+            self.email_grid.SetCellEditor(i, 0,
+                wx.grid.GridCellChoiceEditor(
+                self.email_choices))
+
             self.email_grid.SetCellValue(i, 0,
-                str(self.email_address[i].email_type))
+                self.email_choices[
+                self.email_address[i].email_type])
             self.email_grid.SetCellValue(i, 1,
                 str(self.email_address[i].email_addr))
         self.email_grid.AutoSize()
@@ -152,7 +259,7 @@ class MemberEdit(commonwx.CommonFrame):
         """The main sizer holds member data and labels"""
 
         # Static text
-        label_member_id = wx.StaticText(self.pnl, label="MemberID:  ",
+        label_member_id = wx.StaticText(self.pnl, label="Member ID:  ",
             style=wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
             size=self.label_size)
         label_given_name = wx.StaticText(self.pnl, label="First Name:  ",
@@ -218,7 +325,7 @@ class MemberEdit(commonwx.CommonFrame):
             size=self.label_size)
 
         field_headers = [
-            "Type",
+            "",
             "Country Code",
             "Number",
             "Ext"]
@@ -226,7 +333,7 @@ class MemberEdit(commonwx.CommonFrame):
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         display_rows = max(1, len(self.telephone_number))
-        self.telephone_grid = wx.grid.Grid(self.pnl, -1)
+        self.telephone_grid = wx.grid.Grid(self.pnl)
         self.telephone_grid.CreateGrid(display_rows, len(field_headers))
         self.telephone_grid.HideRowLabels()
         self.telephone_grid.SetDefaultCellFont(self.data_font)
@@ -236,11 +343,15 @@ class MemberEdit(commonwx.CommonFrame):
         for i in range(len(field_headers)):
             self.telephone_grid.SetColLabelValue(i, field_headers[i])
         for i in range(len(self.telephone_number)):
+            self.telephone_grid.SetCellEditor(i, 0,
+                wx.grid.GridCellChoiceEditor(
+                self.telephone_choices))
             self.telephone_grid.SetCellAlignment(i, 1,
                 wx.ALIGN_RIGHT, wx.ALIGN_TOP)
 
             self.telephone_grid.SetCellValue(i, 0,
-                str(self.telephone_number[i].phone_type))
+                self.telephone_choices[
+                self.telephone_number[i].phone_type])
             self.telephone_grid.SetCellValue(i, 1,
                 str(self.telephone_number[i].phone_country_code))
             self.telephone_grid.SetCellValue(i, 2,
@@ -278,6 +389,9 @@ class MemberEdit(commonwx.CommonFrame):
         sizer_main.Add(self.create_sizer_email(),
             0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(self.create_sizer_address(),
+            1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(self.create_sizer_bottom_buttons(),
             0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
@@ -294,6 +408,7 @@ class MemberEdit(commonwx.CommonFrame):
 
     def on_cancel(self, _event):
         """Cancel"""
+#       print(self.GetSize())
         self.Destroy()  # Close the frame
 
     def on_exit(self, _event):
