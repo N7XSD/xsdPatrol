@@ -284,6 +284,65 @@ class PatrolDB():
             ## FIXME: raise something or other
         return members
 
+    def get_member_email(self, member_id):
+        """Return a list of email rows for member_id"""
+
+        sql_statement = """
+            SELECT member_id, active, email_type, email_addr
+            FROM email_address
+            WHERE active and (member_id=?)
+            ORDER BY email_type"""
+#       print(sql_statement)
+#       print()
+
+        items = []
+        try:
+            self.db_connect()
+            self.conn.begin()
+            self.db_cursor()
+            self.curs.execute(sql_statement, [member_id])
+            rows = self.curs.fetchall()
+            for i in rows:
+                items.append(i)
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+        return items
+
+    def get_member_telephone(self, member_id):
+        """Return a list of email rows for member_id"""
+
+        sql_statement = """
+            SELECT member_id, active, phone_type, phone_country_code,
+                phone_number, phone_ext
+            FROM telephone_number
+            WHERE active and (member_id=?)
+            ORDER BY phone_type"""
+#       print(sql_statement)
+#       print()
+
+        items = []
+        try:
+            self.db_connect()
+            self.conn.begin()
+            self.db_cursor()
+            self.curs.execute(sql_statement, [member_id])
+            rows = self.curs.fetchall()
+            for i in rows:
+                items.append(i)
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(type(e), e)
+            ## FIXME: raise something or other
+        return items
+
 if __name__ == '__main__':
     cmn = common.Common()
     pdb = PatrolDB(cmn)

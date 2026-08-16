@@ -148,4 +148,4 @@ class MemberList(commonwx.CommonFrame):
         member_id = self.member_grid.GetCellValue(_event.GetRow(), 0)
         for m in self.members:
             if int(m.member_id) == int(member_id):
-                wx_member_edit.MemberEdit(self, self.cmn, m)
+                wx_member_edit.MemberEdit(self, self.cmn, m, self.pdb)
