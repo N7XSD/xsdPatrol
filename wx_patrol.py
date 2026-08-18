@@ -11,6 +11,7 @@ import common
 import commonwx
 import wx_member
 import wx_member_list
+import wx_time
 
 class PatrolDBMain(commonwx.CommonFrame):
     """
@@ -40,7 +41,7 @@ class PatrolDBMain(commonwx.CommonFrame):
         self.Show()
 
     def create_sizer_common_buttons(self):
-        """Create a size for Common task buttons"""
+        """Create a size for Common task task buttons"""
 
         # Static text
         label_common = wx.StaticText(self.pnl,
@@ -58,6 +59,26 @@ class PatrolDBMain(commonwx.CommonFrame):
         this_sizer = wx.BoxSizer(wx.VERTICAL)
         this_sizer.Add(label_common, 0)
         this_sizer.Add(member_list_button, 0)
+        return this_sizer
+
+    def create_sizer_time_buttons(self):
+        """Create a size for time task buttons"""
+
+        # Static text
+        label_time = wx.StaticText(self.pnl,
+            label="Time Keeping Tasks")
+
+        # Create text controls, check boxes, buttons, etc.
+        # in tab traversal order.
+        time_button = wx.Button(self.pnl, wx.ID_ANY,
+            "Time")
+
+        # Bind widgets to methods
+        self.pnl.Bind(wx.EVT_BUTTON, self.on_time, time_button)
+
+        this_sizer = wx.BoxSizer(wx.VERTICAL)
+        this_sizer.Add(label_time, 0)
+        this_sizer.Add(time_button, 0)
         return this_sizer
 
     def create_sizer_admin_buttons(self):
@@ -114,6 +135,9 @@ class PatrolDBMain(commonwx.CommonFrame):
         sizer_main.Add(self.create_sizer_common_buttons(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
+        sizer_main.Add(self.create_sizer_time_buttons(),
+            1, wx.EXPAND | wx.ALL,
+            border=self.cmn.stns.get_widget_border_size())
         sizer_main.Add(self.create_sizer_admin_buttons(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
@@ -133,6 +157,10 @@ class PatrolDBMain(commonwx.CommonFrame):
     def on_import(self, _event):
         """Import data from MemberDB"""
         wx_member.Import(self, self.cmn)
+
+    def on_time(self, _event):
+        """Import data from MemberDB"""
+        wx_time.TimekeepingMain(self, self.cmn)
 
 if __name__ == '__main__':
     common.init_logging()
