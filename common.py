@@ -425,9 +425,9 @@ class Common():
         self.stns = settings.Settings()
         self.patrol_db_open_info = None
 
-        self.dat = db_dispatch.DispatchDB(self)
-        self.dispatch_db_open_info = None
-        self.dispatch_db_open_info = self.dat.open_dispatch_db()
+#       self.dat = db_dispatch.DispatchDB(self)
+#       self.dispatch_db_open_info = None
+#       self.dispatch_db_open_info = self.dat.open_dispatch_db()
 
         self.member_db = db_member.MemberDB(self)
         self.member_db_open_info = None
