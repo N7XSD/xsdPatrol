@@ -6,6 +6,7 @@ import common
 import datetime
 import logging
 import settings
+import sys
 
 DATE_FORMAT_MSACCESS = "#%m/%d/%Y#"
 MAXINT_MSACCESS = 2147483647
@@ -95,170 +96,191 @@ class DispatchDB():
             self.conn.close()
             self.conn = None
         except Exception as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return code_list
 
-#   def get_car_by_watch(self, s_watch, e_watch):
-#       """Return list of TimeEntry for watches in range."""
+    def get_car_by_watch(self, s_watch, e_watch):
+        """Return list of TimeEntry for watches in range."""
 
-#       # SQL BETWEEN includes both start and end dates so we addjust
-#       s_watch_st = str(s_watch)
-#       e_watch_st = str(e_watch - 1)
+        # SQL BETWEEN includes both start and end dates so we addjust
+        s_watch_st = str(s_watch)
+        e_watch_st = str(e_watch - 1)
 
-#       sql_statement = """
-#           SELECT InService_DateTime, Car_Number, Watch_Number,
-#               Shift_Number, Driver1_ID, Driver1_Hours, Driver2_ID,
-#               Driver2_Hours, Trainee_ID, Trainee_Hours, Observer,
-#               Observer_Hours
-#           FROM Car_Details
-#           WHERE Watch_ID BETWEEN ? AND ?"""
-#       sql_values = (s_watch_st, e_watch_st)
+        sql_statement = """
+            SELECT InService_DateTime, Car_Number, Watch_Number,
+                Shift_Number, Driver1_ID, Driver1_Hours, Driver2_ID,
+                Driver2_Hours, Trainee_ID, Trainee_Hours, Observer,
+                Observer_Hours
+            FROM Car_Details
+            WHERE Watch_ID BETWEEN ? AND ?"""
 ##      print(sql_statement)
+##      print()
+
+        sql_values = (s_watch_st, e_watch_st)
 ##      print(sql_values)
 ##      print()
 
-#       te_list = []
-#       try:
-#           self.db_connect()
-#           self.db_cursor()
-#           self.curs.execute(sql_statement, sql_values)
-#           rows = self.curs.fetchall()
-#           for i in rows:
-#               start_d, _, _ = self.cmn.normalize_shift_date(
-#                   i.InService_DateTime)
+        te_list = []
+        try:
+            self.db_connect()
+            self.db_cursor()
+            self.curs.execute(sql_statement, sql_values)
+            rows = self.curs.fetchall()
+            for i in rows:
+                start_d, _, _ = self.cmn.normalize_shift_date(
+                    i.InService_DateTime)
 
-#               unit_st = "Car " + str(i.Car_Number)
-#               if i.Driver1_ID:
-#                   te = common.TimeEntry()
-#                   te.user_id = i.Driver1_ID
-#                   te.unit_id = unit_st
-#                   te.service_date = start_d
-#                   te.watch_number = i.Watch_Number - 1
-#                   te.shift_number = i.Shift_Number - 1
-#                   te.student = False
-#                   te.instructor = False
-#                   if i.Trainee_ID:
-#                       te.unit_id = unit_st + " Trainer"
-#                       te.instructor = True
-#                   te.hours_rec = float(i.Driver1_Hours)
-#                   if te.hours_rec == 99.0:
-#                       te.unit_id = unit_st + " (no hours earned)"
-#                       te.hours_rec = 0.0
-#                   te_list.append(te)
+                unit_st = "Car " + str(i.Car_Number)
+                if i.Driver1_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Driver1_ID
+                    te.unit_id = unit_st
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = False
+                    te.instructor = False
+                    if i.Trainee_ID:
+                        te.unit_id = unit_st + " Trainer"
+                        te.instructor = True
+                    te.hours_rec = float(i.Driver1_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = unit_st + " (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
 
-#               if i.Driver2_ID:
-#                   te = common.TimeEntry()
-#                   te.user_id = i.Driver2_ID
-#                   te.unit_id = unit_st
-#                   te.service_date = start_d
-#                   te.watch_number = i.Watch_Number - 1
-#                   te.shift_number = i.Shift_Number - 1
-#                   te.student = False
-#                   te.instructor = False
-#                   if i.Trainee_ID:
-#                       te.unit_id = unit_st + " Trainer"
-#                       te.instructor = True
-#                   te.hours_rec = float(i.Driver2_Hours)
-#                   if te.hours_rec == 99.0:
-#                       te.unit_id = unit_st + " (no hours earned)"
-#                       te.hours_rec = 0.0
-#                   te_list.append(te)
+                if i.Driver2_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Driver2_ID
+                    te.unit_id = unit_st
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = False
+                    te.instructor = False
+                    if i.Trainee_ID:
+                        te.unit_id = unit_st + " Trainer"
+                        te.instructor = True
+                    te.hours_rec = float(i.Driver2_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = unit_st + " (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
 
-#               if i.Trainee_ID:
-#                   te = common.TimeEntry()
-#                   te.user_id = i.Trainee_ID
-#                   te.unit_id = unit_st + " Trainee"
-#                   te.service_date = start_d
-#                   te.watch_number = i.Watch_Number - 1
-#                   te.shift_number = i.Shift_Number - 1
-#                   te.student = True
-#                   te.instructor = False
-#                   te.hours_rec = float(i.Trainee_Hours)
-#                   if te.hours_rec == 99.0:
-#                       te.unit_id = unit_st + " (no hours earned)"
-#                       te.hours_rec = 0.0
-#                   te_list.append(te)
+                if i.Trainee_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Trainee_ID
+                    te.unit_id = unit_st + " Trainee"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = True
+                    te.instructor = False
+                    te.hours_rec = float(i.Trainee_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = unit_st + " (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
 
-#               if i.Observer:
-#                   te = common.TimeEntry()
-#                   te.user_id = i.Observer
-#                   te.unit_id = unit_st + " Observer"
-#                   te.service_date = start_d
-#                   te.watch_number = i.Watch_Number - 1
-#                   te.shift_number = i.Shift_Number - 1
-#                   te.student = False
-#                   te.instructor = False
-#                   te.hours_rec = float(i.Observer_Hours)
-#                   if te.hours_rec == 99.0:
-#                       te.unit_id = unit_st + " (no hours earned)"
-#                       te.hours_rec = 0.0
-#                   te_list.append(te)
-#               self.curs.close()
-#               self.curs = None
-#               self.conn.close()
-#               self.conn = None
-#       except Exception as e:
-#           print(type(e), e)
-#           ## FIXME: raise something or other
-#       return te_list
+                if i.Observer:
+                    te = common.TimeEntry()
+                    te.user_id = i.Observer
+                    te.unit_id = unit_st + " Observer"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = False
+                    te.instructor = False
+                    te.hours_rec = float(i.Observer_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = unit_st + " (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
 
-#   def get_dispatch_by_watch(self, s_watch, e_watch):
-#       """Return list of TimeEntry for watches in range."""
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except Exception as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
+        return te_list
 
-#       # SQL BETWEEN includes both start and end values so we addjust
-#       s_watch_st = str(s_watch)
-#       e_watch_st = str(e_watch - 1)
+    def get_dispatch_by_watch(self, s_watch, e_watch):
+        """Return list of TimeEntry for watches in range."""
 
-#       sql_statement = """
-#           SELECT Shift_Start, Watch_Number, Shift_Number,
-#               Dispatcher1_ID, Dispatcher1_Hours,
-#               Dispatcher2_ID, Dispatcher2_Hours
-#           FROM Dispatcher_Log
-#           WHERE Watch_ID BETWEEN ? AND ?"""
+        # SQL BETWEEN includes both start and end values so we addjust
+        s_watch_st = str(s_watch)
+        e_watch_st = str(e_watch - 1)
+
+        sql_statement = """
+            SELECT Shift_Start, Watch_Number, Shift_Number,
+                Dispatcher1_ID, Dispatcher1_Hours,
+                Dispatcher2_ID, Dispatcher2_Hours
+            FROM Dispatcher_Log
+            WHERE Watch_ID BETWEEN ? AND ?"""
 ##      print(sql_statement)
-##      print(s_watch_st, e_watch_st)
 ##      print()
-#       self.curs_disp.execute(sql_statement, (s_watch_st, e_watch_st))
 
-#       te_list = []
-#       rows = self.curs_disp.fetchall()
-#       for i in rows:
-#           start_d, _, _ = self.cmn.normalize_shift_date(i.Shift_Start)
+        sql_values = (s_watch_st, e_watch_st)
+##      print(sql_values)
+##      print()
 
-#           if i.Dispatcher1_ID:
-#               te = common.TimeEntry()
-#               te.user_id = i.Dispatcher1_ID
-#               te.unit_id = "Dispatcher"
-#               te.service_date = start_d
-#               te.watch_number = i.Watch_Number - 1
-#               te.shift_number = i.Shift_Number - 1
-#               te.student = False
-#               te.instructor = False
-#               if i.Dispatcher2_ID:
-#                   te.unit_id = "Dispatcher Trainer"
-#                   te.instructor = True
-#               te.hours_rec = float(i.Dispatcher1_Hours)
-#               if te.hours_rec == 99.0:
-#                   te.unit_id = "Dispatcher (no hours earned)"
-#                   te.hours_rec = 0.0
-#               te_list.append(te)
+        te_list = []
+        try:
+            self.db_connect()
+            self.db_cursor()
+            self.curs.execute(sql_statement, sql_values)
+            rows = self.curs.fetchall()
+            for i in rows:
+                start_d, _, _ = self.cmn.normalize_shift_date(i.Shift_Start)
 
-#           if i.Dispatcher2_ID:
-#               te = common.TimeEntry()
-#               te.user_id = i.Dispatcher2_ID
-#               te.unit_id = "Dispatcher Trainee"
-#               te.service_date = start_d
-#               te.watch_number = i.Watch_Number - 1
-#               te.shift_number = i.Shift_Number - 1
-#               te.student = True
-#               te.instructor = False
-#               te.hours_rec = float(i.Dispatcher2_Hours)
-#               if te.hours_rec == 99.0:
-#                   te.unit_id = "Dispatcher Trainee (no hours earned)"
-#                   te.hours_rec = 0.0
-#               te_list.append(te)
-#       return te_list
+                if i.Dispatcher1_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Dispatcher1_ID
+                    te.unit_id = "Dispatcher"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = False
+                    te.instructor = False
+                    if i.Dispatcher2_ID:
+                        te.unit_id = "Dispatcher Trainer"
+                        te.instructor = True
+                    te.hours_rec = float(i.Dispatcher1_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = "Dispatcher (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
+
+                if i.Dispatcher2_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Dispatcher2_ID
+                    te.unit_id = "Dispatcher Trainee"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = True
+                    te.instructor = False
+                    te.hours_rec = float(i.Dispatcher2_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = "Dispatcher Trainee (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
+
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except Exception as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
+        if self.curs is not None:
+            self.curs.close()
+        if self.conn is not None:
+            self.conn.close()
+        return te_list
 
 #   def get_event_list(self, code_list=None, start_date=None,
 #           event_id_list=None):
@@ -277,8 +299,8 @@ class DispatchDB():
 ##          print(sql_statement)
 ##          print(start_date, list(code_list))
 ##          print()
-#           self.curs_disp.execute(sql_statement, [start_date] + code_list)
-#           rows = self.curs_disp.fetchall()
+#           self.curs.execute(sql_statement, [start_date] + code_list)
+#           rows = self.curs.fetchall()
 #       elif event_id_list is not None:
 #           placeholders = ", ".join(["?"] * len(event_id_list))
 #           sql_statement = """
@@ -290,8 +312,8 @@ class DispatchDB():
 ##          print(sql_statement)
 ##          print(event_id_list)
 ##          print()
-#           self.curs_disp.execute(sql_statement, event_id_list)
-#           rows = self.curs_disp.fetchall()
+#           self.curs.execute(sql_statement, event_id_list)
+#           rows = self.curs.fetchall()
 #       if rows is not None:
 #           for i in rows:
 #               event = common.Event()
@@ -310,72 +332,90 @@ class DispatchDB():
 #               event_list.append(event)
 #       return event_list
 
-#   def get_ic_by_watch(self, s_watch, e_watch):
-#       """Return list of TimeEntry for watches in range."""
+    def get_ic_by_watch(self, s_watch, e_watch):
+        """Return list of TimeEntry for watches in range."""
 
-#       # SQL BETWEEN includes both start and end dates so we addjust
-#       s_watch_st = str(s_watch)
-#       e_watch_st = str(e_watch - 1)
+        # SQL BETWEEN includes both start and end dates so we addjust
+        s_watch_st = str(s_watch)
+        e_watch_st = str(e_watch - 1)
 
-#       sql_statement = """
-#           SELECT InService_DateTime, IC_Number,
-#               Watch_Number, Shift_Number,
-#               Monitor_ID, Monitor_Hours,
-#               Trainee_ID, Trainee_Hours
-#           FROM IC_Details
-#           WHERE Watch_ID BETWEEN ? AND ?"""
+        sql_statement = """
+            SELECT InService_DateTime, IC_Number,
+                Watch_Number, Shift_Number,
+                Monitor_ID, Monitor_Hours,
+                Trainee_ID, Trainee_Hours
+            FROM IC_Details
+            WHERE Watch_ID BETWEEN ? AND ?"""
 ##      print(sql_statement)
-##      print(s_watch_st, e_watch_st)
 ##      print()
-#       self.curs_disp.execute(sql_statement, (s_watch_st, e_watch_st))
 
-#       te_list = []
-#       rows = self.curs_disp.fetchall()
-#       for i in rows:
-#           start_d, _, _ = self.cmn.normalize_shift_date(
-#               i.InService_DateTime)
+        sql_values = (s_watch_st, e_watch_st)
+##      print(sql_value)
+##      print()
 
-#           unit_st = "Unknown IC"
-#           if i.IC_Number == 1:
-#               unit_st = "Rampart IC"
-#           elif i.IC_Number == 2:
-#               unit_st = "Lake Meade IC"
-#           elif i.IC_Number == 3:
-#               unit_st = "Sun City IC"
+        te_list = []
+        try:
+            self.db_connect()
+            self.db_cursor()
+            self.curs.execute(sql_statement, sql_values)
 
-#           if i.Monitor_ID:
-#               te = common.TimeEntry()
-#               te.user_id = i.Monitor_ID
-#               te.unit_id = unit_st
-#               te.service_date = start_d
-#               te.watch_number = i.Watch_Number - 1
-#               te.shift_number = i.Shift_Number - 1
-#               te.student = False
-#               te.instructor = False
-#               if i.Trainee_ID:
-#                   te.unit_id = unit_st + " Trainer"
-#                   te.instructor = True
-#               te.hours_rec = float(i.Monitor_Hours)
-#               if te.hours_rec == 99.0:
-#                   te.unit_id = unit_st + " (no hours earned)"
-#                   te.hours_rec = 0.0
-#               te_list.append(te)
+            rows = self.curs.fetchall()
+            for i in rows:
+                start_d, _, _ = self.cmn.normalize_shift_date(
+                    i.InService_DateTime)
 
-#           if i.Trainee_ID:
-#               te = common.TimeEntry()
-#               te.user_id = i.Trainee_ID
-#               te.unit_id = unit_st + " Trainee"
-#               te.service_date = start_d
-#               te.watch_number = i.Watch_Number - 1
-#               te.shift_number = i.Shift_Number - 1
-#               te.student = True
-#               te.instructor = False
-#               te.hours_rec = float(i.Trainee_Hours)
-#               if te.hours_rec == 99.0:
-#                   te.unit_id = unit_st + " (no hours earned)"
-#                   te.hours_rec = 0.0
-#               te_list.append(te)
-#       return te_list
+                unit_st = "Unknown IC"
+                if i.IC_Number == 1:
+                    unit_st = "Rampart IC"
+                elif i.IC_Number == 2:
+                    unit_st = "Lake Meade IC"
+                elif i.IC_Number == 3:
+                    unit_st = "Sun City IC"
+
+                if i.Monitor_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Monitor_ID
+                    te.unit_id = unit_st
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = False
+                    te.instructor = False
+                    if i.Trainee_ID:
+                        te.unit_id = unit_st + " Trainer"
+                        te.instructor = True
+                    te.hours_rec = float(i.Monitor_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = unit_st + " (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
+
+                if i.Trainee_ID:
+                    te = common.TimeEntry()
+                    te.user_id = i.Trainee_ID
+                    te.unit_id = unit_st + " Trainee"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = i.Shift_Number - 1
+                    te.student = True
+                    te.instructor = False
+                    te.hours_rec = float(i.Trainee_Hours)
+                    if te.hours_rec == 99.0:
+                        te.unit_id = unit_st + " (no hours earned)"
+                        te.hours_rec = 0.0
+                    te_list.append(te)
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except Exception as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
+        if self.curs is not None:
+            self.curs.close()
+        if self.conn is not None:
+            self.conn.close()
+        return te_list
 
 #   def get_ticket_list(self, include_closed=False):
 #       """Return list of Tickets"""
@@ -413,69 +453,82 @@ class DispatchDB():
 #           i.initial_event = event_dict[i.initial_event]
 #       return(sorted(ticket_list, key=lambda x: x.open_dt))
 
-#   def get_wc_date_range(self, s_date_d, e_date_d):
-#       """Return list of Watch Commanders who worked during a date range"""
-#       # Date range includes the start date and excludes the end date
-#       # (typical Python).
+    def get_wc_date_range(self, s_date_d, e_date_d):
+        """Return list of Watch Commanders who worked during a date range"""
+        # Date range includes the start date and excludes the end date
+        # (typical Python).
 
-#       # Ask the DB for one day of data either side of the range so we
-#       # can do a little date/time munging later in the code.
-#       s_date1_d = s_date_d - datetime.timedelta(days=1)
+        # Ask the DB for one day of data either side of the range so we
+        # can do a little date/time munging later in the code.
+        s_date1_d = s_date_d - datetime.timedelta(days=1)
 
-#       sql_statement = """
-#           SELECT Watch_ID, Watch_Start, Watch_Number,
-#               Watch_Commander_ID, Watch_Commander_Trainee_ID
-#           FROM Watch_Commander_Log
-#           WHERE Watch_Start BETWEEN ? AND ?"""
+        sql_statement = """
+            SELECT Watch_ID, Watch_Start, Watch_Number,
+                Watch_Commander_ID, Watch_Commander_Trainee_ID
+            FROM Watch_Commander_Log
+            WHERE Watch_Start BETWEEN ? AND ?"""
 ##      print(sql_statement)
-##      print(s_date1_d, e_date_d)
 ##      print()
-#       self.curs_disp.execute(sql_statement, (s_date1_d, e_date_d))
 
-#       watch_id_first = MAXINT_MSACCESS
-#       watch_id_last = MININT_MSACCESS
-#       te_list = []
-#       rows = self.curs_disp.fetchall()
-#       for i in rows:
-#           start_d, _ = self.cmn.normalize_watch_date(i.Watch_Start)
-#           if start_d < s_date_d or start_d >= e_date_d:
-#               continue
+        sql_values = (s_date1_d, e_date_d)
+##      print(sql_values)
+##      print()
 
-#           if i.Watch_Commander_ID:
-#               watch_id_first = min(watch_id_first, i.Watch_ID)
-#               watch_id_last = max(watch_id_last, i.Watch_ID)
-#               te = common.TimeEntry()
-#               te.user_id = i.Watch_Commander_ID
-#               te.unit_id = "Watch Commander"
-#               te.service_date = start_d
-#               te.watch_number = i.Watch_Number - 1
-#               te.shift_number = -1
-#               te.second_shift = False
-#               te.student = False
-#               te.instructor = False
-#               if i.Watch_Commander_Trainee_ID:
-#                   te.instructor = True
-#               te.hours_rec = 12.0
-#               te.hours_calc = 0.0
-#               te_list.append(te)
+        watch_id_first = MAXINT_MSACCESS
+        watch_id_last = MININT_MSACCESS
+        te_list = []
+        try:
+            self.db_connect()
+            self.db_cursor()
+            self.curs.execute(sql_statement, sql_values)
+            rows = self.curs.fetchall()
+            for i in rows:
+                start_d, _ = self.cmn.normalize_watch_date(i.Watch_Start)
+                if start_d < s_date_d or start_d >= e_date_d:
+                    continue
 
-#           if i.Watch_Commander_Trainee_ID:
-#               watch_id_first = min(watch_id_first, i.Watch_ID)
-#               watch_id_last = max(watch_id_last, i.Watch_ID)
-#               te = common.TimeEntry()
-#               te.user_id = i.Watch_Commander_Trainee_ID
-#               te.unit_id = "Watch Commander Trainee"
-#               te.service_date = start_d
-#               te.watch_number = i.Watch_Number - 1
-#               te.shift_number = -1
-#               te.second_shift = False
-#               te.student = True
-#               te.instructor = False
-#               te.hours_rec = 4.0
-#               te.hours_calc = 0.0
-#               te_list.append(te)
+                if i.Watch_Commander_ID:
+                    watch_id_first = min(watch_id_first, i.Watch_ID)
+                    watch_id_last = max(watch_id_last, i.Watch_ID)
+                    te = common.TimeEntry()
+                    te.user_id = i.Watch_Commander_ID
+                    te.unit_id = "Watch Commander"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = -1
+                    te.second_shift = False
+                    te.student = False
+                    te.instructor = False
+                    if i.Watch_Commander_Trainee_ID:
+                        te.instructor = True
+                    te.hours_rec = 12.0
+                    te.hours_calc = 0.0
+                    te_list.append(te)
 
-#       return te_list, watch_id_first, watch_id_last + 1
+                if i.Watch_Commander_Trainee_ID:
+                    watch_id_first = min(watch_id_first, i.Watch_ID)
+                    watch_id_last = max(watch_id_last, i.Watch_ID)
+                    te = common.TimeEntry()
+                    te.user_id = i.Watch_Commander_Trainee_ID
+                    te.unit_id = "Watch Commander Trainee"
+                    te.service_date = start_d
+                    te.watch_number = i.Watch_Number - 1
+                    te.shift_number = -1
+                    te.second_shift = False
+                    te.student = True
+                    te.instructor = False
+                    te.hours_rec = 4.0
+                    te.hours_calc = 0.0
+                    te_list.append(te)
+
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
+        return te_list, watch_id_first, watch_id_last + 1
 
 #   def get_active_disp_users(self):
 #       """Return a dictionary with id:full_name"""
@@ -486,46 +539,57 @@ class DispatchDB():
 #           WHERE IsActive"""
 ##      print(sql_statement)
 ##      print()
-#       self.curs_disp.execute(sql_statement)
+#       self.curs.execute(sql_statement)
 #       name_dict = {}
-#       rows = self.curs_disp.fetchall()
+#       rows = self.curs.fetchall()
 #       for i in rows:
 #           name_dict[i.User_ID] = i.User_Name
 #       return name_dict
 
-#   def get_full_name(self, user_ids):
-#       """Return a dictionary with id:full_name"""
+    def get_full_name(self, user_ids):
+        """Return a dictionary with id:full_name"""
 
-#       # Every User_ID with hours found in the DB is added to the name
-#       # dictionary with a value intended to get attention.
-#       # Names later found in the Users table are changed to something
-#       # nicer.
-#       name_dict = {}
-#       for i in sorted(user_ids):
-#           name_dict[i] = f"### unexpected User_ID={i}"
-#       placeholders = ", ".join(["?"] * len(user_ids))
-#       sql_statement = """
-#           SELECT User_ID, User_Name
-#           FROM Users
-#           WHERE User_ID IN (""" + placeholders + ")"
+        # Every User_ID with hours found in the DB is added to the name
+        # dictionary with a value intended to get attention.
+        # Names later found in the Users table are changed to something
+        # nicer.
+        name_dict = {}
+        for i in sorted(user_ids):
+            name_dict[i] = f"### unexpected User_ID={i}"
+        placeholders = ", ".join(["?"] * len(user_ids))
+        sql_statement = """
+            SELECT User_ID, User_Name
+            FROM Users
+            WHERE User_ID IN (""" + placeholders + ")"
 ##      print(sql_statement)
+##      print()
+
+        sql_values = (sql_statement, list(user_ids))
 ##      print(list(user_ids))
 ##      print()
-#       self.curs_disp.execute(sql_statement, list(user_ids))
-#       rows = self.curs_disp.fetchall()
-#       print(f'Recoreds retrieved: {len(rows)}')
-#       for i in rows:
-#           if not i.User_Name:
-#               full_Name = i.User_ID.strip()
-#           else:
-#               (sname, gname, pname
-#                   ) = parse_dispatch_name(i.User_Name)
-#               full_name = display_name_by_surname(
-#                   sname, gname, pname)
-#           name_dict[i.User_ID] = full_name
-#       for i, j in sorted(name_dict.items()):
-#           print(f"{i}: {j}")
-#       return name_dict
+
+        try:
+            self.db_connect()
+            self.db_cursor()
+            self.curs.execute(sql_statement, list(user_ids))
+            rows = self.curs.fetchall()
+            for i in rows:
+                if not i.User_Name:
+                    full_Name = i.User_ID.strip()
+                else:
+                    (sname, gname, pname
+                        ) = parse_dispatch_name(i.User_Name)
+                    full_name = display_name_by_surname(
+                        sname, gname, pname)
+                name_dict[i.User_ID] = full_name
+        except Exception as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
+        if self.curs is not None:
+            self.curs.close()
+        if self.conn is not None:
+            self.conn.close()
+        return name_dict
 
 #   def get_responder_list(self):
 #       """Returns a responder list."""
@@ -616,8 +680,8 @@ class DispatchDB():
 #              + self.cmn.stns.get_pathname_dispatch_db()
 #              + r"; Mode=Read;")
 #           logging.info("    connected to %s", conn_str)
-#           self.conn_disp = pyodbc.connect(conn_str)
-#           self.curs_disp = self.conn_disp.cursor()
+#           self.conn = pyodbc.connect(conn_str)
+#           self.curs = self.conn.cursor()
 #           return conn_str
 #       except:
 #           return None

@@ -14,6 +14,7 @@ import wx.html
 
 import common
 import commonwx
+import rp_time
 #import timeimportdi
 
 
@@ -28,7 +29,7 @@ class TimekeepingMain(commonwx.CommonFrame):
         logging.debug("Init wx_time.TimekeepingMain")
 
         self.cmn = cmn
-        self.reports = common.DispatchDbReports()
+        self.ddb_reports = rp_time.DispatchDbReports()
         self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
         self.SetTitle("Patrol Timekeeping Management")
 
@@ -180,7 +181,7 @@ class TimekeepingMain(commonwx.CommonFrame):
 #       timeimportdi.TimeImportDispatchHours(self, self.cmn)
 
         web_page = io.StringIO()
-        self.reports.dispatch_db_hours(self.cmn, web_page, self.start_d,
+        self.ddb_reports.dispatch_db_hours(self.cmn, web_page, self.start_d,
             self.end_d)
         web_page.seek(0)
         report_viewer = commonwx.ShowHTML(self, self.cmn, web_page,
@@ -192,8 +193,8 @@ class TimekeepingMain(commonwx.CommonFrame):
         """Print data imported from dispatch DB"""
 
         web_page = io.StringIO()
-        self.reports.dispatch_db_hours(self.cmn, web_page, self.start_d,
-            self.end_d)
+        self.ddb_reports.dispatch_db_hours(self.cmn, web_page,
+            self.start_d, self.end_d)
         web_page.seek(0)
         self.html_print.PreviewText(web_page.read())
 #       web_page.seek(0)

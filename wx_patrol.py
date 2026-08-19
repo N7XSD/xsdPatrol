@@ -22,7 +22,7 @@ class PatrolDBMain(commonwx.CommonFrame):
         super().__init__(parent, cmn)
         self.pnl = wx.Panel(self)
         logging.debug("Init wx_patrol.PatrolBMain")
-##      self.reports = common.DispatchDbReports()
+##      self.ddb_reports = common.DispatchDbReports()
 ##      self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
 
         self.SetTitle("xsdPatrol")
