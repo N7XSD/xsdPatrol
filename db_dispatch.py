@@ -670,37 +670,6 @@ class DispatchDB():
         self.conn = None
         return items
 
-#   def open_dispatch_db(self):
-#       """Open Database used by Dispatch and WC logging applications"""
-
-#       try:
-#           import pyodbc
-#           conn_str = (r"DRIVER={Microsoft Access Driver"
-#              r" (*.mdb, *.accdb)}; DBQ="
-#              + self.cmn.stns.get_pathname_dispatch_db()
-#              + r"; Mode=Read;")
-#           logging.info("    connected to %s", conn_str)
-#           self.conn = pyodbc.connect(conn_str)
-#           self.curs = self.conn.cursor()
-#           return conn_str
-#       except:
-#           return None
-
-#   def open_patrol_db(self):
-#       """Open Database used by xsdPatrol applications"""
-
-#       try:
-#           import pyodbc
-#           conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-#               r'DBQ=' + self.cmn.stns.get_pathname_patrol_db() + r';'
-#               r'Mode=Write;')
-#           logging.info("    connected to %s", conn_str)
-#           self.conn_patrol = pyodbc.connect(conn_str)
-#           self.curs_patrol = self.conn_patrol.cursor()
-#           return conn_str
-#       except:
-#           return None
-
 #   def save_ticket(self, ticket):
 #       """This is where we put the ticket back in the DB.  This could
 #       be a new or existing record."""
