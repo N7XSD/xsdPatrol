@@ -19,12 +19,11 @@ class PatrolDB():
     # datetime objects.  They must accept date time as datetime
     # objects and convert to the database native format.
 
-    conn = None
-    curs = None
-
     def __init__(self, cmn):
         logging.debug("Init db_patrol.PatrolDB")
         self.cmn = cmn
+        self.conn = None
+        self.curs = None
 
     def add_member(self, member_list, replace=False):
         """Take a list of Member objects and add them to the database"""
@@ -41,8 +40,8 @@ class PatrolDB():
         for i in range(len(member_list)):
             sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         sql_values = []
         telephone_lists = []
@@ -88,7 +87,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         if self.curs is not None:
             self.curs.close()
@@ -106,18 +105,18 @@ class PatrolDB():
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-#       print(sql_values)
-#       print()
+##      print(sql_values)
+##      print()
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def add_member_note(self, list_list):
@@ -131,18 +130,18 @@ class PatrolDB():
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-#       print(sql_values)
-#       print()
+##      print(sql_values)
+##      print()
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def add_member_phys_addr(self, list_list):
@@ -157,20 +156,21 @@ class PatrolDB():
                 scscai_number, renter, lease_exp_date)
             VALUES"""
         for i in range(len(list_list)):
-            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
+            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?,"
+                + " ?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-#       print(sql_values)
-#       print()
+##      print(sql_values)
+##      print()
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def add_member_telephone(self, list_list):
@@ -184,18 +184,18 @@ class PatrolDB():
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-#       print(sql_values)
-#       print()
+##      print(sql_values)
+##      print()
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def db_connect(self):
@@ -263,8 +263,8 @@ class PatrolDB():
                 nickname, birthdate, deceased, dl_number, dl_state_code,
                 dl_expiry_date
             FROM member"""
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         members = []
         try:
@@ -280,7 +280,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return members
 
@@ -288,12 +288,15 @@ class PatrolDB():
         """Return a list of address rows for member_id"""
 
         sql_statement = """
-            SELECT member_id, active, phys_addr_type, country_code, postal_code, state_code, city_name, unit_number, street_number, street_name, street_direction, scscai_number, renter, lease_exp_date
+            SELECT member_id, active, phys_addr_type, country_code,
+                postal_code, state_code, city_name, unit_number,
+                street_number, street_name, street_direction,
+                scscai_number, renter, lease_exp_date
             FROM physical_address
             WHERE active and (member_id=?)
             ORDER BY phys_addr_type"""
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         items = []
         try:
@@ -309,7 +312,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return items
 
@@ -321,8 +324,8 @@ class PatrolDB():
             FROM email_address
             WHERE active and (member_id=?)
             ORDER BY email_type"""
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         items = []
         try:
@@ -338,7 +341,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return items
 
@@ -351,8 +354,8 @@ class PatrolDB():
             FROM telephone_number
             WHERE active and (member_id=?)
             ORDER BY phone_type"""
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         items = []
         try:
@@ -368,7 +371,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(type(e), e)
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return items
 
