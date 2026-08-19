@@ -156,7 +156,7 @@ class PatrolDB():
                 scscai_number, renter, lease_exp_date)
             VALUES"""
         for i in range(len(list_list)):
-            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?,"
+            sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?,"\
                 + " ?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
 ##      print(sql_statement)
