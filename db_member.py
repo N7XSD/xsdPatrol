@@ -1,5 +1,6 @@
 """
-Access MemberDB.  After data is moved to PatrolDB, MemberDB will be abandoned
+Access MemberDB.  After data is moved to PatrolDB,
+MemberDB will be abandoned
 """
 
 import datetime
@@ -975,8 +976,8 @@ class MemberDB():
             WHERE Service.DateDropped IS NULL
                 OR (Service.DateRejoined IS NOT Null
                 AND Service.DateRedropped IS NULL)"""
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
         self.curs_member.execute(sql_statement)
         name_dict = {}
         rows = self.curs_member.fetchall()
@@ -994,8 +995,8 @@ class MemberDB():
                 CellPhone, HomePhone, `E-Mail`, MAddress, City, State,
                 ZIP, AssociationNo, `Renter?`, LeaseExpDate, Notes, DHRdate
             FROM Members"""
-#       print(sql_statement)
-#       print()
+##      print(sql_statement)
+##      print()
 
         self.curs_member.execute(sql_statement)
         members = []
