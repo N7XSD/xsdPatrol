@@ -104,3 +104,11 @@ CREATE TABLE IF NOT EXISTS hours_earned (
         COMMENT 'TRUE when hours not extracted from DispatchLogDB',
     description VARCHAR(255)
 );
+
+/*
+This is where we remember things.
+*/
+
+CREATE TABLE IF NOT EXISTS xsd_housekeeping (
+    latest_dispatch_hours_import DATETIME
+);

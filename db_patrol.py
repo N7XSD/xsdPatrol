@@ -25,6 +25,15 @@ class PatrolDB():
         self.conn = None
         self.curs = None
 
+        # These are stored as fields in db_housekeepng.
+        self.latest_hours_import = None
+
+        # This should be a try-except.  Bottom line is if we can't
+        # access our housekeeping items, we're done.
+        # Not in a good way.
+        self.get_db_housekeeping()
+        print(f"    latest_hours_import: {self.latest_hours_import}")
+
     def add_member(self, member_list, replace=False):
         """Take a list of Member objects and add them to the database"""
 
@@ -72,8 +81,9 @@ class PatrolDB():
                 note_lists.append(vl)
         try:
             self.db_connect()
-            self.conn.begin()
             self.db_cursor()
+
+            self.conn.begin()
             print("Um... adding data to tables disabled right now")
 # The following lines are commented out for development
 #           self.curs.execute(sql_statement, sql_values)
@@ -82,6 +92,7 @@ class PatrolDB():
 #           self.add_member_phys_addr(phys_addr_lists)
 #           self.add_member_note(note_lists)
             self.conn.commit()
+
             self.curs.close()
             self.curs = None
             self.conn.close()
@@ -269,7 +280,6 @@ class PatrolDB():
         members = []
         try:
             self.db_connect()
-            self.conn.begin()
             self.db_cursor()
             self.curs.execute(sql_statement)
             rows = self.curs.fetchall()
@@ -283,6 +293,33 @@ class PatrolDB():
             print(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return members
+
+    def get_db_housekeeping(self):
+        """Get the information we need to know about previous app runs"""
+
+        sql_statement = """
+            SELECT latest_dispatch_hours_import
+            FROM xsd_housekeeping"""
+##      print(sql_statement)
+##      print()
+
+        try:
+            self.db_connect()
+            self.db_cursor()
+            self.curs.execute(sql_statement)
+
+            rows = self.curs.fetchall()
+            # only one row in this one
+            self.latest_hours_import\
+                = rows[0].latest_dispatch_hours_import
+
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
 
     def get_member_address(self, member_id):
         """Return a list of address rows for member_id"""
@@ -301,7 +338,6 @@ class PatrolDB():
         items = []
         try:
             self.db_connect()
-            self.conn.begin()
             self.db_cursor()
             self.curs.execute(sql_statement, [member_id])
             rows = self.curs.fetchall()
@@ -330,7 +366,6 @@ class PatrolDB():
         items = []
         try:
             self.db_connect()
-            self.conn.begin()
             self.db_cursor()
             self.curs.execute(sql_statement, [member_id])
             rows = self.curs.fetchall()
@@ -360,7 +395,6 @@ class PatrolDB():
         items = []
         try:
             self.db_connect()
-            self.conn.begin()
             self.db_cursor()
             self.curs.execute(sql_statement, [member_id])
             rows = self.curs.fetchall()
@@ -375,10 +409,39 @@ class PatrolDB():
             ## FIXME: raise something or other
         return items
 
+    def set_db_housekeeping(self):
+        """Set the information we need to know about previous app runs"""
+
+        sql_statement = """
+            UPDATE xsd_housekeeping
+            SET latest_dispatch_hours_import = ?  """
+##      print(sql_statement)
+##      print()
+
+        sql_values = (latest_dispatch_hours_import)
+
+        try:
+            self.db_connect()
+            self.db_cursor()
+
+            self.conn.begin()
+            self.curs.execute(sql_statement, sql_values)
+            self.conn.commit()
+
+            self.curs.close()
+            self.curs = None
+            self.conn.close()
+            self.conn = None
+        except mariadb.Error as e:
+            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            ## FIXME: raise something or other
+
 if __name__ == '__main__':
     cmn = common.Common()
+    print("PatrolDB")
     pdb = PatrolDB(cmn)
     tables = pdb.db_table_list()
+    print()
     if tables:
         print(f"### Tables:")
         for i in tables:
