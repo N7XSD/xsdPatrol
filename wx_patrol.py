@@ -11,7 +11,7 @@ import common
 import commonwx
 import wx_member
 import wx_member_list
-import wx_time
+import wx_time_import
 
 class PatrolDBMain(commonwx.CommonFrame):
     """
@@ -61,7 +61,7 @@ class PatrolDBMain(commonwx.CommonFrame):
         this_sizer.Add(member_list_button, 0)
         return this_sizer
 
-    def create_sizer_time_buttons(self):
+    def create_sizer_time_import(self):
         """Create a size for time task buttons"""
 
         # Static text
@@ -71,7 +71,7 @@ class PatrolDBMain(commonwx.CommonFrame):
         # Create text controls, check boxes, buttons, etc.
         # in tab traversal order.
         time_button = wx.Button(self.pnl, wx.ID_ANY,
-            "Time")
+            "Time Import")
 
         # Bind widgets to methods
         self.pnl.Bind(wx.EVT_BUTTON, self.on_time, time_button)
@@ -131,24 +131,24 @@ class PatrolDBMain(commonwx.CommonFrame):
         """The main sizer holds everything the user will interact with"""
 
         # Use a vertical sizer to stack our window
-        sizer_main = wx.BoxSizer(wx.VERTICAL)
-        sizer_main.Add(self.create_sizer_common_buttons(),
+        this_sizer = wx.BoxSizer(wx.VERTICAL)
+        this_sizer.Add(self.create_sizer_common_buttons(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(self.create_sizer_time_buttons(),
+        this_sizer.Add(self.create_sizer_time_import(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(self.create_sizer_admin_buttons(),
+        this_sizer.Add(self.create_sizer_admin_buttons(),
             1, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(self.create_sizer_info(),
+        this_sizer.Add(self.create_sizer_info(),
             0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
-        sizer_main.Add(self.create_sizer_bottom_buttons(),
+        this_sizer.Add(self.create_sizer_bottom_buttons(),
             0, wx.EXPAND | wx.ALL,
             border=self.cmn.stns.get_widget_border_size())
 
-        return sizer_main
+        return this_sizer
 
     def on_member_list(self, _event):
         """Import data from MemberDB"""
@@ -160,7 +160,7 @@ class PatrolDBMain(commonwx.CommonFrame):
 
     def on_time(self, _event):
         """Import data from MemberDB"""
-        wx_time.TimekeepingMain(self, self.cmn)
+        wx_time_import.TimeImport(self, self.cmn)
 
 if __name__ == '__main__':
     common.init_logging()

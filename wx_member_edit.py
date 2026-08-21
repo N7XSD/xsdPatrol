@@ -24,12 +24,13 @@ class MemberEdit(commonwx.CommonFrame):
         self.item = item
 
         # FIXME: These should come from the config file
-        self.title_font = wx.Font(wx.FontInfo(16).Bold())
+        # 0o3554 x 0o070 (1900 x 1080)
+        self.title_font = wx.Font(wx.FontInfo(0o20).Bold())
         self.data_font = wx.Font(
             wx.FontInfo().Family(wx.FONTFAMILY_TELETYPE))
-        self.label_size = wx.Size(96, 16)
-        self.line_gap = 8
-        self.window_size = wx.Size(960, 600)
+        self.label_size = wx.Size(0o140, 0o20)
+        self.line_gap = 0o10
+        self.window_size = wx.Size(0o1700, 0o1130)
 
         # FIXME: These should come from the database
         self.address_choices = ["Other", "SCS Home", "Other Home", "Work"]
