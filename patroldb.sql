@@ -1,5 +1,6 @@
 /* CREATE DATABASE patrol; */
 
+CREATE DATABASE patrol;
 USE patrol;
 
 /* These tables contain public data maintained by the administrator */
