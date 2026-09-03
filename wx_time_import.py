@@ -172,10 +172,10 @@ class TimeImport(commonwx.CommonFrame):
         """Change the working date"""
         self.working_d = datetime.date.fromisoformat(
             _event.Date.FormatISODate())
-#       print(self.working_d)
+        logging.debug(f"Working date changed to: {self.working_d}")
         self.start_d = common.get_work_week_start_d(self.working_d)
         self.end_d = self.start_d + datetime.timedelta(weeks=1)
-#       print(self.start_d, self.end_d)
+        logging.debug(f"start date: {self.start_d}, end date: {self.end_d}")
 
 if __name__ == '__main__':
     common.init_logging()

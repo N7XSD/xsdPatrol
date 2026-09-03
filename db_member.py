@@ -976,8 +976,7 @@ class MemberDB():
             WHERE Service.DateDropped IS NULL
                 OR (Service.DateRejoined IS NOT Null
                 AND Service.DateRedropped IS NULL)"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
         self.curs_member.execute(sql_statement)
         name_dict = {}
         rows = self.curs_member.fetchall()
@@ -995,8 +994,7 @@ class MemberDB():
                 CellPhone, HomePhone, `E-Mail`, MAddress, City, State,
                 ZIP, AssociationNo, `Renter?`, LeaseExpDate, Notes, DHRdate
             FROM Members"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         self.curs_member.execute(sql_statement)
         members = []

@@ -419,7 +419,7 @@ class Common():
 #       self.app_start_time_dt = datetime.datetime(
 #           year=2024, month=3, day=20)
 #       self.app_start_time_dt -= datetime.timedelta(days=365)
-#       print(self.app_start_time_dt)
+#       logging.info(f"Adjusted start time: {self.app_start_time_dt})
 
         self.stns = settings.Settings()
         self.patrol_db = None

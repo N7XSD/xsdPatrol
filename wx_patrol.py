@@ -33,11 +33,13 @@ class PatrolDBMain(commonwx.CommonFrame):
             self.cmn.patrol_db = db_patrol.PatrolDB(self.cmn)
         except Exception as e:
             # No point in going further without PatrolDB.
+            logging.debug(f"Can not access Patrol DB; {e}")
             dlg = wx.MessageDialog(None,
                 f"Can not access Patrol DB.  Terminating applications.\n{e}",
                 style=wx.OK | wx.ICON_ERROR | wx.STAY_ON_TOP,
                 caption="xsdPatrol")
             dlg.ShowModal()
+            logging.info("Terminating application.")
             wx.Exit()
 
         self.SetTitle("xsdPatrol")

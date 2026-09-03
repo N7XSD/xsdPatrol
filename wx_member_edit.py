@@ -58,7 +58,7 @@ class MemberEdit(commonwx.CommonFrame):
             self.physical_address = db.get_member_address(self.member_id)
             self.SetTitle(f"Member ID: {self.member_id}")
         except Exception as e:
-            print(e)
+            logging.debug(e)
             # FIXME: Raise something,
             # without data we can't get any farther
 
@@ -409,7 +409,6 @@ class MemberEdit(commonwx.CommonFrame):
 
     def on_cancel(self, _event):
         """Cancel"""
-#       print(self.GetSize())
         self.Destroy()  # Close the frame
 
     def on_exit(self, _event):

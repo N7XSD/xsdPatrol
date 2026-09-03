@@ -79,8 +79,7 @@ class DispatchDB():
         sql_statement = """
             SELECT Code, Description, IsActive
             FROM Activity_Codes"""
-##      print(sql_statement)
-##      print()
+        logging.debug(sql_statement)
 
         code_list = []
         try:
@@ -96,7 +95,7 @@ class DispatchDB():
             self.conn.close()
             self.conn = None
         except Exception as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return code_list
 
@@ -114,12 +113,10 @@ class DispatchDB():
                 Observer_Hours
             FROM Car_Details
             WHERE Watch_ID BETWEEN ? AND ?"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = (s_watch_st, e_watch_st)
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
 
         te_list = []
         try:
@@ -203,7 +200,7 @@ class DispatchDB():
             self.conn.close()
             self.conn = None
         except Exception as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return te_list
 
@@ -220,12 +217,10 @@ class DispatchDB():
                 Dispatcher2_ID, Dispatcher2_Hours
             FROM Dispatcher_Log
             WHERE Watch_ID BETWEEN ? AND ?"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = (s_watch_st, e_watch_st)
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
 
         te_list = []
         try:
@@ -274,7 +269,7 @@ class DispatchDB():
             self.conn.close()
             self.conn = None
         except Exception as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         if self.curs is not None:
             self.curs.close()
@@ -296,12 +291,10 @@ class DispatchDB():
                 Trainee_ID, Trainee_Hours
             FROM IC_Details
             WHERE Watch_ID BETWEEN ? AND ?"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = (s_watch_st, e_watch_st)
-##      print(sql_value)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
 
         te_list = []
         try:
@@ -359,7 +352,7 @@ class DispatchDB():
             self.conn.close()
             self.conn = None
         except Exception as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         if self.curs is not None:
             self.curs.close()
@@ -381,12 +374,10 @@ class DispatchDB():
                 Watch_Commander_ID, Watch_Commander_Trainee_ID
             FROM Watch_Commander_Log
             WHERE Watch_Start BETWEEN ? AND ?"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = (s_date1_d, e_date_d)
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
 
         watch_id_first = MAXINT_MSACCESS
         watch_id_last = MININT_MSACCESS
@@ -440,7 +431,7 @@ class DispatchDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return te_list, watch_id_first, watch_id_last + 1
 
@@ -451,8 +442,7 @@ class DispatchDB():
 #           SELECT User_ID, User_Name
 #           FROM Users
 #           WHERE IsActive"""
-##      print(sql_statement)
-##      print()
+#       logging.debug(f"sql_statement: {sql_statement}")
 #       self.curs.execute(sql_statement)
 #       name_dict = {}
 #       rows = self.curs.fetchall()
@@ -475,12 +465,10 @@ class DispatchDB():
             SELECT User_ID, User_Name
             FROM Users
             WHERE User_ID IN (""" + placeholders + ")"
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = (sql_statement, list(user_ids))
-##      print(list(user_ids))
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
 
         try:
             self.db_connect()
@@ -497,7 +485,7 @@ class DispatchDB():
                         sname, gname, pname)
                 name_dict[i.User_ID] = full_name
         except Exception as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         if self.curs is not None:
             self.curs.close()
@@ -519,7 +507,6 @@ class DispatchDB():
             self.conn = pyodbc.connect(self.db_conn_str)
             logging.info("Connected")
         except Exception as e:
-            print(f"Error connecting to the database: {e}")
             logging.info(f"Error connecting to the database: {e}")
             self.conn = None
 

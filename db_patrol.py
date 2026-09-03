@@ -32,7 +32,7 @@ class PatrolDB():
         # access our housekeeping items, we're done.
         # Not in a good way.
         self.get_db_housekeeping()
-        print(f"    latest_hours_import: {self.latest_hours_import}")
+        logging.info(f"latest_hours_import: {self.latest_hours_import}")
 
     def add_member(self, member_list, replace=False):
         """Take a list of Member objects and add them to the database"""
@@ -49,8 +49,7 @@ class PatrolDB():
         for i in range(len(member_list)):
             sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = []
         telephone_lists = []
@@ -85,6 +84,7 @@ class PatrolDB():
 
             self.conn.begin()
             print("Um... adding data to tables disabled right now")
+            logging.info("Adding data to tables disabled")
 # The following lines are commented out for development
 #           self.curs.execute(sql_statement, sql_values)
 #           self.add_member_telephone(telephone_lists)
@@ -98,7 +98,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         if self.curs is not None:
             self.curs.close()
@@ -116,18 +116,16 @@ class PatrolDB():
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def add_member_note(self, list_list):
@@ -141,18 +139,16 @@ class PatrolDB():
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-##      print(sql_statement)
-##      print()
+        logging.debug(f" sql_statement: {sql_statement}")
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def add_member_phys_addr(self, list_list):
@@ -170,18 +166,16 @@ class PatrolDB():
             sql_statement += "\n(?, ?, ?, ?, ?, ?, ?, ?,"\
                 + " ?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def add_member_telephone(self, list_list):
@@ -195,18 +189,16 @@ class PatrolDB():
         for i in range(len(list_list)):
             sql_statement += "\n(?, ?, ?, ?, ?, ?, ?),"
         sql_statement = sql_statement[:-1] + ";"
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = []
         for item_list in list_list:
             sql_values += item_list
-##      print(sql_values)
-##      print()
+        logging.debug(f"sql_values: {sql_values}")
         try:
             self.curs.execute(sql_statement, sql_values)
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def db_connect(self):
@@ -236,7 +228,7 @@ class PatrolDB():
                 db=self.db_database)
             logging.info("Connected")
         except mariadb.Error as e:
-            logging.info(f"Error connecting to the database: {e}")
+            logging.info(f"Error connecting to the database; {e}")
             self.conn = None
 
     def db_cursor(self):
@@ -274,8 +266,7 @@ class PatrolDB():
                 nickname, birthdate, deceased, dl_number, dl_state_code,
                 dl_expiry_date
             FROM member"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         members = []
         try:
@@ -290,7 +281,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return members
 
@@ -300,8 +291,7 @@ class PatrolDB():
         sql_statement = """
             SELECT latest_dispatch_hours_import
             FROM xsd_housekeeping"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         try:
             self.db_connect()
@@ -313,15 +303,17 @@ class PatrolDB():
             if rows:
                 self.latest_hours_import\
                     = rows[0].latest_dispatch_hours_import
+                logging.info(f"Housekeeping from DB: {rows[0]}")
             else:
                 self.latest_hours_import = datetime.datetime(1970, 1, 1)
+                logging.info("Using default housekeeping values")
 
             self.curs.close()
             self.curs = None
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
     def get_member_address(self, member_id):
@@ -335,8 +327,7 @@ class PatrolDB():
             FROM physical_address
             WHERE active and (member_id=?)
             ORDER BY phys_addr_type"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         items = []
         try:
@@ -351,7 +342,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return items
 
@@ -363,8 +354,7 @@ class PatrolDB():
             FROM email_address
             WHERE active and (member_id=?)
             ORDER BY email_type"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         items = []
         try:
@@ -379,7 +369,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return items
 
@@ -392,8 +382,7 @@ class PatrolDB():
             FROM telephone_number
             WHERE active and (member_id=?)
             ORDER BY phone_type"""
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         items = []
         try:
@@ -408,7 +397,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
         return items
 
@@ -418,8 +407,7 @@ class PatrolDB():
         sql_statement = """
             UPDATE xsd_housekeeping
             SET latest_dispatch_hours_import = ?  """
-##      print(sql_statement)
-##      print()
+        logging.debug(f"sql_statement: {sql_statement}")
 
         sql_values = (latest_dispatch_hours_import)
 
@@ -436,7 +424,7 @@ class PatrolDB():
             self.conn.close()
             self.conn = None
         except mariadb.Error as e:
-            print(sys._getframe().f_code.co_name, " ", type(e), e)
+            logging.debug(sys._getframe().f_code.co_name, " ", type(e), e)
             ## FIXME: raise something or other
 
 if __name__ == '__main__':
