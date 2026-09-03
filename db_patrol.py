@@ -91,7 +91,7 @@ class PatrolDB():
 #           self.add_member_email(email_lists)
 #           self.add_member_phys_addr(phys_addr_lists)
 #           self.add_member_note(note_lists)
-            self.conn.commit()
+#           self.conn.commit()
 
             self.curs.close()
             self.curs = None
@@ -310,8 +310,11 @@ class PatrolDB():
 
             rows = self.curs.fetchall()
             # only one row in this one
-            self.latest_hours_import\
-                = rows[0].latest_dispatch_hours_import
+            if rows:
+                self.latest_hours_import\
+                    = rows[0].latest_dispatch_hours_import
+            else:
+                self.latest_hours_import = datetime.datetime(1970, 1, 1)
 
             self.curs.close()
             self.curs = None

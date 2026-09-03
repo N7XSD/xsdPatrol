@@ -8,7 +8,6 @@ import wx.grid
 
 import common
 import commonwx
-import db_patrol
 import wx_member_edit
 
 class MemberList(commonwx.CommonFrame):
@@ -22,11 +21,10 @@ class MemberList(commonwx.CommonFrame):
         logging.debug("Init wx_member_list.MemberList")
 
         self.cmn = cmn
-        self.pdb = db_patrol.PatrolDB(self.cmn)
         self.title_font = wx.Font(wx.FontInfo(16).Bold())
         self.data_font = wx.Font(
             wx.FontInfo().Family(wx.FONTFAMILY_TELETYPE))
-        self.members = self.pdb.get_members()
+        self.members = self.cmn.patrol_db.get_members()
         self.SetTitle("Members")
 
         # Create the menubar
@@ -148,4 +146,5 @@ class MemberList(commonwx.CommonFrame):
         member_id = self.member_grid.GetCellValue(_event.GetRow(), 0)
         for m in self.members:
             if int(m.member_id) == int(member_id):
-                wx_member_edit.MemberEdit(self, self.cmn, m, self.pdb)
+                wx_member_edit.MemberEdit(self, self.cmn, m,
+                    self.cmn.patrol_db)

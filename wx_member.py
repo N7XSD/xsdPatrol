@@ -8,7 +8,6 @@ import wx.grid
 
 import common
 import commonwx
-import db_patrol
 
 class Import(commonwx.CommonFrame):
     """
@@ -21,7 +20,6 @@ class Import(commonwx.CommonFrame):
         logging.debug("Init wx_member.Import")
 
         self.cmn = cmn
-        self.pdb = db_patrol.PatrolDB(self.cmn)
         self.SetTitle("Import from MemberDB")
 
 #      Checks that may need human attention
@@ -195,7 +193,7 @@ class Import(commonwx.CommonFrame):
     def on_save_all(self, _event):
         """Save All"""
 
-        self.pdb.add_member(self.members, replace=True)
+        self.cmn.patrol_db.add_member(self.members, replace=True)
         self.save_all_button.Disable()
 
 

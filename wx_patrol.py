@@ -9,6 +9,8 @@ import wx
 
 import common
 import commonwx
+import db_dispatch
+import db_member
 import wx_member
 import wx_member_list
 import wx_time_import
@@ -20,10 +22,23 @@ class PatrolDBMain(commonwx.CommonFrame):
 
     def __init__(self, parent, cmn):
         super().__init__(parent, cmn)
+        self.cmn = cmn
         self.pnl = wx.Panel(self)
         logging.debug("Init wx_patrol.PatrolBMain")
 ##      self.ddb_reports = common.DispatchDbReports()
 ##      self.html_print = wx.html.HtmlEasyPrinting(parentWindow=self)
+
+        try:
+            import db_patrol
+            self.cmn.patrol_db = db_patrol.PatrolDB(self.cmn)
+        except Exception as e:
+            # No point in going further without PatrolDB.
+            dlg = wx.MessageDialog(None,
+                f"Can not access Patrol DB.  Terminating applications.\n{e}",
+                style=wx.OK | wx.ICON_ERROR | wx.STAY_ON_TOP,
+                caption="xsdPatrol")
+            dlg.ShowModal()
+            wx.Exit()
 
         self.SetTitle("xsdPatrol")
 
